@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực đơn - Café & Tea House</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+     <!-- Header  -->
+    <header class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="font-display text-2xl font-bold text-primary">
+                        Café & Tea House
+                    </div>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-700 hover:text-primary transition-colors">Trang chủ</a>
+                        <a href="menu.html" class="text-primary font-medium">Thực đơn</a>
+                        <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">Về chúng tôi</a>
+                        <a href="contact.html" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
+                        <a href="cart.html" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
+                        <a href="profile.html" class="text-gray-700 hover:text-primary transition-colors">Tài khoản</a>
+                    </div>
+                </div>
+
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-primary">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="mobile-menu fixed top-16 left-0 w-full h-screen bg-white z-40 md:hidden">
+            <div class="px-4 py-6 space-y-4">
+                <a href="index.html" class="block text-gray-700 hover:text-primary text-lg">Trang chủ</a>
+                <a href="menu.html" class="block text-primary font-medium text-lg">Thực đơn</a>
+                <a href="about.html" class="block text-gray-700 hover:text-primary text-lg">Về chúng tôi</a>
+                <a href="contact.html" class="block text-gray-700 hover:text-primary text-lg">Liên hệ</a>
+                <a href="cart.html" class="block text-gray-700 hover:text-primary text-lg">Giỏ hàng</a>
+                <a href="profile.html" class="block text-gray-700 hover:text-primary text-lg">Tài khoản</a>
+            </div>
+        </div>
+    </header>
+
+     <!-- Page Header  -->
+    <section class="page-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="font-display text-5xl font-bold mb-4">Thực đơn</h1>
+            <p class="text-xl opacity-90 max-w-2xl mx-auto">
+                Khám phá bộ sưu tập đồ uống cao cấp được tuyển chọn kỹ lưỡng
+            </p>
+        </div>
+    </section>
+
+     <!-- Menu Section  -->
+    <section class="content-section bg-muted">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+             <!-- Menu Categories  -->
+            <div class="flex justify-center mb-12">
+                <div class="flex flex-wrap gap-4">
+                    <button class="menu-category active px-6 py-3 rounded-full bg-primary text-white font-medium" data-category="all">
+                        Tất cả
+                    </button>
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="coffee">
+                        Cà phê
+                    </button>
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="tea">
+                        Trà
+                    </button>
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="cold">
+                        Đồ uống lạnh
+                    </button>
+                </div>
+            </div>
+
+             <!-- Menu Items Grid  -->
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 Initial 9 products will be loaded here 
+            </div>
+
+             <!-- Load More Button  -->
+            <div class="text-center mt-12">
+                <button id="load-more-btn" class="btn-primary" style="display: none;">
+                    Xem thêm sản phẩm
+                </button>
+                <div id="loading" class="hidden">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    <p class="mt-2 text-gray-600">Đang tải...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Footer  -->
+    <footer class="bg-foreground text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="font-display text-3xl font-bold mb-4">Café & Tea House</div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Nơi hội tụ của những tín đồ yêu thích cà phê và trà cao cấp.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Liên kết nhanh</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Trang chủ</a></li>
+                        <li><a href="menu.html" class="text-gray-300 hover:text-white transition-colors">Thực đơn</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors">Về chúng tôi</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Liên hệ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Tài khoản</h3>
+                    <ul class="space-y-2">
+                        <li><a href="profile.html" class="text-gray-300 hover:text-white transition-colors">Tài khoản</a></li>
+                        <li><a href="cart.html" class="text-gray-300 hover:text-white transition-colors">Giỏ hàng</a></li>
+                        <li><a href="order.html" class="text-gray-300 hover:text-white transition-colors">Đơn hàng</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-300">
+                    © 2025 Café & Tea House. Tất cả quyền được bảo lưu.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="menu.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
