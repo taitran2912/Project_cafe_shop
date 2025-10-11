@@ -1,16 +1,17 @@
 <?php
-require_once './config/config.php';
-require_once './app/models/Branch.php';
-
-class HomeController {
+class HomeController extends Controller {
     public function index() {
-        $database = new Database();
-        $db = $database->connect();
+        // Gọi model
+        $productModel = $this->model('Product');
 
-        $branchModel = new Branch($db);
-        $branches = $branchModel->getAllBranches();
+        // Lấy dữ liệu từ DB
+        $products = $productModel->get_Best_Selling_Products();
 
-        require './app/views/home/index.php';
+
+        $data = [
+            'title' => 'Trang chủ',
+            'products' => $products
+        ];
+        $this->view('home/index', $data);
     }
 }
-?>
