@@ -1,35 +1,23 @@
 <?php
 class Router {
-    protected $controller = 'HomeController';
-    protected $action = 'index';
-    protected $params = [];
+    public static function route($url) {
+        $controllerName = !empty($url[0]) ? ucfirst($url[0]) . 'Controller' : 'HomeController';
+        $methodName = !empty($url[1]) ? $url[1] : 'index';
+        $params = array_slice($url, 2);
 
-    public function __construct() {
-        $url = $this->getUrl();
+        $controllerFile = 'app/controllers/' . $controllerName . '.php';
 
-        if (isset($url[0]) && file_exists("./app/controllers/" . ucfirst($url[0]) . "Controller.php")) {
-            $this->controller = ucfirst($url[0]) . "Controller";
-            unset($url[0]);
-        }
+        if (file_exists($controllerFile)) {
+            require_once $controllerFile;
+            $controller = new $controllerName();
 
-        require_once "./app/controllers/" . $this->controller . ".php";
-        $this->controller = new $this->controller;
-
-        if (isset($url[1]) && method_exists($this->controller, $url[1])) {
-            $this->action = $url[1];
-            unset($url[1]);
-        }
-
-        $this->params = $url ? array_values($url) : [];
-    }
-
-    public function run() {
-        call_user_func_array([$this->controller, $this->action], $this->params);
-    }
-
-    private function getUrl() {
-        if (isset($_GET['url'])) {
-            return explode('/', filter_var(trim($_GET['url'], '/'), FILTER_SANITIZE_URL));
+            if (method_exists($controller, $methodName)) {
+                call_user_func_array([$controller, $methodName], $params);
+            } else {
+                echo "❌ Method '$methodName' không tồn tại trong $controllerName.";
+            }
+        } else {
+            echo "❌ Controller '$controllerName' không tồn tại.";
         }
     }
 }

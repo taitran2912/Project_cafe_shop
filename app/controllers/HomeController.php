@@ -1,8 +1,16 @@
 <?php
-class HomeController extends Controller {
+require_once './config/config.php';
+require_once './app/models/Branch.php';
+
+class HomeController {
     public function index() {
-        $data = ['title' => 'Trang chủ', 'message' => 'Chào mừng bạn đến với website!'];
-        $this->view('home/index', $data);
+        $database = new Database();
+        $db = $database->connect();
+
+        $branchModel = new Branch($db);
+        $branches = $branchModel->getAllBranches();
+
+        require './app/views/home/index.php';
     }
 }
 ?>
