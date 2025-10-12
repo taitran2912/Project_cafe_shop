@@ -2,7 +2,7 @@
 class HomeController extends Controller {
     public function index() {
         // Gọi model
-        $productModel = $this->model('Product');
+        $productModel = $this->model('Home');
 
         // Lấy dữ liệu từ DB
         $products = $productModel->get_Best_Selling_Products();

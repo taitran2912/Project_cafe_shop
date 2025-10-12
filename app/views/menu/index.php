@@ -21,15 +21,13 @@
                     <button class="menu-category active px-6 py-3 rounded-full bg-primary text-white font-medium" data-category="all">
                         Tất cả
                     </button>
-                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="coffee">
-                        Cà phê
+<?php if (!empty($data['categoris'])): ?>
+  <?php foreach ($data['categoris'] as $categoris): ?>
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categoris['Name']) ?>">
+                        <?= htmlspecialchars($categoris['Name']) ?>
                     </button>
-                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="tea">
-                        Trà
-                    </button>
-                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="cold">
-                        Đồ uống lạnh
-                    </button>
+  <?php endforeach; ?>
+<?php endif; ?>
                 </div>
             </div>
 
@@ -57,260 +55,20 @@
 <script>
     // Menu data
 const menuItems = [
-  // Coffee items
-  {
-    id: 1,
-    name: "Espresso Đặc Biệt",
-    price: 45000,
-    category: "coffee",
-    image: "public/espresso-coffee-cup.png",
-    description: "Cà phê espresso nguyên chất từ hạt Arabica cao cấp",
-  },
-  {
-    id: 2,
-    name: "Cappuccino Nghệ Thuật",
-    price: 55000,
-    category: "coffee",
-    image: "public/cappuccino-with-latte-art.jpg",
-    description: "Cappuccino với latte art tinh tế và sữa tươi béo ngậy",
-  },
-  {
-    id: 3,
-    name: "Americano Đậm Đà",
-    price: 40000,
-    category: "coffee",
-    image: "public/americano-coffee-black.jpg",
-    description: "Cà phê Americano đậm đà, thơm nồng",
-  },
-  {
-    id: 4,
-    name: "Latte Vanilla",
-    price: 50000,
-    category: "coffee",
-    image: "public/vanilla-latte-coffee.jpg",
-    description: "Latte thơm ngon với hương vani tự nhiên",
-  },
-  {
-    id: 5,
-    name: "Mocha Chocolate",
-    price: 60000,
-    category: "coffee",
-    image: "public/mocha-chocolate-coffee.jpg",
-    description: "Sự kết hợp hoàn hảo giữa cà phê và chocolate",
-  },
+<?php if (!empty($data['products'])): ?>
+  <?php foreach ($data['products'] as $index => $product): ?>
+    {
+      id: <?= (int)$product['ID'] ?>,
+      name: "<?= htmlspecialchars($product['Name'], ENT_QUOTES) ?>",
+      price: <?= (int)$product['Price'] ?>,
+      category: "<?= htmlspecialchars($product['Name_Category'], ENT_QUOTES) ?>",
+      image: "<?= BASE_URL ?>/public/image/<?= htmlspecialchars($product['Image'], ENT_QUOTES) ?>",
+      description: "<?= htmlspecialchars($product['Description'], ENT_QUOTES) ?>",
+    }<?= $index < count($data['products']) - 1 ? ',' : '' ?>
 
-  // Tea items
-  {
-    id: 6,
-    name: "Trà Xanh Cao Cấp",
-    price: 40000,
-    category: "tea",
-    image: "public/green-tea-in-elegant-cup.jpg",
-    description: "Trà xanh Sencha Nhật Bản với hương vị thanh mát",
-  },
-  {
-    id: 7,
-    name: "Earl Grey Hoàng Gia",
-    price: 50000,
-    category: "tea",
-    image: "public/earl-grey-tea-cup.jpg",
-    description: "Trà đen Earl Grey với tinh dầu bergamot thơm nồng",
-  },
-  {
-    id: 8,
-    name: "Trà Oolong Đài Loan",
-    price: 55000,
-    category: "tea",
-    image: "public/oolong-tea-traditional.jpg",
-    description: "Trà Oolong cao cấp từ Đài Loan, hương vị độc đáo",
-  },
-  {
-    id: 9,
-    name: "Trà Hoa Nhài",
-    price: 45000,
-    category: "tea",
-    image: "public/jasmine-tea-flowers.jpg",
-    description: "Trà xanh thơm với hương hoa nhài tự nhiên",
-  },
-
-  // Cold drinks
-  {
-    id: 10,
-    name: "Cà Phê Đá Đặc Biệt",
-    price: 48000,
-    category: "cold",
-    image: "public/iced-coffee-with-milk-foam.jpg",
-    description: "Cà phê đá với sữa tươi và foam mịn màng",
-  },
-  {
-    id: 11,
-    name: "Trà Sữa Trân Châu",
-    price: 42000,
-    category: "cold",
-    image: "public/bubble-tea-with-pearls.jpg",
-    description: "Trà sữa thơm ngon với trân châu đen dai giòn",
-  },
-  {
-    id: 12,
-    name: "Matcha Latte Đá",
-    price: 52000,
-    category: "cold",
-    image: "public/iced-matcha-latte.png",
-    description: "Matcha Nhật Bản nguyên chất với sữa tươi",
-  },
-  {
-    id: 13,
-    name: "Trà Đào Cam Sả",
-    price: 38000,
-    category: "cold",
-    image: "public/peach-tea-with-herbs.jpg",
-    description: "Trà trái cây tươi mát với đào, cam và sả",
-  },
-  {
-    id: 14,
-    name: "Cold Brew Coffee",
-    price: 46000,
-    category: "cold",
-    image: "public/cold-brew-coffee-glass.jpg",
-    description: "Cà phê pha lạnh 12 tiếng, vị đậm đà không đắng",
-  },
-  {
-    id: 15,
-    name: "Smoothie Xoài",
-    price: 44000,
-    category: "cold",
-    image: "public/mango-smoothie-tropical.jpg",
-    description: "Sinh tố xoài tươi ngon, bổ dưỡng",
-  },
-    // More Coffee items
-  {
-    id: 16,
-    name: "Flat White",
-    price: 52000,
-    category: "coffee",
-    image: "public/flat-white-coffee.jpg",
-    description: "Cà phê Flat White mịn màng với lớp milk foam mỏng",
-  },
-  {
-    id: 17,
-    name: "Caramel Macchiato",
-    price: 58000,
-    category: "coffee",
-    image: "public/caramel-macchiato.jpg",
-    description: "Sự hòa quyện giữa espresso, sữa và caramel ngọt ngào",
-  },
-  {
-    id: 18,
-    name: "Affogato",
-    price: 65000,
-    category: "coffee",
-    image: "public/affogato-coffee-icecream.jpg",
-    description: "Espresso nóng rưới lên kem vanilla mát lạnh",
-  },
-
-  // More Tea items
-  {
-    id: 19,
-    name: "Trà Bạc Hà",
-    price: 42000,
-    category: "tea",
-    image: "public/mint-tea-fresh.jpg",
-    description: "Trà xanh thanh mát kết hợp lá bạc hà tươi",
-  },
-  {
-    id: 20,
-    name: "Trà Gừng Mật Ong",
-    price: 43000,
-    category: "tea",
-    image: "public/ginger-honey-tea.jpg",
-    description: "Trà gừng ấm áp pha mật ong thiên nhiên",
-  },
-  {
-    id: 21,
-    name: "Trà Dâu Tây",
-    price: 47000,
-    category: "tea",
-    image: "public/strawberry-tea.jpg",
-    description: "Trà hoa quả tươi với hương dâu tây tự nhiên",
-  },
-
-  // More Cold drinks
-  {
-    id: 22,
-    name: "Sinh Tố Dâu",
-    price: 46000,
-    category: "cold",
-    image: "public/strawberry-smoothie.jpg",
-    description: "Sinh tố dâu tươi thơm ngon bổ dưỡng",
-  },
-  {
-    id: 23,
-    name: "Sinh Tố Bơ",
-    price: 48000,
-    category: "cold",
-    image: "public/avocado-smoothie.jpg",
-    description: "Sinh tố bơ béo ngậy, giàu dinh dưỡng",
-  },
-  {
-    id: 24,
-    name: "Nước Cam Ép",
-    price: 35000,
-    category: "cold",
-    image: "public/orange-juice-fresh.jpg",
-    description: "Nước cam ép nguyên chất, giàu vitamin C",
-  },
-  {
-    id: 25,
-    name: "Nước Ép Dưa Hấu",
-    price: 34000,
-    category: "cold",
-    image: "public/watermelon-juice.jpg",
-    description: "Nước ép dưa hấu mát lạnh, giải nhiệt mùa hè",
-  },
-  {
-    id: 26,
-    name: "Yogurt Đá Xay Việt Quất",
-    price: 49000,
-    category: "cold",
-    image: "public/blueberry-yogurt-iceblend.jpg",
-    description: "Sữa chua đá xay kết hợp việt quất chua ngọt",
-  },
-  {
-    id: 27,
-    name: "Chocolate Đá Xay",
-    price: 55000,
-    category: "cold",
-    image: "public/chocolate-frappe.jpg",
-    description: "Đá xay chocolate ngọt ngào, topping kem tươi",
-  },
-
-  // Dessert items
-  {
-    id: 28,
-    name: "Cheesecake Dâu Tây",
-    price: 60000,
-    category: "dessert",
-    image: "public/strawberry-cheesecake.jpg",
-    description: "Bánh cheesecake mềm mịn với topping dâu tây",
-  },
-  {
-    id: 29,
-    name: "Tiramisu Truyền Thống",
-    price: 62000,
-    category: "dessert",
-    image: "public/tiramisu-classic.jpg",
-    description: "Tiramisu Ý với hương vị cà phê & cacao đặc trưng",
-  },
-  {
-    id: 30,
-    name: "Bánh Cookies Socola",
-    price: 30000,
-    category: "dessert",
-    image: "public/chocolate-cookies.jpg",
-    description: "Cookies giòn tan với hương vị chocolate ngọt ngào",
-  },
-
-]
+  <?php endforeach; ?>
+<?php endif; ?>
+];
 
 let currentCategory = "all"
 let displayedItems = 0

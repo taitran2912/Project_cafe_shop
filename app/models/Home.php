@@ -1,5 +1,5 @@
 <?php
-class Product extends Model {
+class Home extends Model {
     public function get_Best_Selling_Products() {
         $query = "SELECT 
                         p.*,
@@ -8,6 +8,8 @@ class Product extends Model {
                         Order_detail od
                     JOIN 
                         Product p ON od.ID_product = p.ID
+                    WHERE 
+                        p.Status = 'active'
                     GROUP BY 
                         p.ID, p.Name
                     ORDER BY 
