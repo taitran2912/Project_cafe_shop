@@ -1,3 +1,9 @@
+<?php
+$_SESSION['user'] = [
+    'ID' => 1,
+    'Name' => ''
+];
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -21,12 +27,16 @@
                  <!-- Desktop Menu  -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="" class="text-primary font-medium">Trang chủ</a>
+                        <a href="index" class="text-primary font-medium">Trang chủ</a>
                         <a href="menu" class="text-gray-700 hover:text-primary transition-colors">Thực đơn</a>
-                        <a href="" class="text-gray-700 hover:text-primary transition-colors">Về chúng tôi</a>
-                        <a href="c" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
-                        <a href="" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
-                        <a href="" class="text-gray-700 hover:text-primary transition-colors">Tài khoản</a>
+                        <a href="about" class="text-gray-700 hover:text-primary transition-colors">Về chúng tôi</a>
+                        <a href="contact" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
+                        <a href="cart" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
+                        <?php if (isset($_SESSION['user'])): ?>
+                            <a href="profile" class="text-gray-700 hover:text-primary transition-colors"><?= htmlspecialchars($_SESSION['user']['Name']) ?></a>
+                        <?php else: ?>
+                            <a href="login" class="text-gray-700 hover:text-primary transition-colors">Đăng nhập</a>
+                        <?php endif; ?>
                     </div>
                 </div>
 

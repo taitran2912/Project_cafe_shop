@@ -1,4 +1,8 @@
-    <!-- Header  -->
+<?php 
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+?>
+ <!-- Header  -->
 <?php include 'app/views/layout/header.php'; ?>
 
     <!-- Main  -->
@@ -186,6 +190,20 @@ function addCartEventListeners() {
       }, 1500)
     })
   })
+}
+
+function addToCart(item) {
+  fetch("http://localhost/Project_cafe_shop/index.php?url=menu/addToCart", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `id_product=${item.id}&quantity=${item.quantity}`,
+  })
+  .then(res => res.text())
+  .then(data => {
+    if (data.success) {
+      console.log("✅ Giỏ hàng đã được cập nhật!");
+    }
+  });
 }
 
 // Initialize menu
