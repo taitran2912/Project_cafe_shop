@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th10 11, 2025 lúc 10:38 PM
+-- Thời gian đã tạo: Th10 13, 2025 lúc 08:12 PM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.2.4
 
@@ -29,9 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `Account` (
   `ID` int(10) NOT NULL,
+  `Usename` varchar(50) NOT NULL,
   `Fullname` varchar(100) DEFAULT NULL,
   `Password` varchar(50) DEFAULT NULL,
-  `Phone` int(10) DEFAULT NULL,
+  `Phone` varchar(11) DEFAULT NULL,
   `Role` int(10) DEFAULT NULL,
   `Status` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -40,12 +41,12 @@ CREATE TABLE `Account` (
 -- Đang đổ dữ liệu cho bảng `Account`
 --
 
-INSERT INTO `Account` (`ID`, `Fullname`, `Password`, `Phone`, `Role`, `Status`) VALUES
-(1, 'Nguyễn Văn A', '123456', 901000001, 3, 'active'),
-(2, 'Trần Thị B', '123456', 902000002, 3, 'active'),
-(3, 'Lê Văn C', '123456', 903000003, 3, 'active'),
-(4, 'Phạm Thị D', '123456', 904000004, 3, 'active'),
-(5, 'Đỗ Văn E', '123456', 905000005, 3, 'active');
+INSERT INTO `Account` (`ID`, `Usename`, `Fullname`, `Password`, `Phone`, `Role`, `Status`) VALUES
+(1, 'VanA', 'Nguyễn Văn A', '123456', '0901000001', 3, 'active'),
+(2, 'ThiB', 'Trần Thị B', '123456', '0902000002', 3, 'active'),
+(3, 'VanC', 'Lê Văn C', '123456', '0903000003', 3, 'active'),
+(4, 'ThiD', 'Phạm Thị D', '123456', '0904000004', 3, 'active'),
+(5, 'VanE', 'Đỗ Văn E', '123456', '0905000005', 3, 'active');
 
 -- --------------------------------------------------------
 
@@ -75,6 +76,43 @@ INSERT INTO `Branches` (`ID`, `Name`, `Address`, `Phone`, `Status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `Cart`
+--
+
+CREATE TABLE `Cart` (
+  `ID` int(11) NOT NULL,
+  `ID_Customer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `Cart`
+--
+
+INSERT INTO `Cart` (`ID`, `ID_Customer`) VALUES
+(2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `Cart_detail`
+--
+
+CREATE TABLE `Cart_detail` (
+  `ID_Cart` int(11) NOT NULL,
+  `ID_Product` int(11) NOT NULL,
+  `Quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `Cart_detail`
+--
+
+INSERT INTO `Cart_detail` (`ID_Cart`, `ID_Product`, `Quantity`) VALUES
+(2, 1, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `Categories`
 --
 
@@ -93,7 +131,8 @@ INSERT INTO `Categories` (`ID`, `Name`, `Status`) VALUES
 (2, 'Trà', 'active'),
 (3, 'Sinh tố và Nước ép', 'active'),
 (4, 'Đá xay', 'active'),
-(5, 'Nước đóng chai', 'active');
+(5, 'Nước đóng chai', 'active'),
+(6, 'test', 'deactive');
 
 -- --------------------------------------------------------
 
@@ -209,6 +248,7 @@ CREATE TABLE `Order_Coffee` (
   `ID_table` int(10) DEFAULT NULL,
   `Status` varchar(10) DEFAULT NULL,
   `Time` time DEFAULT NULL,
+  `Address` varchar(100) NOT NULL,
   `Payment_status` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -216,12 +256,12 @@ CREATE TABLE `Order_Coffee` (
 -- Đang đổ dữ liệu cho bảng `Order_Coffee`
 --
 
-INSERT INTO `Order_Coffee` (`ID`, `ID_customer`, `ID_branch`, `ID_table`, `Status`, `Time`, `Payment_status`) VALUES
-(1, 1, 1, NULL, 'completed', '09:15:00', 'paid'),
-(2, 2, 2, NULL, 'completed', '10:30:00', 'paid'),
-(3, 3, 3, NULL, 'completed', '14:20:00', 'paid'),
-(4, 4, 4, NULL, 'completed', '16:45:00', 'paid'),
-(5, 5, 5, NULL, 'completed', '18:10:00', 'paid');
+INSERT INTO `Order_Coffee` (`ID`, `ID_customer`, `ID_branch`, `ID_table`, `Status`, `Time`, `Address`, `Payment_status`) VALUES
+(1, 1, 1, NULL, 'completed', '09:15:00', '', 'paid'),
+(2, 2, 2, NULL, 'completed', '10:30:00', '', 'paid'),
+(3, 3, 3, NULL, 'completed', '14:20:00', '', 'paid'),
+(4, 4, 4, NULL, 'completed', '16:45:00', '', 'paid'),
+(5, 5, 5, NULL, 'completed', '18:10:00', '', 'paid');
 
 -- --------------------------------------------------------
 
@@ -457,6 +497,20 @@ ALTER TABLE `Branches`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Chỉ mục cho bảng `Cart`
+--
+ALTER TABLE `Cart`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID_Customer` (`ID_Customer`);
+
+--
+-- Chỉ mục cho bảng `Cart_detail`
+--
+ALTER TABLE `Cart_detail`
+  ADD KEY `ID_Cart` (`ID_Cart`),
+  ADD KEY `ID_Product` (`ID_Product`);
+
+--
 -- Chỉ mục cho bảng `Categories`
 --
 ALTER TABLE `Categories`
@@ -573,10 +627,16 @@ ALTER TABLE `Branches`
   MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT cho bảng `Cart`
+--
+ALTER TABLE `Cart`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT cho bảng `Categories`
 --
 ALTER TABLE `Categories`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `Coupons`
@@ -659,6 +719,19 @@ ALTER TABLE `Table_Coffee`
 --
 -- Các ràng buộc cho các bảng đã đổ
 --
+
+--
+-- Các ràng buộc cho bảng `Cart`
+--
+ALTER TABLE `Cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ID_Customer`) REFERENCES `Customer_Profile` (`ID`);
+
+--
+-- Các ràng buộc cho bảng `Cart_detail`
+--
+ALTER TABLE `Cart_detail`
+  ADD CONSTRAINT `cart_detail_ibfk_1` FOREIGN KEY (`ID_Cart`) REFERENCES `Cart` (`ID`),
+  ADD CONSTRAINT `cart_detail_ibfk_2` FOREIGN KEY (`ID_Product`) REFERENCES `Product` (`ID`);
 
 --
 -- Các ràng buộc cho bảng `Coupon_usage`

@@ -14,7 +14,7 @@
                     Khám phá bộ sưu tập cà phê và trà cao cấp được tuyển chọn kỹ lưỡng từ những vùng đất nổi tiếng nhất thế giới.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="menu.html" class="btn-primary text-center">Khám phá thực đơn</a>
+                    <a href="menu" class="btn-primary text-center">Khám phá thực đơn</a>
                 </div>
             </div>
             <div class="fade-in">

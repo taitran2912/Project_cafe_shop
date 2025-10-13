@@ -1,7 +1,7 @@
 <?php
 $_SESSION['user'] = [
     'ID' => 1,
-    'Name' => ''
+    'Name' => 'VanA'
 ];
 ?>
 <!DOCTYPE html>
@@ -33,7 +33,7 @@ $_SESSION['user'] = [
                         <a href="contact" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
                         <a href="cart" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
                         <?php if (isset($_SESSION['user'])): ?>
-                            <a href="profile" class="text-gray-700 hover:text-primary transition-colors"><?= htmlspecialchars($_SESSION['user']['Name']) ?></a>
+                            <a href="profile" class="text-yellow-950 hover:text-primary transition-colors">My Profile</a>
                         <?php else: ?>
                             <a href="login" class="text-gray-700 hover:text-primary transition-colors">Đăng nhập</a>
                         <?php endif; ?>
