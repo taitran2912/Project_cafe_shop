@@ -91,7 +91,7 @@ CREATE TABLE `Categories` (
 INSERT INTO `Categories` (`ID`, `Name`, `Status`) VALUES
 (1, 'Cà phê', 'active'),
 (2, 'Trà', 'active'),
-(3, 'Sinh tố & Nước ép', 'active'),
+(3, 'Sinh tố và Nước ép', 'active'),
 (4, 'Đá xay', 'active'),
 (5, 'Nước đóng chai', 'active');
 
