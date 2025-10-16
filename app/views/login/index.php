@@ -28,11 +28,10 @@
 
             <div class="error-message" id="errorMessage"></div>
 
-            <form id="loginForm">
+            <form id="loginForm" action="<?= BASE_URL ?>login/auth" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-envelope"></i>
                         <input type="email" id="email" name="email" placeholder="example@email.com" required>
                     </div>
                 </div>
@@ -81,7 +80,7 @@
         const errorMessage = document.getElementById('errorMessage');
 
         loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -105,12 +104,7 @@
                 return;
             }
 
-            // Simulate login (replace with actual API call)
-            console.log('[v0] Login attempt:', { email, password: '***' });
-            
-            // Success simulation
-            alert('Đăng nhập thành công!');
-            window.location.href = 'index.html';
+
         });
 
         function showError(message) {
