@@ -1,5 +1,12 @@
     <!-- Header  -->
-<?php include 'app/views/layout/header.php'; ?>
+<?php
+    // session_start();
+    // $userID = $_SESSION['user']['ID']?? 0;
+    // $userName = $_SESSION['user']['Name'];
+    // $userEmail = $_SESSION['user']['Email'];
+    // $userRole = $_SESSION['user']['Role'];
+    include 'app/views/layout/header.php'; 
+?>
     <!-- Hero Section  -->
 <section class="hero-bg min-h-screen flex items-center pt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

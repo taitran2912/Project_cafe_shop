@@ -15,10 +15,21 @@ class LoginController extends Controller {
             $user = $loginModel->checkLogin($email, $password);
             if ($user) {
                 // Lưu thông tin người dùng vào session
-                $_SESSION['user'] = $user;
+                $_SESSION['user'] = [
+                    'ID' => $user['ID'],
+                    'Name' => $user['Name'],
+                    'Email' => $user['Email'],
+                    'Role' => $user['Role']
+                ];
+
+
                 // Chuyển hướng về trang chủ hoặc trang dashboard
                 // $_SESSION['user'] = $user;
-                echo "<script>alert('Đăng nhập thành công!'); window.location.href = '" . BASE_URL . "home';</script>";
+                // echo "<script>alert('ID = {$user['ID']}'); window.location.href='" . BASE_URL . "';</script>";
+                header("Location: " . BASE_URL);
+                exit();
+
+
             } else {
                 // Xử lý lỗi đăng nhập
                 $data = [

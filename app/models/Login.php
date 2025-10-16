@@ -1,27 +1,22 @@
 <?php
 class Login extends Model {
     /**
-     * Kiểm tra đăng nhập bằng email và mật khẩu
+     * Kiểm tra đăng nhập bằng email và mật khẩu (MD5)
      */
     public function checkLogin($email, $password) {
-        // Câu lệnh SQL
-        $query = "SELECT * FROM Account WHERE Email = ? AND Status = 'active' LIMIT 1";
+        // Mã hoá mật khẩu bằng MD5
+        // $password = md5($password);
+
+        $query = "SELECT * FROM Account WHERE Email = ? AND Password = ? AND Status = 'active' LIMIT 1";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("ss", $email, $password);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Nếu có user
         if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-
-            // So khớp mật khẩu (nếu đã mã hoá bằng password_hash)
-            if ($password == $user['Password']) {
-                return $user;
-            }
+            return $result->fetch_assoc(); // Trả về thông tin user
         }
 
-        // Sai tài khoản hoặc mật khẩu
-        return false;
+        return false; // Sai email hoặc mật khẩu
     }
 }

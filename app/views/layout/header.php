@@ -1,5 +1,9 @@
 <?php
-$userID = $_SESSION['UserID'] ?? null;
+    // session_start();
+    $userID = $_SESSION['user']['ID']?? 0;
+    $userName = $_SESSION['user']['Name'];
+    $userEmail = $_SESSION['user']['Email'];
+    $userRole = $_SESSION['user']['Role'];
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -29,7 +33,7 @@ $userID = $_SESSION['UserID'] ?? null;
                         <a href="about" class="text-gray-700 hover:text-primary transition-colors">Về chúng tôi</a>
                         <a href="contact" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
                         <a href="cart" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
-                        <?php if (isset($userID)): ?>
+                        <?php if ($userID !=0): ?>
                             <a href="profile" class="text-yellow-950 hover:text-primary transition-colors">My Profile</a>
                         <?php else: ?>
                             <a href="login" class="text-gray-700 hover:text-primary transition-colors">Đăng nhập</a>
