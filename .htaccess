@@ -1,10 +1,13 @@
 Options +FollowSymLinks
 RewriteEngine On
 
-# ✅ Bỏ qua tất cả request đến /public/
-RewriteCond %{REQUEST_URI} !^/public/
+# Đặt base URL trùng tên thư mục dự án
+RewriteBase /Project_cafe_shop/
 
+# Bỏ qua tất cả request trỏ đến thư mục public/
+RewriteCond %{REQUEST_URI} !^/Project_cafe_shop/public/
+
+# Nếu không phải file hoặc thư mục thật, rewrite về index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

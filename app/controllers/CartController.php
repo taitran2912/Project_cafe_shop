@@ -1,46 +1,67 @@
 <?php
+// $customerId = $_SESSION['user']['ID']; // tạm thời cố định người dùng
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
 class CartController extends Controller {
     public function index() {
-        // Kiểm tra session đăng nhập
-        session_start();
-        if (!isset($_SESSION['user']['ID'])) {
-            header("Location: " . BASE_URL . "login");
-            exit();
-        }
+        $cartModel = $this->model('Cart');
+        // giả sử khách hàng đang đăng nhập có ID = 1
 
-        $customerID = $_SESSION['user']['ID'];
-
-        // Gọi model
-        // $cartModel = $this->model('Cart');
-
-        // Lấy giỏ hàng từ database
-        // $cartItems = $cartModel->getCartItems($customerID);
+        // $cartItems = $cartModel->getCartByCustomer($customerId);
 
         $data = [
             'title' => 'Giỏ hàng',
-            'cartItems' => $cartItems
+            'Cartcss' => 'cart.css'
+            // 'cartItems' => $cartItems
         ];
 
         $this->view('cart/index', $data);
     }
 
-    // API trả JSON để JS load (nếu muốn dùng fetch AJAX)
-    public function getCartData($customerID = null) {
-        header('Content-Type: application/json');
+    // ✅ API lấy dữ liệu giỏ hàng (cho AJAX)
+   public function getCart($customerId) {
+    $cartModel = $this->model('Cart');
+     // tạm thời cố định người dùng
 
-        session_start();
-        if (!$customerID) {
-            $customerID = $_SESSION['user']['ID'] ?? null;
-        }
+    $cartItems = $cartModel->getCartByCustomer($customerId);
 
-        if (!$customerID) {
-            echo json_encode(['error' => 'Chưa đăng nhập']);
-            return;
-        }
+    // Trả về JSON thuần
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($cartItems, JSON_UNESCAPED_UNICODE);
+    exit; // đảm bảo không in thêm gì khác
+}
 
+
+    // AJAX thêm sản phẩm
+    public function add() {
         $cartModel = $this->model('Cart');
-        $cartItems = $cartModel->getCartItems($customerID);
-        echo json_encode($cartItems);
+        $customerId = $_POST['customer_id'];
+        $productId = $_POST['product_id'];
+        $quantity = $_POST['quantity'] ?? 1;
+
+        $success = $cartModel->addToCart($customerId, $productId, $quantity);
+        echo json_encode(['success' => $success]);
+    }
+
+    // AJAX cập nhật số lượng
+    public function update() {
+        $cartModel = $this->model('Cart');
+        $customerId = $_POST['customer_id'];
+        $productId = $_POST['product_id'];
+        $quantity = $_POST['quantity'];
+
+        $success = $cartModel->updateQuantity($customerId, $productId, $quantity);
+        echo json_encode(['success' => $success]);
+    }
+
+    // AJAX xoá sản phẩm
+    public function delete() {
+        $cartModel = $this->model('Cart');
+        $customerId = $_POST['customer_id'];
+        $productId = $_POST['product_id'];
+
+        $success = $cartModel->removeItem($customerId, $productId);
+        echo json_encode(['success' => $success]);
     }
 }
-?>

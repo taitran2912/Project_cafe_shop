@@ -9,7 +9,7 @@ class Controller {
 
             // 🔍 Kiểm tra class có tồn tại trong file không
             if (class_exists($model)) {
-                echo "✅ Model '{$model}' đã được load thành công.<br>";
+                // echo "✅ Model '{$model}' đã được load thành công.<br>";
                 return new $model();
             } else {
                 die("❌ Class '{$model}' KHÔNG tồn tại trong file {$modelPath}.<br>");
@@ -25,7 +25,7 @@ class Controller {
         // 🔍 Kiểm tra file view có tồn tại không
         if (file_exists($viewPath)) {
             extract($data);
-            echo "✅ View '{$view}' đã được load thành công.<br>";
+            // echo "✅ View '{$view}' đã được load thành công.<br>";
             require_once $viewPath;
         } else {
             die("❌ Không tìm thấy file view tại: {$viewPath}.<br>");

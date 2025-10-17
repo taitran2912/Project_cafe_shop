@@ -16,10 +16,10 @@ class MenuController extends Controller {
         $this->view('menu/index', $data);
     }
     
-    public function addToCart() {
+    public function addToCart($idCustomer) {
     session_start();
 
-        $idCustomer = 1;
+        // $idCustomer = 1;
         $idProduct = $_POST['id_product'];
         $quantity = $_POST['quantity'];
 

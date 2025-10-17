@@ -9,7 +9,7 @@
           <!-- Page Header  -->
     <section class="page-header">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="font-display text-5xl font-bold mb-4">Thực đơn</h1>
+            <h1 class="font-display text-5xl font-bold mb-4">Thực đơn <?= $userID ?></h1>
             <p class="text-xl opacity-90 max-w-2xl mx-auto">
                 Khám phá bộ sưu tập đồ uống cao cấp được tuyển chọn kỹ lưỡng
             </p>
@@ -199,7 +199,7 @@ function addCartEventListeners() {
 }
 
 function addToCart(item) {
-  fetch("http://localhost/Project_cafe_shop/index.php?url=menu/addToCart", {
+  fetch("http://localhost/Project_cafe_shop/index.php?url=menu/addToCart/<?=$userID?>", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `id_product=${item.id}&quantity=${item.quantity}`,

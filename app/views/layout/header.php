@@ -12,8 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $data['title'] ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/styles.css">
+    <?php if (isset($data['Cartcss'])): ?>
+        <link rel="stylesheet" href="<?= BASE_URL ?>public/css/<?= $data['Cartcss'] ?>">
+    <?php endif; ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
 <header class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">

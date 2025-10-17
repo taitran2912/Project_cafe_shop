@@ -1,0 +1,216 @@
+/* ==========================================
+   CART PAGE STYLE – Café & Tea House
+   ========================================== */
+
+body {
+  background-color: #f9f6f1;
+  font-family: "Inter", sans-serif;
+  color: #3b2e25;
+  padding-top: 80px;
+}
+
+/* ----------- TITLE ----------- */
+.cart-title {
+  font-family: "Playfair Display", serif;
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #3b2e25;
+  margin: 50px 0 30px;
+}
+
+/* ----------- CONTAINER ----------- */
+.cart-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 1rem;
+  gap: 30px;
+}
+
+/* ----------- LEFT: CART ITEMS ----------- */
+.cart-items {
+  background: #fff;
+  flex: 2;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 24px 32px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1ece6;
+  padding: 24px 0;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cart-item img {
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  background-color: #e8decf;
+  object-fit: cover;
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-item-info h3 {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #3a2c23;
+}
+
+.cart-item-info p {
+  font-size: 0.95rem;
+  color: #8a7b6a;
+  margin: 4px 0;
+}
+
+.cart-item-price {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #8b4513;
+  margin-top: 6px;
+}
+
+/* ----------- QUANTITY CONTROL ----------- */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5ddd2;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.quantity-control button {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #6b4f33;
+  transition: background 0.2s;
+}
+
+.quantity-control button:hover {
+  background: #f4e6d0;
+}
+
+.quantity-control span {
+  width: 32px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ----------- DELETE BUTTON ----------- */
+.delete-btn {
+  color: #e74c3c;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn:hover {
+  transform: scale(1.15);
+  color: #c0392b;
+}
+
+/* ----------- RIGHT: SUMMARY ----------- */
+.cart-summary {
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.cart-summary h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #3b2e25;
+  margin-bottom: 20px;
+}
+
+.cart-summary p {
+  display: flex;
+  justify-content: space-between;
+  color: #4e4037;
+  margin: 8px 0;
+}
+
+.cart-summary .total {
+  border-top: 1px solid #eee;
+  margin-top: 12px;
+  padding-top: 12px;
+  font-weight: 700;
+  color: #8b4513;
+}
+
+/* ----------- BUTTONS ----------- */
+.checkout-btn {
+  width: 100%;
+  background: #8b4513;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+  background: #a0522d;
+}
+
+.continue-btn {
+  width: 100%;
+  background: #f4e6d0;
+  color: #6b4f33;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.continue-btn:hover {
+  background: #ead9ba;
+}
+
+/* ----------- RESPONSIVE ----------- */
+@media (max-width: 900px) {
+  .cart-container {
+    flex-direction: column;
+  }
+  .cart-summary {
+    position: relative;
+    top: 0;
+  }
+}
