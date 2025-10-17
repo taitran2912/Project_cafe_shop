@@ -91,6 +91,7 @@ function createMenuItemHTML(item) {
                 <p class="text-gray-600 mb-4">${item.description}</p>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-bold text-primary">${formatPrice(item.price)}</span>
+<?php if (isset($userID)): ?>
                     <button class="btn-primary text-sm px-4 py-2 add-to-cart" 
                             data-id="${item.id}"
                             data-name="${item.name}" 
@@ -98,6 +99,11 @@ function createMenuItemHTML(item) {
                             data-image="${item.image}">
                         Thêm vào giỏ
                     </button>
+<?php else: ?>
+                    <a href="login" class="btn-primary text-sm px-4 py-2">
+                        Thêm vào giỏ
+                    </a>
+<?php endif; ?>
                 </div>
             </div>
         </div>
