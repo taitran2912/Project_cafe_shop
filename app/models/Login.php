@@ -7,7 +7,7 @@ class Login extends Model {
         // Mã hoá mật khẩu bằng MD5
         // $password = md5($password);
 
-        $query = "SELECT * FROM Account WHERE Email = ? AND Password = ? AND Status = 'active' LIMIT 1";
+        $query = "SELECT ID, Name, Phone, Email, Role FROM Account WHERE Email = ? AND Password = ? AND Status = 'active' LIMIT 1";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ss", $email, $password);
         $stmt->execute();

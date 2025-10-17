@@ -1,10 +1,5 @@
     <!-- Header  -->
 <?php
-    // session_start();
-    // $userID = $_SESSION['user']['ID']?? 0;
-    // $userName = $_SESSION['user']['Name'];
-    // $userEmail = $_SESSION['user']['Email'];
-    // $userRole = $_SESSION['user']['Role'];
     include 'app/views/layout/header.php'; 
 ?>
     <!-- Hero Section  -->

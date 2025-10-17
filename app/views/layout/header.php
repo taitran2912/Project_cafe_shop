@@ -1,6 +1,6 @@
 <?php
     // session_start();
-    $userID = $_SESSION['user']['ID']?? 0;
+    $userID = $_SESSION['user']['ID'];
     $userName = $_SESSION['user']['Name'];
     $userEmail = $_SESSION['user']['Email'];
     $userRole = $_SESSION['user']['Role'];
@@ -33,11 +33,20 @@
                         <a href="about" class="text-gray-700 hover:text-primary transition-colors">Về chúng tôi</a>
                         <a href="contact" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
                         <a href="cart" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
-                        <?php if ($userID !=0): ?>
-                            <a href="profile" class="text-yellow-950 hover:text-primary transition-colors">My Profile</a>
-                        <?php else: ?>
-                            <a href="login" class="text-gray-700 hover:text-primary transition-colors">Đăng nhập</a>
-                        <?php endif; ?>
+                    <?php if ($userID !=0): ?>
+                        <!-- <a href="profile" class="text-yellow-950 hover:text-primary transition-colors">My Profile</a> -->
+                        <div class="relative group">
+                            <button class="text-yellow-950 hover:text-primary transition-colors font-medium">
+                                <?= htmlspecialchars($userName) ?> ▼
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                <a href="profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg">Hồ sơ của tôi</a>
+                                <a href="logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg">Đăng xuất</a>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <a href="login" class="text-gray-700 hover:text-primary transition-colors">Đăng nhập</a>
+                    <?php endif; ?>
                     </div>
                 </div>
 
