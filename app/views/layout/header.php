@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/styles.css">
-    <?php if (isset($data['Cartcss'])): ?>
-        <link rel="stylesheet" href="<?= BASE_URL ?>public/css/<?= $data['Cartcss'] ?>">
+    <?php if (isset($data['css'])): ?>
+        <link rel="stylesheet" href="<?= BASE_URL ?>public/css/<?= $data['css'] ?>">
     <?php endif; ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -38,7 +38,11 @@
                         <a href="menu" class="text-gray-700 hover:text-primary transition-colors">Thực đơn</a>
                         <a href="about" class="text-gray-700 hover:text-primary transition-colors">Về chúng tôi</a>
                         <a href="contact" class="text-gray-700 hover:text-primary transition-colors">Liên hệ</a>
+<?php if(isset($userID)): ?>
                         <a href="cart" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
+<?php else: ?>
+                        <a href="login" class="text-gray-700 hover:text-primary transition-colors">Giỏ hàng</a>
+<?php endif; ?>
                     <?php if ($userID !=0): ?>
                         <!-- <a href="profile" class="text-yellow-950 hover:text-primary transition-colors">My Profile</a> -->
                         <div class="relative group">

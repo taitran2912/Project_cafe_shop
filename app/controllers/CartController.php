@@ -12,7 +12,7 @@ class CartController extends Controller {
 
         $data = [
             'title' => 'Giỏ hàng',
-            'Cartcss' => 'cart.css'
+            'css' => 'cart.css'
             // 'cartItems' => $cartItems
         ];
 
