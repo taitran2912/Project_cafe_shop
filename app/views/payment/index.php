@@ -137,7 +137,7 @@
                         </div>
                         <div class="item-price"><?= $product['Price'] ?>đ</div>
                     </div>
-                    <?php endforeach; ?>
+    <?php endforeach; ?>
 <?php endif; ?>
                 </div>
 
