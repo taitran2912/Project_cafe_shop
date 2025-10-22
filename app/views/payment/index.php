@@ -15,33 +15,6 @@
         <div class="checkout-container">
             <!-- Checkout Form -->
             <form class="checkout-form" id="checkoutForm">
-                <!-- Customer Information -->
-                <div class="form-section">
-                    <h3><i class="fas fa-user"></i> Thông Tin Khách Hàng</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Họ *</label>
-                            <input type="text" id="firstName" name="firstName" required>
-                            <span class="error-message">Vui lòng nhập họ</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Tên *</label>
-                            <input type="text" id="lastName" name="lastName" required>
-                            <span class="error-message">Vui lòng nhập tên</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" name="email" required>
-                        <span class="error-message">Vui lòng nhập email hợp lệ</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại *</label>
-                        <input type="tel" id="phone" name="phone" required>
-                        <span class="error-message">Vui lòng nhập số điện thoại</span>
-                    </div>
-                </div>
-
                 <!-- Delivery Address -->
                 <div class="form-section">
                     <h3><i class="fas fa-map-marker-alt"></i> Địa Chỉ Giao Hàng</h3>
@@ -154,29 +127,18 @@
             <!-- Order Summary -->
             <aside class="order-summary">
                 <h3><i class="fas fa-shopping-cart"></i> Tóm Tắt Đơn Hàng</h3>
-
+<?php if (!empty($data['product'])): ?>
+    <?php foreach ($data['product'] as $product): ?>
                 <div id="orderItems">
                     <div class="order-item">
                         <div class="item-info">
-                            <div class="item-name">Cà Phê Đen Đá</div>
-                            <div class="item-quantity">x 2</div>
+                            <div class="item-name"><?= $product['Name'] ?></div>
+                            <div class="item-quantity"><?= $product['Quantity'] ?></div>
                         </div>
-                        <div class="item-price">50.000đ</div>
+                        <div class="item-price"><?= $product['Price'] ?>đ</div>
                     </div>
-                    <div class="order-item">
-                        <div class="item-info">
-                            <div class="item-name">Trà Chanh Tươi</div>
-                            <div class="item-quantity">x 1</div>
-                        </div>
-                        <div class="item-price">25.000đ</div>
-                    </div>
-                    <div class="order-item">
-                        <div class="item-info">
-                            <div class="item-name">Sinh Tố Xoài</div>
-                            <div class="item-quantity">x 1</div>
-                        </div>
-                        <div class="item-price">40.000đ</div>
-                    </div>
+                    <?php endforeach; ?>
+<?php endif; ?>
                 </div>
 
                 <div class="summary-divider"></div>

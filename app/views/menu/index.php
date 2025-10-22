@@ -25,10 +25,10 @@
                     <button class="menu-category active px-6 py-3 rounded-full bg-primary text-white font-medium" data-category="all">
                         Tất cả
                     </button>
-<?php if (!empty($data['categoris'])): ?>
-  <?php foreach ($data['categoris'] as $categoris): ?>
-                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categoris['Name']) ?>">
-                        <?= htmlspecialchars($categoris['Name']) ?>
+<?php if (!empty($data['categories'])): ?>
+  <?php foreach ($data['categories'] as $categories): ?>
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
+                        <?= htmlspecialchars($categories['Name']) ?>
                     </button>
   <?php endforeach; ?>
 <?php endif; ?>

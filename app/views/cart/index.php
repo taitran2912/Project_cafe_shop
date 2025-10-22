@@ -9,9 +9,14 @@
 </div>
 
 <div class="cart-container"> 
-    <button class="checkout-btn" onclick="window.location.href='payment'">Thanh toán</button>
-    <button class="continue-btn" onclick="window.location.href='menu'">Tiếp tục mua sắm</button>
+    <button class="checkout-btn" onclick="window.location.href='payment/index/<?= $userID ?>'">
+        Thanh toán
+    </button>
+    <button class="continue-btn" onclick="window.location.href='menu'">
+        Tiếp tục mua sắm
+    </button>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
