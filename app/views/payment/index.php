@@ -12,11 +12,11 @@
             <i class="fas fa-check-circle"></i> Đơn hàng của bạn đã được xử lý thành công!
         </div>
 
-        <div class="checkout-container">
+        <!-- <div class="checkout-container"> -->
             <!-- Checkout Form -->
-            <form class="checkout-form" id="checkoutForm">
+            <!-- <form class="checkout-form" id="checkoutForm"> -->
                 <!-- Delivery Address -->
-                <div class="form-section">
+                <!-- <div class="form-section">
                     <h3><i class="fas fa-map-marker-alt"></i> Địa Chỉ Giao Hàng</h3>
                     <div class="form-group">
                         <label for="address">Địa chỉ *</label>
@@ -50,10 +50,10 @@
                         <label for="notes">Ghi chú đơn hàng</label>
                         <textarea id="notes" name="notes" placeholder="Ghi chú thêm cho đơn hàng (tùy chọn)"></textarea>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Payment Method -->
-                <div class="form-section">
+                <!-- <div class="form-section">
                     <h3><i class="fas fa-credit-card"></i> Phương Thức Thanh Toán</h3>
                     <div class="payment-methods">
                         <div class="payment-option">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
 
-                    <!-- Card Details (shown when card is selected) -->
+                    
                     <div id="cardDetails" style="display: none;">
                         <div class="form-group">
                             <label for="cardName">Tên Chủ Thẻ *</label>
@@ -111,31 +111,31 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Buttons -->
-                <div class="button-group">
+                <!-- <div class="button-group">
                     <a href="cart.html" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Quay Lại
                     </a>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-check"></i> Hoàn Tất Thanh Toán
                     </button>
-                </div>
-            </form>
+                </div> -->
+            <!-- </form> -->
 
             <!-- Order Summary -->
-            <aside class="order-summary">
+            <div class="container-sm order-summary">
                 <h3><i class="fas fa-shopping-cart"></i> Tóm Tắt Đơn Hàng</h3>
 <?php if (!empty($data['product'])): ?>
     <?php foreach ($data['product'] as $product): ?>
                 <div id="orderItems">
                     <div class="order-item">
                         <div class="item-info">
-                            <div class="item-name"><?= $product['Name'] ?></div>
+                            <div class="item-name"><?= htmlspecialchars($product['Name']) ?></div>
                             <div class="item-quantity"><?= $product['Quantity'] ?></div>
                         </div>
-                        <div class="item-price"><?= $product['Price'] ?>đ</div>
+                        <div class="item-price"><?= number_format($product['Price'])     ?>đ</div>
                     </div>
     <?php endforeach; ?>
 <?php endif; ?>
@@ -156,13 +156,27 @@
                     <span>0đ</span>
                 </div>
 
+                <div class="summary-row">
+                    <span>Điểm thưởng:</span>
+                    <span>0đ</span>
+                </div>
+
                 <div class="summary-divider"></div>
 
                 <div class="summary-row total">
                     <span>Tổng cộng:</span>
                     <span>130.000đ</span>
                 </div>
-            </aside>
+
+                <div class="button-group">
+                    <a href="cart.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay Lại
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Hoàn Tất Thanh Toán
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </main>

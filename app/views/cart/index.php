@@ -9,7 +9,7 @@
 </div>
 
 <div class="cart-container"> 
-    <button class="checkout-btn" onclick="window.location.href='payment/index/<?= $userID ?>'">
+    <button class="checkout-btn" onclick="window.location.href='payment'">
         Thanh toán
     </button>
     <button class="continue-btn" onclick="window.location.href='menu'">
@@ -25,7 +25,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadCart();
 });
-s
+
 function loadCart() {
   $.ajax({
     url: '<?= BASE_URL ?>/index.php?url=cart/getCart/<?= $userID;?>',

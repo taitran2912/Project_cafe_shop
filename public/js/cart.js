@@ -52,7 +52,7 @@ function updateQuantity(productId, quantity) {
 }
 
 function removeFromCart(productId) {
-  $.post("/Cart/delete", { customer_id: 1, product_id: productId })
+  $.post("http://localhost/Project_cafe_shop/index.php?url=cart/delete", { customer_id: 1, product_id: productId })
     .done(() => {
       loadCart(); // gọi lại loadCart() để cập nhật giao diện
     })
