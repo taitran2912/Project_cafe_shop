@@ -35,6 +35,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="<?= BASE_URL ?>public/admin/login.js"></script>
 </body>
 </html>
