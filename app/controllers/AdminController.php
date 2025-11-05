@@ -32,10 +32,21 @@ class AdminController extends Controller {
 
         $data = [
             'title' => 'Quản lý chi nhánh',
-            'css' => 'branch.css',
             'branches' => $branches
         ];
         $this->view('admin/home/index', $data);
          
     }   
+
+    public function branch_detail($idBranch) {
+        // Hủy session và chuyển hướng về trang đăng nhập
+        $detail = $this->model('Branch');
+        // $branchDetail = $detail->getBranchById($idBranch);
+        
+        $data = [
+            'title' => 'Chi tiết chi nhánh',
+            // 'detail' => $branchDetail
+        ];
+        $this->view('admin/home/index', $data);
+    }
 }

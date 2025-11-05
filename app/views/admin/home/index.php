@@ -35,6 +35,8 @@
             case 'branch':
               include_once 'app/views/admin/home/branch.php';
               break;
+            case (preg_match('/^branch_detail\/\d+$/', $action) ? true : false):
+              include_once 'app/views/admin/home/branch_detail.php';
             default:
               include_once 'app/views/admin/home/content.php';
               break;

@@ -126,6 +126,16 @@ function renderPagination() {
 
 // Hiển thị trang đầu tiên
 displayBranches(currentPage);
+
+// 🎯 Xử lý nút "Xem chi tiết"
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.btn-view')) {
+        const btn = e.target.closest('.btn-view');
+        const id = btn.closest('tr').querySelector('td').textContent.trim(); // Lấy ID từ cột đầu tiên
+        window.location.href = `http://localhost/Project_cafe_shop/admin/branch_detail/${id}`;
+    }
+});
+
 </script>
 
         
