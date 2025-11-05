@@ -1,6 +1,7 @@
 <?php
 class BranchController extends Controller {
     public function index() {
+        
         $data = [
             'title' => 'admin',
         ];

@@ -13,9 +13,6 @@
   $currentController = isset($urlParts[0]) ? strtolower($urlParts[0]) : 'home';
   $currentAction = isset($urlParts[1]) ? strtolower($urlParts[1]) : 'index';
 
-  // Giả sử $role đã có sẵn (ví dụ từ session)
-  // $role = $_SESSION['role'] ?? 1;
-
   $menuItems = [
     [
       "title" => "Quản lý thực đơn",
@@ -75,8 +72,8 @@
     <div class="user-info">
       <i class="fas fa-user-circle"></i>
       <div>
-        <div class="user-name">Admin</div>
-        <div class="user-role">Quản trị viên</div>
+        <div class="user-name"><?= $name ?></div>
+        <div class="user-role"><?= $roleName ?></div>
       </div>
     </div>
     <button class="btn-logout">

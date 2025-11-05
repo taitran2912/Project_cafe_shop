@@ -12,7 +12,7 @@ class AdminController extends Controller {
         $role = $_SESSION['user']['Role'];
         $userID = $_SESSION['user']['ID'];
 
-        if (!in_array($role, [2, 1])) {
+        if (!in_array($role, [2, 1, 3])) {
             echo "<script>
                 alert('Bạn không có quyền truy cập trang này!');
                 window.location.href = 'login_admin';
@@ -26,4 +26,16 @@ class AdminController extends Controller {
         ];
         $this->view('admin/home/index', $data);
     }
+   public function branch() {
+        $branch = $this->model('Contact');
+        $branches = $branch->getAllBranch();
+
+        $data = [
+            'title' => 'Quản lý chi nhánh',
+            'css' => 'branch.css',
+            'branches' => $branches
+        ];
+        $this->view('admin/home/index', $data);
+         
+    }   
 }
