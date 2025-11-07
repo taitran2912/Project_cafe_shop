@@ -63,6 +63,36 @@
 
         <div id="pagination" style="margin-top: 20px; text-align:center;"></div>
 
+<style>
+  /* Căn giữa và tạo style cho pagination */
+  #pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  #pagination .page-btn {
+    border: none;
+    background-color: #eee;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+
+  #pagination .page-btn:hover {
+    background-color: #d4a373;
+    color: #fff;
+  }
+
+  #pagination .page-btn.active {
+    background-color: #b87333;
+    color: #fff;
+  }
+</style>
+
 <script>
 // Lấy dữ liệu chi nhánh từ PHP
 const branches = <?= json_encode($data['branches'], JSON_UNESCAPED_UNICODE); ?>;
@@ -115,7 +145,7 @@ function renderPagination() {
         const button = document.createElement('button');
         button.textContent = i;
         button.classList.add('page-btn');
-        if (i === currentPage) button.style.backgroundColor = '#b87333';
+        if (i === currentPage) button.classList.add('active');
         button.addEventListener('click', () => {
             currentPage = i;
             displayBranches(currentPage);
@@ -135,7 +165,4 @@ document.addEventListener('click', function(e) {
         window.location.href = `http://localhost/Project_cafe_shop/admin/branch_detail/${id}`;
     }
 });
-
 </script>
-
-        
