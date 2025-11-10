@@ -1,3 +1,24 @@
+<?php 
+include '../../app/controllers/BranchController.php';
+
+$branchController = new BranchController();
+
+// Pagination parameters (from query string)
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
+
+// Use controller paginate helper (keeps logic in controller)
+$pagination = $branchController->paginate($page, $limit);
+$branches = $pagination['branches'];
+$totalItems = $pagination['totalItems'];
+$totalPages = $pagination['totalPages'];
+$page = $pagination['currentPage'];
+$limit = $pagination['limit'];
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -441,49 +462,8 @@ color: #f5f1ed;
 </style>
 <body>
     <div class="dashboard">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="logo">
-        <i class="fas fa-coffee"></i>
-        <span>Cafe Manager</span>
-      </div>
-      
-      <nav class="nav-menu">
-        <a href="index.html" class="nav-item">
-          <i class="fas fa-utensils"></i>
-          <span>Quản lý thực đơn</span>
-        </a>
-        <a href="chi-nhanh.html" class="nav-item active">
-          <i class="fas fa-store"></i>
-          <span>Quản lý chi nhánh</span>
-        </a>
-        <a href="#" class="nav-item">
-          <i class="fas fa-chart-bar"></i>
-          <span>Thống kê báo cáo</span>
-        </a>
-        <a href="#" class="nav-item">
-          <i class="fas fa-user-shield"></i>
-          <span>Phân quyền nhân viên</span>
-        </a>
-        <a href="#" class="nav-item">
-          <i class="fas fa-ticket-alt"></i>
-          <span>Quản lý khuyến mãi</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-info">
-          <i class="fas fa-user-circle"></i>
-          <div>
-            <div class="user-name">Admin</div>
-            <div class="user-role">Quản trị viên</div>
-          </div>
-        </div>
-        <button class="btn-logout">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
-      </div>
-    </aside>
+    <!-- Sidebar (shared) -->
+    <?php include __DIR__ . '/sidebar.php'; ?>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -526,11 +506,12 @@ color: #f5f1ed;
               </tr>
             </thead>
             <tbody>
+              <?php foreach ($branches as $branch): ?>
               <tr>
-                <td>CN001</td>
-                <td>Chi nhánh Quận 1</td>
-                <td>123 Nguyễn Huệ, Quận 1, TP.HCM</td>
-                <td>028 3822 1234</td>
+                <td><?php echo $branch['ID']; ?></td>
+                <td><?php echo $branch['Name']; ?></td>
+                <td><?php echo $branch['Address']; ?></td>
+                <td><?php echo $branch['Phone']; ?></td>
                 <td><span class="status-badge status-active">Đang hoạt động</span></td>
                 <td>
                   <div class="action-buttons">
@@ -546,120 +527,44 @@ color: #f5f1ed;
                   </div>
                 </td>
               </tr>
-              <tr>
-                <td>CN002</td>
-                <td>Chi nhánh Quận 3</td>
-                <td>456 Võ Văn Tần, Quận 3, TP.HCM</td>
-                <td>028 3930 5678</td>
-                <td><span class="status-badge status-active">Đang hoạt động</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn-action btn-view" title="Xem chi tiết">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-edit" title="Sửa">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-action btn-delete" title="Xóa">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>CN003</td>
-                <td>Chi nhánh Bình Thạnh</td>
-                <td>789 Điện Biên Phủ, Bình Thạnh, TP.HCM</td>
-                <td>028 3512 9012</td>
-                <td><span class="status-badge status-active">Đang hoạt động</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn-action btn-view" title="Xem chi tiết">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-edit" title="Sửa">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-action btn-delete" title="Xóa">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>CN004</td>
-                <td>Chi nhánh Phú Nhuận</td>
-                <td>321 Phan Xích Long, Phú Nhuận, TP.HCM</td>
-                <td>028 3997 3456</td>
-                <td><span class="status-badge status-inactive">Tạm đóng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn-action btn-view" title="Xem chi tiết">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-edit" title="Sửa">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-action btn-delete" title="Xóa">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>CN005</td>
-                <td>Chi nhánh Quận 7</td>
-                <td>555 Nguyễn Văn Linh, Quận 7, TP.HCM</td>
-                <td>028 3775 7890</td>
-                <td><span class="status-badge status-active">Đang hoạt động</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn-action btn-view" title="Xem chi tiết">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-edit" title="Sửa">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-action btn-delete" title="Xóa">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>CN006</td>
-                <td>Chi nhánh Tân Bình</td>
-                <td>888 Cộng Hòa, Tân Bình, TP.HCM</td>
-                <td>028 3844 2345</td>
-                <td><span class="status-badge status-active">Đang hoạt động</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn-action btn-view" title="Xem chi tiết">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-edit" title="Sửa">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-action btn-delete" title="Xóa">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
 
         <div class="pagination">
-          <button class="btn-page" disabled>
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button class="btn-page active">1</button>
-          <button class="btn-page">2</button>
-          <button class="btn-page">3</button>
-          <button class="btn-page">
-            <i class="fas fa-chevron-right"></i>
-          </button>
+          <?php
+            // build page url preserving other query params
+            function page_url($p) {
+              $params = $_GET;
+              $params['page'] = $p;
+              $params['limit'] = $GLOBALS['limit'];
+              return htmlspecialchars($_SERVER['PHP_SELF'] . '?' . http_build_query($params));
+            }
+
+            // prev
+            if ($page > 1) {
+              echo '<a class="btn-page" href="' . page_url($page - 1) . '"><i class="fas fa-chevron-left"></i></a>';
+            } else {
+              echo '<button class="btn-page" disabled><i class="fas fa-chevron-left"></i></button>';
+            }
+
+            // pages (concise)
+            for ($i = 1; $i <= $totalPages; $i++) {
+              if ($i == $page) {
+                echo '<button class="btn-page active">' . $i . '</button>';
+              } else {
+                echo '<a class="btn-page" href="' . page_url($i) . '">' . $i . '</a>';
+              }
+            }
+
+            // next
+            if ($page < $totalPages) {
+              echo '<a class="btn-page" href="' . page_url($page + 1) . '"><i class="fas fa-chevron-right"></i></a>';
+            } else {
+              echo '<button class="btn-page" disabled><i class="fas fa-chevron-right"></i></button>';
+            }
+          ?>
         </div>
       </div>
     </main>

@@ -1,7 +1,7 @@
 <?php
 class Controller {
     public function model($model) {
-        $modelPath = "./app/models/" . $model . ".php";
+        $modelPath = __DIR__ . "/../models/" . $model . ".php";
 
         // 🔍 Kiểm tra file model có tồn tại không
         if (file_exists($modelPath)) {
@@ -20,7 +20,7 @@ class Controller {
     }
 
     public function view($view, $data = []) {
-        $viewPath = "./app/views/" . $view . ".php";
+        $viewPath = __DIR__ . "/../views/" . $view . ".php";
 
         // 🔍 Kiểm tra file view có tồn tại không
         if (file_exists($viewPath)) {
