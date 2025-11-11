@@ -142,7 +142,7 @@
           // So sánh controller/action hiện tại với link menu
           $isActive = ($currentController === $itemController && $currentAction === $itemAction);
         ?>
-        <a href="/Project_cafe_shop/app/views/<?= $item['link'] ?>"
+        <a href="/Project_cafe_shop/<?= $item['link'] ?>"
            class="nav-item <?= $isActive ? 'active' : '' ?>">
           <i class="<?= $item['icon'] ?>"></i>
           <span><?= $item['title'] ?></span>

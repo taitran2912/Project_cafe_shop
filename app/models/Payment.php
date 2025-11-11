@@ -22,5 +22,60 @@ class Payment extends Model {
         return $data;
     }
 
-    
+    public function getDefaultAddress($customerId) {
+        $query = "SELECT ad.Address, ac.Name, ac.Phone, ad.ID 
+                    FROM Address ad 
+                    JOIN Account ac 
+                    ON ad.ID_Customer = ac.ID 
+                    WHERE ad.ID_Customer = ? 
+                    AND ad.AddressDefault = 1 
+                    LIMIT 1;";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $customerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $row = $result->fetch_assoc(); // Lấy 1 dòng duy nhất
+
+        $stmt->close();
+
+        if ($row) {
+            return [
+                'ID' => $row['ID'],
+                'Name' => $row['Name'],
+                'Phone' => $row['Phone'],
+                'Address' => $row['Address']
+            ];
+        } else {
+            return null;
+        }
+    }
+
+    public function getAllAddress($customerId) {
+        $query = "SELECT ad.Address, ac.Name, ac.Phone, ad.ID, ad.AddressDefault
+                    FROM Address ad 
+                    JOIN Account ac 
+                    ON ad.ID_Customer = ac.ID 
+                    WHERE ad.ID_Customer = ?;";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $customerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $addresses = [];
+        while ($row = $result->fetch_assoc()) {
+            $addresses[] = [
+                'ID' => $row['ID'],
+                'Name' => $row['Name'],
+                'Phone' => $row['Phone'],
+                'Address' => $row['Address'],
+                'is_default' => $row['AddressDefault']
+            ];
+        }
+
+        $stmt->close();
+        return $addresses; // Trả về mảng nhiều địa chỉ
+    }    
 }   
