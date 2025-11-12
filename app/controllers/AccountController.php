@@ -2,16 +2,6 @@
 require_once __DIR__ . '/../core/Controller.php';
 class AccountController extends Controller {
 
-    public function index() {
-        $accountModel = $this->model('Account');
-        $data = [
-            'title' => 'Tài khoản',
-            'accounts' => $accountModel->getAllAccounts(),
-            'pagination' => $accountModel->paginate()
-        ];
-        $this->view('admin/manager/PQNV', $data);
-    }
-
     public function getAllAccounts() {
         $accountModel = $this->model('Account');
         return $accountModel->getAllAccounts();

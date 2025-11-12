@@ -35,10 +35,11 @@
             case 'branch':
               include_once 'app/views/admin/home/branch.php';
               break;
-            case (preg_match('/^branch_detail\/\d+$/', $action) ? true : false):
-              include_once 'app/views/admin/home/branch_detail.php';
+            case 'menu':
+              include_once 'app/views/admin/home/menu.php'; // Tuỳ theo action để include file tương ứng
+              break;
             default:
-              include_once 'app/views/admin/home/content.php';
+              include_once 'app/views/admin/home/branch.php';
               break;
           }
       ?>

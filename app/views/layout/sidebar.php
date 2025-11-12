@@ -1,87 +1,3 @@
-<style>
-  /* Sidebar */
-.sidebar {
-    width: 260px;
-    background: linear-gradient(180deg, #5d4037 0%, #4e342e 100%);
-    color: #f5f1ed;
-    padding: 24px 0;
-    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-    position: fixed;
-    height: 100vh;
-    overflow-y: auto;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 24px 24px;
-    border-bottom: 1px solid rgba(245, 241, 237, 0.2);
-    margin-bottom: 24px;
-}
-
-.logo i {
-    font-size: 32px;
-    color: #d7a86e;
-}
-
-.logo span {
-    font-size: 20px;
-    font-weight: 700;
-    color: #f5f1ed;
-}
-
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 0 12px;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    color: #e0d5c7;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    font-size: 15px;
-}
-
-.nav-item:hover {
-    background-color: rgba(215, 168, 110, 0.15);
-    color: #f5f1ed;
-}
-
-.nav-item.active {
-    background-color: #d7a86e;
-    color: #3d2817;
-    font-weight: 600;
-}
-
-.nav-item i {
-    font-size: 18px;
-    width: 20px;
-}
-.main-content {
-    margin-left: 260px; /* width of the sidebar */
-    transition: margin-left 0.2s ease;
-}
-
-@media (max-width: 768px) {
-    /* On small screens sidebar becomes horizontal/stacked; remove left margin */
-    .main-content {
-        margin-left: 0;
-    }
-    .sidebar {
-        position: relative;
-        height: auto;
-    }
-}
-</style>
-
 <aside class="sidebar">
   <div class="logo">
     <i class="fas fa-coffee"></i>
@@ -101,13 +17,13 @@
     [
       "title" => "Quản lý thực đơn",
       "icon"  => "fas fa-utensils",
-      "link"  => "admin/manager/QLTD",
+      "link"  => "admin/menu",   // admin trỏ đến AdminController, menu là action trỏ đến function menu() được viết trong AdminController
       "roles" => [1]
     ],
     [
       "title" => "Quản lý chi nhánh",
       "icon"  => "fas fa-store",
-      "link"  => "admin/manager/QLCN",
+      "link"  => "admin/branch",
       "roles" => [1]
     ],
     [

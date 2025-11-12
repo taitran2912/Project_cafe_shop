@@ -49,4 +49,16 @@ class AdminController extends Controller {
         ];
         $this->view('admin/home/index', $data);
     }
+
+    public function menu() { // từ function menu render ra view thực đơn ở trang index
+        $productModel = $this->model('Product');
+        $data = [
+            'title' => 'Sản phẩm',
+            'products' => $productModel->getAllProducts(),
+            // 'pagination' => $productModel->paginate()
+
+        ];
+        $this->view('admin/home/index', $data);
+    }
+
 }

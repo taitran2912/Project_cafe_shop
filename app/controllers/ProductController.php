@@ -1,18 +1,5 @@
 <?php
-require_once __DIR__ . '/../core/Controller.php';
 class ProductController extends Controller {
-
-    public function index() {
-        $productModel = $this->model('Product');
-        $data = [
-            'title' => 'Sản phẩm',
-            'products' => $productModel->getAllProducts(),
-            'pagination' => $productModel->paginate()
-
-        ];
-        $this->view('admin/manager/QLTD', $data);
-    }
-
     public function getAllProducts() {
         $productModel = $this->model('Product');
         return $productModel->getAllProducts();
@@ -27,29 +14,7 @@ class ProductController extends Controller {
         $productModel = $this->model('Product');
         return $productModel->countProducts();
     }
-    public function paginate($page = 1, $limit = 5) {
-        $productModel = $this->model('Product');
-
-        // sanitize
-        $page = (int)$page;
-        $limit = (int)$limit;
-        if ($page < 1) $page = 1;
-        if ($limit < 1) $limit = 5;
-
-        $totalItems = $productModel->countProducts();
-        $totalPages = ($totalItems > 0) ? (int)ceil($totalItems / $limit) : 1;
-        if ($page > $totalPages) $page = $totalPages;
-
-        $products = $productModel->getProductsByPage($page, $limit);
-
-        return [
-            'products' => $products,
-            'totalItems' => $totalItems,
-            'totalPages' => $totalPages,
-            'currentPage' => $page,
-            'limit' => $limit
-        ];
-    }
+    
     
     /**
      * Store a new product
