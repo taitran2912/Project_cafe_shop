@@ -14,7 +14,7 @@
                 <p>Hệ thống quản lý quán cafe</p>
             </div>
             
-            <form id="loginForm" class="login-form" action="<?= BASE_URL ?>login_admin/auth" method="POST">
+            <form id="loginForm" class="login-form" action="login_admin/auth" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="admin@cafe.com" required>

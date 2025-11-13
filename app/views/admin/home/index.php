@@ -39,7 +39,7 @@
               include_once 'app/views/admin/home/menu.php'; // Tuỳ theo action để include file tương ứng
               break;
             default:
-              include_once 'app/views/admin/home/branch.php';
+              
               break;
           }
       ?>
