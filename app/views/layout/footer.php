@@ -36,7 +36,7 @@
             </div>
         </div>
     </footer>
-        <script src="<?= BASE_URL ?>public/js/script.js"></script>
+        <script src="public/js/script.js"></script>
         <!-- <script src="<?= BASE_URL ?>public/js/<?= $data['js'] ?>.js"></script> -->
 
 </body>

@@ -49,11 +49,11 @@ class MenuController extends Controller {
 $action = $_GET['action'] ?? '';
 $controller = new MenuController();
 
-switch ($action) {
-    case 'addToCart':
-        $controller->addToCart();
-        break;
-    default:
-        $controller->index();
-        break;
-    }
+// switch ($action) {
+//     case 'addToCart':
+//         $controller->addToCart();
+//         break;
+//     default:
+//         $controller->index();
+//         break;
+//     }
