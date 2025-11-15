@@ -32,7 +32,6 @@ class Product extends Model
     {
         $query = "SELECT ID, ID_category, Name, Price, Description, Status 
                   FROM {$this->table} 
-                  ORDER BY ID DESC 
                   LIMIT 100;";
         $stmt = $this->db->prepare($query);
         $stmt->execute();

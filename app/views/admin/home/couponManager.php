@@ -1,148 +1,109 @@
 <?php 
+require_once __DIR__ . '/../../../models/Coupon.php';
 
 // Initialize messages
 $successMessage = '';
 $errorMessage = '';
 
-// Handle form submission for adding product
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_product') {
-    // Prepare data from form
-    $productData = [
-        'ID_category' => isset($_POST['category']) ? (int)$_POST['category'] : null,
-        'Name' => isset($_POST['name']) ? trim($_POST['name']) : '',
+// Handle form submission for adding coupon
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_coupon') {
+    $couponData = [
+        'Code' => isset($_POST['code']) ? trim($_POST['code']) : '',
         'Description' => isset($_POST['description']) ? trim($_POST['description']) : '',
-        'Price' => isset($_POST['price']) ? (float)$_POST['price'] : 0,
+        'Value' => isset($_POST['value']) ? trim($_POST['value']) : '',
+        'StartDate' => isset($_POST['start_date']) ? trim($_POST['start_date']) : '',
+        'EndDate' => isset($_POST['end_date']) ? trim($_POST['end_date']) : '',
         'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active',
-        'Image' => ''
+        'Quantity' => isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0
     ];
 
-    // Handle image upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../../../../../public/image/products/';
-        
-        // Create directory if it doesn't exist
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        
-        if (in_array($fileExtension, $allowedExtensions)) {
-            $newFileName = uniqid('product_') . '.' . $fileExtension;
-            $uploadPath = $uploadDir . $newFileName;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                $productData['Image'] = 'public/image/products/' . $newFileName;
-            }
-        }
-    }
-
     // Validate required fields
-    if (empty($productData['Name'])) {
-        $errorMessage = 'Tên sản phẩm không được để trống!';
-    } elseif ($productData['ID_category'] === null || $productData['ID_category'] <= 0) {
-        $errorMessage = 'Vui lòng chọn loại sản phẩm!';
-    } elseif ($productData['Price'] <= 0) {
-        $errorMessage = 'Giá sản phẩm phải lớn hơn 0!';
+    if (empty($couponData['Code'])) {
+        $errorMessage = 'Mã khuyến mãi không được để trống!';
+    } elseif (empty($couponData['Description'])) {
+        $errorMessage = 'Mô tả không được để trống!';
+    } elseif (empty($couponData['Value'])) {
+        $errorMessage = 'Giá trị khuyến mãi không được để trống!';
+    } elseif (empty($couponData['StartDate'])) {
+        $errorMessage = 'Ngày bắt đầu không được để trống!';
+    } elseif (empty($couponData['EndDate'])) {
+        $errorMessage = 'Ngày kết thúc không được để trống!';
     } else {
-        // Call model to create product
-        $productModel = new Product();
-        $result = $productModel->createProduct($productData);
+        // Call model to create coupon
+        $couponModel = new Coupon();
+        $result = $couponModel->createCoupon($couponData);
         
         if ($result) {
-            // Redirect to admin/menu with success message
-            header('Location: /Project_cafe_shop/admin/menu?success=add');
+            header('Location: /Project_cafe_shop/admin/coupon?success=add');
             exit;
         } else {
-            $errorMessage = 'Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại!';
+            $errorMessage = 'Có lỗi xảy ra khi thêm khuyến mãi. Vui lòng thử lại!';
         }
     }
 }
 
-// Handle form submission for updating product
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_product') {
-    $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+// Handle form submission for updating coupon
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_coupon') {
+    $couponId = isset($_POST['coupon_id']) ? (int)$_POST['coupon_id'] : 0;
     
-    if ($productId > 0) {
-        $productData = [
-            'ID_category' => isset($_POST['category']) ? (int)$_POST['category'] : null,
-            'Name' => isset($_POST['name']) ? trim($_POST['name']) : '',
+    if ($couponId > 0) {
+        $couponData = [
+            'Code' => isset($_POST['code']) ? trim($_POST['code']) : '',
             'Description' => isset($_POST['description']) ? trim($_POST['description']) : '',
-            'Price' => isset($_POST['price']) ? (float)$_POST['price'] : 0,
-            'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active'
+            'Value' => isset($_POST['value']) ? trim($_POST['value']) : '',
+            'StartDate' => isset($_POST['start_date']) ? trim($_POST['start_date']) : '',
+            'EndDate' => isset($_POST['end_date']) ? trim($_POST['end_date']) : '',
+            'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active',
+            'Quantity' => isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0
         ];
 
-        // Handle image upload for edit
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../../../../public/image/products/';
-            
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            
-            if (in_array($fileExtension, $allowedExtensions)) {
-                $newFileName = uniqid('product_') . '.' . $fileExtension;
-                $uploadPath = $uploadDir . $newFileName;
-                
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                    $productData['Image'] = 'public/image/products/' . $newFileName;
-                }
-            }
-        }
-
         // Validate
-        if (empty($productData['Name'])) {
-            $errorMessage = 'Tên sản phẩm không được để trống!';
-        } elseif ($productData['Price'] <= 0) {
-            $errorMessage = 'Giá sản phẩm phải lớn hơn 0!';
+        if (empty($couponData['Code'])) {
+            $errorMessage = 'Mã khuyến mãi không được để trống!';
+        } elseif (empty($couponData['Description'])) {
+            $errorMessage = 'Mô tả không được để trống!';
+        } elseif (empty($couponData['Value'])) {
+            $errorMessage = 'Giá trị khuyến mãi không được để trống!';
         } else {
-            $productModel = new Product();
-            $result = $productModel->updateProduct($productId, $productData);
+            $couponModel = new Coupon();
+            $result = $couponModel->updateCoupon($couponId, $couponData);
             
             if ($result) {
-                // Redirect to admin/menu with success message
-                header('Location: /Project_cafe_shop/admin/menu?success=edit');
+                header('Location: /Project_cafe_shop/admin/coupon?success=edit');
                 exit;
             } else {
-                $errorMessage = 'Có lỗi xảy ra khi cập nhật sản phẩm!';
+                $errorMessage = 'Có lỗi xảy ra khi cập nhật khuyến mãi!';
             }
         }
     }
 }
 
-// Handle delete product
+// Handle delete coupon
 if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-    $productId = (int)$_GET['id'];
-    if ($productId > 0) {
-        $productModel = new Product();
-        $result = $productModel->deleteProduct($productId);
+    $couponId = (int)$_GET['id'];
+    if ($couponId > 0) {
+        $couponModel = new Coupon();
+        $result = $couponModel->deleteCoupon($couponId);
         if ($result) {
-            // Redirect to admin/menu with success message
-            header('Location: /Project_cafe_shop/admin/menu?success=delete');
+            header('Location: /Project_cafe_shop/admin/coupon?success=delete');
             exit;
         } else {
-            $errorMessage = 'Có lỗi xảy ra khi xóa sản phẩm!';
+            $errorMessage = 'Có lỗi xảy ra khi xóa khuyến mãi!';
         }
     }
 }
-
-
 
 // Handle success messages from redirect
 if (isset($_GET['success'])) {
     switch ($_GET['success']) {
         case 'add':
-            $successMessage = 'Thêm sản phẩm thành công!';
+            $successMessage = 'Thêm khuyến mãi thành công!';
             break;
         case 'edit':
-            $successMessage = 'Cập nhật sản phẩm thành công!';
+            $successMessage = 'Cập nhật khuyến mãi thành công!';
             break;
         case 'delete':
-            $successMessage = 'Xóa sản phẩm thành công!';
+            $successMessage = 'Xóa khuyến mãi thành công!';
             break;
     }
 }
@@ -151,30 +112,30 @@ if (isset($_GET['success'])) {
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 $isSearching = !empty($searchQuery);
 
-// Get products - either from data passed by controller or fetch directly
-if (!isset($products)) {
-    $productModel = new Product();
-    $allProducts = $productModel->getAllProducts();
+// Get coupons
+if (!isset($coupons)) {
+    $couponModel = new Coupon();
+    $allcoupons = $couponModel->getAllCoupons();
 } else {
-    $allProducts = $products;
+    $allcoupons = $coupons;
 }
 
-// Filter products if searching
+// Filter coupons if searching
 if ($isSearching) {
-    $products = array_filter($allProducts, function($product) use ($searchQuery) {
+    $coupons = array_filter($allcoupons, function($coupon) use ($searchQuery) {
         $searchLower = strtolower($searchQuery);
-        return stripos($product['Name'], $searchLower) !== false ||
-               stripos($product['Description'], $searchLower) !== false ||
-               stripos($product['ID'], $searchLower) !== false;
+        return stripos($coupon['Code'], $searchLower) !== false ||
+               stripos($coupon['Description'], $searchLower) !== false ||
+               stripos($coupon['Discount_value'], $searchLower) !== false;
     });
-    $products = array_values($products); // Re-index array
+    $coupons = array_values($coupons);
 } else {
-    $products = $allProducts;
+    $coupons = $allcoupons;
 }
 
 ?>
 
-            <!-- Content Area -->
+    <!-- Content Area -->
     <div class="content">
         <!-- Success/Error Messages -->
         <?php if (!empty($successMessage)): ?>
@@ -193,13 +154,13 @@ if ($isSearching) {
 
         <!-- Content Header -->
         <div class="content-header">
-            <button class="btn btn-primary" id="btnAddProduct">
+            <button class="btn btn-primary" id="btnAddcoupon">
                 <i class="fas fa-plus"></i>
-                Thêm sản phẩm
+                Thêm khuyến mãi
             </button>
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." value="<?php echo htmlspecialchars($searchQuery); ?>" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm khuyến mãi..." value="<?php echo htmlspecialchars($searchQuery); ?>" autocomplete="off">
                 <?php if ($isSearching): ?>
                     <button type="button" class="clear-search-btn" id="clearSearchBtn" title="Xóa tìm kiếm">
                         <i class="fas fa-times"></i>
@@ -211,75 +172,27 @@ if ($isSearching) {
         <?php if ($isSearching): ?>
             <div class="search-info">
                 <i class="fas fa-info-circle"></i>
-                Tìm thấy <strong><?php echo count($products); ?></strong> sản phẩm với từ khóa "<strong><?php echo htmlspecialchars($searchQuery); ?></strong>"
+                Tìm thấy <strong><?php echo count($coupons); ?></strong> khuyến mãi với từ khóa "<strong><?php echo htmlspecialchars($searchQuery); ?></strong>"
             </div>
         <?php endif; ?>
 
         <!-- Table Container -->
         <div class="table-container">
-            <table class="data-table" id="productTable">
+            <table class="data-table" id="couponTable">
                 <thead>
                     <tr>
-                        <th>Mã SP</th>
-                        <th>Loại</th>
-                        <th>Tên sản phẩm</th>
+                        <th>ID</th>
+                        <th>Mã KM</th>
                         <th>Mô tả</th>
-                        <th>Giá</th>
+                        <th>Giá trị</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Số lượng</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
-                <tbody id="productBody">
-                    <?php
-                        if (!empty($products)) {
-                            foreach($products as $product) {
-                                echo '
-                                <tr>
-                                    <td>'.$product['ID'].'</td>
-                                    <td>'.$product['ID_category'].'</td>
-                                    <td>'.$product['Name'].'</td>
-                                    <td>'.$product['Description'].'</td>
-                                    <td>'.number_format($product['Price'], 0, ',', '.').' VNĐ</td>
-                                    <td>';
-                                if ($product['Status'] == 'active') {
-                                    echo '<span class="status status-active">Đang bán</span>';
-                                } else {
-                                    echo '<span class="status status-inactive">Ngừng bán</span>';
-                                }
-                                echo '</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn-icon btn-view" title="Xem chi tiết" 
-                                                data-id="'.$product['ID'].'"
-                                                data-category="'.$product['ID_category'].'"
-                                                data-name="'.htmlspecialchars($product['Name']).'"
-                                                data-description="'.htmlspecialchars($product['Description']).'"
-                                                data-price="'.$product['Price'].'"
-                                                data-status="'.$product['Status'].'">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn-icon btn-edit" title="Sửa"
-                                                data-id="'.$product['ID'].'"
-                                                data-category="'.$product['ID_category'].'"
-                                                data-name="'.htmlspecialchars($product['Name']).'"
-                                                data-description="'.htmlspecialchars($product['Description']).'"
-                                                data-price="'.$product['Price'].'"
-                                                data-status="'.$product['Status'].'">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn-icon btn-delete" title="Xóa"
-                                                data-id="'.$product['ID'].'"
-                                                data-name="'.htmlspecialchars($product['Name']).'">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>';
-                            }
-                        } else {
-                            echo '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không có sản phẩm nào.</td></tr>';
-                        }
-                    ?>
+                <tbody id="couponBody">
                 </tbody>
             </table>
         </div>
@@ -288,68 +201,67 @@ if ($isSearching) {
         <div class="pagination" id="pagination"></div>
     </div>
 
-
-    <!-- Modal Thêm Sản Phẩm -->
-    <div id="addProductModal" class="modal">
+    <!-- Modal Thêm Khuyến Mãi -->
+    <div id="addcouponModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới</h2>
+                <h2><i class="fas fa-ticket-alt"></i> Thêm Khuyến Mãi Mới</h2>
                 <button class="close-btn" id="closeModal">&times;</button>
             </div>
-            <form id="addProductForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="add_product">
+            <form id="addcouponForm" method="POST" action="">
+                <input type="hidden" name="action" value="add_coupon">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="productCategory">
-                            <i class="fas fa-list"></i> Loại sản phẩm <span class="required">*</span>
+                        <label for="couponCode">
+                            <i class="fas fa-barcode"></i> Mã khuyến mãi <span class="required">*</span>
                         </label>
-                        <select id="productCategory" name="category" required>
-                            <option value="">-- Chọn loại sản phẩm --</option>
-                            <option value="1">Cà phê</option>
-                            <option value="2">Trà</option>
-                            <option value="3">Sinh tố</option>
-                            <option value="4">Bánh ngọt</option>
-                            <option value="5">Đồ ăn nhẹ</option>
-                        </select>
+                        <input type="text" id="couponCode" name="code" placeholder="Nhập mã khuyến mãi" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="productName">
-                            <i class="fas fa-coffee"></i> Tên sản phẩm <span class="required">*</span>
+                        <label for="couponValue">
+                            <i class="fas fa-percentage"></i> Giá trị <span class="required">*</span>
                         </label>
-                        <input type="text" id="productName" name="name" placeholder="Nhập tên sản phẩm" required>
+                        <input type="text" id="couponValue" name="value" placeholder="Ví dụ: 10%, 20000đ" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="couponDescription">
+                            <i class="fas fa-align-left"></i> Mô tả <span class="required">*</span>
+                        </label>
+                        <textarea id="couponDescription" name="description" placeholder="Nhập mô tả khuyến mãi" rows="3" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="productPrice">
-                            <i class="fas fa-dollar-sign"></i> Giá (VNĐ) <span class="required">*</span>
+                        <label for="couponStartDate">
+                            <i class="fas fa-calendar-alt"></i> Ngày bắt đầu <span class="required">*</span>
                         </label>
-                        <input type="number" id="productPrice" name="price" placeholder="Nhập giá sản phẩm" min="0" step="1000" required>
+                        <input type="date" id="couponStartDate" name="start_date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="productStatus">
+                        <label for="couponEndDate">
+                            <i class="fas fa-calendar-check"></i> Ngày kết thúc <span class="required">*</span>
+                        </label>
+                        <input type="date" id="couponEndDate" name="end_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="couponQuantity">
+                            <i class="fas fa-box"></i> Số lượng <span class="required">*</span>
+                        </label>
+                        <input type="number" id="couponQuantity" name="quantity" placeholder="Nhập số lượng" min="0" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="couponStatus">
                             <i class="fas fa-toggle-on"></i> Trạng thái <span class="required">*</span>
                         </label>
-                        <select id="productStatus" name="status" required>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
+                        <select id="couponStatus" name="status" required>
+                            <option value="active">Đang hoạt động</option>
+                            <option value="inactive">Chưa kích hoạt</option>
+                            <option value="expired">Đã hết hạn</option>
                         </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="productDescription">
-                            <i class="fas fa-align-left"></i> Mô tả
-                        </label>
-                        <textarea id="productDescription" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="productImage">
-                            <i class="fas fa-image"></i> Hình ảnh sản phẩm
-                        </label>
-                        <input type="file" id="productImage" name="image" accept="image/*">
-                        <div id="imagePreview" class="image-preview"></div>
                     </div>
                 </div>
 
@@ -358,43 +270,51 @@ if ($isSearching) {
                         <i class="fas fa-times"></i> Hủy
                     </button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Lưu sản phẩm
+                        <i class="fas fa-save"></i> Lưu khuyến mãi
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Xem Chi Tiết Sản Phẩm -->
-    <div id="viewProductModal" class="modal">
+    <!-- Modal Xem Chi Tiết -->
+    <div id="viewcouponModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-info-circle"></i> Chi Tiết Sản Phẩm</h2>
+                <h2><i class="fas fa-info-circle"></i> Chi Tiết Khuyến Mãi</h2>
                 <button class="close-btn" id="closeViewModal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="detail-grid">
                     <div class="detail-item">
-                        <label><i class="fas fa-hashtag"></i> Mã sản phẩm:</label>
+                        <label><i class="fas fa-hashtag"></i> ID:</label>
                         <span id="view_id"></span>
                     </div>
                     <div class="detail-item">
-                        <label><i class="fas fa-list"></i> Loại sản phẩm:</label>
-                        <span id="view_category"></span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <label><i class="fas fa-coffee"></i> Tên sản phẩm:</label>
-                        <span id="view_name"></span>
+                        <label><i class="fas fa-barcode"></i> Mã KM:</label>
+                        <span id="view_code"></span>
                     </div>
                     <div class="detail-item full-width">
                         <label><i class="fas fa-align-left"></i> Mô tả:</label>
                         <span id="view_description"></span>
                     </div>
                     <div class="detail-item">
-                        <label><i class="fas fa-dollar-sign"></i> Giá:</label>
-                        <span id="view_price"></span>
+                        <label><i class="fas fa-percentage"></i> Giá trị:</label>
+                        <span id="view_value"></span>
                     </div>
                     <div class="detail-item">
+                        <label><i class="fas fa-box"></i> Số lượng:</label>
+                        <span id="view_quantity"></span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-calendar-alt"></i> Ngày bắt đầu:</label>
+                        <span id="view_start_date"></span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-calendar-check"></i> Ngày kết thúc:</label>
+                        <span id="view_end_date"></span>
+                    </div>
+                    <div class="detail-item full-width">
                         <label><i class="fas fa-toggle-on"></i> Trạng thái:</label>
                         <span id="view_status"></span>
                     </div>
@@ -408,68 +328,68 @@ if ($isSearching) {
         </div>
     </div>
 
-    <!-- Modal Sửa Sản Phẩm -->
-    <div id="editProductModal" class="modal">
+    <!-- Modal Sửa Khuyến Mãi -->
+    <div id="editcouponModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-edit"></i> Sửa Sản Phẩm</h2>
+                <h2><i class="fas fa-edit"></i> Sửa Khuyến Mãi</h2>
                 <button class="close-btn" id="closeEditModal">&times;</button>
             </div>
-            <form id="editProductForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="edit_product">
-                <input type="hidden" name="product_id" id="edit_product_id">
+            <form id="editcouponForm" method="POST" action="">
+                <input type="hidden" name="action" value="edit_coupon">
+                <input type="hidden" name="coupon_id" id="edit_coupon_id">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="editProductCategory">
-                            <i class="fas fa-list"></i> Loại sản phẩm <span class="required">*</span>
+                        <label for="editcouponCode">
+                            <i class="fas fa-barcode"></i> Mã khuyến mãi <span class="required">*</span>
                         </label>
-                        <select id="editProductCategory" name="category" required>
-                            <option value="">-- Chọn loại sản phẩm --</option>
-                            <option value="1">Cà phê</option>
-                            <option value="2">Trà</option>
-                            <option value="3">Sinh tố</option>
-                            <option value="4">Bánh ngọt</option>
-                            <option value="5">Đồ ăn nhẹ</option>
-                        </select>
+                        <input type="text" id="editcouponCode" name="code" placeholder="Nhập mã khuyến mãi" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="editProductName">
-                            <i class="fas fa-coffee"></i> Tên sản phẩm <span class="required">*</span>
+                        <label for="editcouponValue">
+                            <i class="fas fa-percentage"></i> Giá trị <span class="required">*</span>
                         </label>
-                        <input type="text" id="editProductName" name="name" placeholder="Nhập tên sản phẩm" required>
+                        <input type="text" id="editcouponValue" name="value" placeholder="Ví dụ: 10%, 20000đ" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="editcouponDescription">
+                            <i class="fas fa-align-left"></i> Mô tả <span class="required">*</span>
+                        </label>
+                        <textarea id="editcouponDescription" name="description" placeholder="Nhập mô tả khuyến mãi" rows="3" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="editProductPrice">
-                            <i class="fas fa-dollar-sign"></i> Giá (VNĐ) <span class="required">*</span>
+                        <label for="editcouponStartDate">
+                            <i class="fas fa-calendar-alt"></i> Ngày bắt đầu <span class="required">*</span>
                         </label>
-                        <input type="number" id="editProductPrice" name="price" placeholder="Nhập giá sản phẩm" min="0" step="1000" required>
+                        <input type="date" id="editcouponStartDate" name="start_date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="editProductStatus">
+                        <label for="editcouponEndDate">
+                            <i class="fas fa-calendar-check"></i> Ngày kết thúc <span class="required">*</span>
+                        </label>
+                        <input type="date" id="editcouponEndDate" name="end_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editcouponQuantity">
+                            <i class="fas fa-box"></i> Số lượng <span class="required">*</span>
+                        </label>
+                        <input type="number" id="editcouponQuantity" name="quantity" placeholder="Nhập số lượng" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editcouponStatus">
                             <i class="fas fa-toggle-on"></i> Trạng thái <span class="required">*</span>
                         </label>
-                        <select id="editProductStatus" name="status" required>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
+                        <select id="editcouponStatus" name="status" required>
+                            <option value="active">Đang hoạt động</option>
+                            <option value="inactive">Chưa kích hoạt</option>
+                            <option value="expired">Đã hết hạn</option>
                         </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editProductDescription">
-                            <i class="fas fa-align-left"></i> Mô tả
-                        </label>
-                        <textarea id="editProductDescription" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editProductImage">
-                            <i class="fas fa-image"></i> Hình ảnh sản phẩm (để trống nếu không muốn thay đổi)
-                        </label>
-                        <input type="file" id="editProductImage" name="image" accept="image/*">
-                        <div id="editImagePreview" class="image-preview"></div>
                     </div>
                 </div>
 
@@ -494,7 +414,7 @@ if ($isSearching) {
             </div>
             <div class="modal-body">
                 <p class="delete-message">
-                    Bạn có chắc chắn muốn xóa sản phẩm <strong id="delete_product_name"></strong>?
+                    Bạn có chắc chắn muốn xóa khuyến mãi <strong id="delete_coupon_code"></strong>?
                 </p>
                 <p class="delete-warning">
                     <i class="fas fa-info-circle"></i> Hành động này không thể hoàn tác!
@@ -739,6 +659,11 @@ if ($isSearching) {
         }
 
         .status-inactive {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-expired {
             background-color: #f8d7da;
             color: #721c24;
         }
@@ -852,24 +777,13 @@ if ($isSearching) {
             padding: 0;
             border-radius: 16px;
             width: 90%;
-            max-width: 700px;
+            max-width: 800px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             animation: slideDown 0.4s ease;
         }
 
         .modal-small {
             max-width: 500px;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
 
         .modal-header {
@@ -975,23 +889,8 @@ if ($isSearching) {
             box-shadow: 0 0 0 3px rgba(215, 168, 110, 0.1);
         }
 
-        .image-preview {
-            margin-top: 12px;
-            border: 2px dashed #d7a86e;
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fafafa;
-        }
-
-        .image-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            object-fit: contain;
+        .form-group textarea {
+            resize: vertical;
         }
 
         .detail-grid {
@@ -1087,76 +986,94 @@ if ($isSearching) {
     </style>
 
     <script>
-        // Product data from PHP
-        const productsData = <?php echo json_encode($products); ?>;
+        // coupon data from PHP
+        const couponsData = <?php echo json_encode($coupons); ?>;
         
-        // Category names mapping
-        const categoryNames = {
-            '1': 'Cà phê',
-            '2': 'Trà',
-            '3': 'Sinh tố',
-            '4': 'Bánh ngọt',
-            '5': 'Đồ ăn nhẹ'
-        };
-
         // Pagination settings
         let currentPage = 1;
         const itemsPerPage = 5;
-        let totalPages = Math.ceil(productsData.length / itemsPerPage);
+        let totalPages = Math.ceil(couponsData.length / itemsPerPage);
 
-        // Display products for current page
-        function displayProducts(page) {
-            const tbody = document.getElementById('productBody');
+        // Format date to dd/mm/yyyy or display time if it's time format
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            // If it's a time format (HH:MM:SS), just return it
+            if (dateString.match(/^\d{2}:\d{2}:\d{2}$/)) {
+                return dateString;
+            }
+            // Otherwise try to parse as date
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return dateString; // Return original if invalid
+            }
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Display coupons for current page
+        function displaycoupons(page) {
+            const tbody = document.getElementById('couponBody');
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
-            const pageProducts = productsData.slice(start, end);
+            const pagecoupons = couponsData.slice(start, end);
 
-            if (pageProducts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;">Không có sản phẩm nào</td></tr>';
+            if (pagecoupons.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">Không có khuyến mãi nào</td></tr>';
                 return;
             }
 
             tbody.innerHTML = '';
-            pageProducts.forEach(product => {
+            pagecoupons.forEach(coupon => {
                 const row = document.createElement('tr');
-                const categoryName = categoryNames[product.ID_category] || 'N/A';
-                const priceFormatted = parseFloat(product.Price).toLocaleString('vi-VN') + ' VNĐ';
-                const statusClass = product.Status === 'active' ? 'status-active' : 'status-inactive';
-                const statusText = product.Status === 'active' ? 'Đang bán' : 'Ngừng bán';
-                const descShort = product.Description && product.Description.length > 50 
-                    ? product.Description.substring(0, 50) + '...' 
-                    : (product.Description || '');
+                
+                let statusClass = 'status-active';
+                let statusText = 'Đang hoạt động';
+                if (coupon.Status === 'inactive') {
+                    statusClass = 'status-inactive';
+                    statusText = 'Chưa kích hoạt';
+                } else if (coupon.Status === 'expired') {
+                    statusClass = 'status-expired';
+                    statusText = 'Đã hết hạn';
+                }
 
                 row.innerHTML = `
-                    <td>${product.ID}</td>
-                    <td>${categoryName}</td>
-                    <td>${escapeHtml(product.Name)}</td>
-                    <td>${escapeHtml(descShort)}</td>
-                    <td>${priceFormatted}</td>
+                    <td>${coupon.ID}</td>
+                    <td>${escapeHtml(coupon.Code)}</td>
+                    <td>${escapeHtml(coupon.Description)}</td>
+                    <td>${escapeHtml(coupon.Discount_value)}</td>
+                    <td>${formatDate(coupon.StartDate)}</td>
+                    <td>${formatDate(coupon.EndDate)}</td>
+                    <td>${coupon.Quantity}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
                         <div class="action-buttons">
                             <button class="btn-action btn-view" title="Xem chi tiết" 
-                                data-id="${product.ID}"
-                                data-category="${product.ID_category}"
-                                data-name="${escapeHtml(product.Name)}"
-                                data-description="${escapeHtml(product.Description || '')}"
-                                data-price="${product.Price}"
-                                data-status="${product.Status}">
+                                data-id="${coupon.ID}"
+                                data-code="${escapeHtml(coupon.Code)}"
+                                data-description="${escapeHtml(coupon.Description)}"
+                                data-value="${escapeHtml(coupon.Discount_value)}"
+                                data-start="${coupon.StartDate}"
+                                data-end="${coupon.EndDate}"
+                                data-quantity="${coupon.Quantity}"
+                                data-status="${coupon.Status}">
                                 <i class="fas fa-eye"></i>
                             </button>
                             <button class="btn-action btn-edit" title="Sửa"
-                                data-id="${product.ID}"
-                                data-category="${product.ID_category}"
-                                data-name="${escapeHtml(product.Name)}"
-                                data-description="${escapeHtml(product.Description || '')}"
-                                data-price="${product.Price}"
-                                data-status="${product.Status}">
+                                data-id="${coupon.ID}"
+                                data-code="${escapeHtml(coupon.Code)}"
+                                data-description="${escapeHtml(coupon.Description)}"
+                                data-value="${escapeHtml(coupon.Discount_value)}"
+                                data-start="${coupon.StartDate}"
+                                data-end="${coupon.EndDate}"
+                                data-quantity="${coupon.Quantity}"
+                                data-status="${coupon.Status}">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn-action btn-delete" title="Xóa"
-                                data-id="${product.ID}"
-                                data-name="${escapeHtml(product.Name)}">
+                                data-id="${coupon.ID}"
+                                data-code="${escapeHtml(coupon.Code)}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -1183,7 +1100,7 @@ if ($isSearching) {
             prevBtn.onclick = () => {
                 if (currentPage > 1) {
                     currentPage--;
-                    displayProducts(currentPage);
+                    displaycoupons(currentPage);
                     displayPagination();
                 }
             };
@@ -1200,7 +1117,7 @@ if ($isSearching) {
                 }
                 pageBtn.onclick = () => {
                     currentPage = i;
-                    displayProducts(currentPage);
+                    displaycoupons(currentPage);
                     displayPagination();
                 };
                 pagination.appendChild(pageBtn);
@@ -1214,7 +1131,7 @@ if ($isSearching) {
             nextBtn.onclick = () => {
                 if (currentPage < totalPages) {
                     currentPage++;
-                    displayProducts(currentPage);
+                    displaycoupons(currentPage);
                     displayPagination();
                 }
             };
@@ -1224,8 +1141,8 @@ if ($isSearching) {
             const pageInfo = document.createElement('span');
             pageInfo.className = 'page-info';
             pageInfo.textContent = totalPages > 0 
-                ? `Trang ${currentPage}/${totalPages} — Tổng: ${productsData.length} mục`
-                : 'Không có sản phẩm';
+                ? `Trang ${currentPage}/${totalPages} — Tổng: ${couponsData.length} mục`
+                : 'Không có khuyến mãi';
             pagination.appendChild(pageInfo);
         }
 
@@ -1241,19 +1158,25 @@ if ($isSearching) {
             // View buttons
             document.querySelectorAll('.btn-view').forEach(btn => {
                 btn.onclick = function() {
-                    const category = this.dataset.category;
                     document.getElementById('view_id').textContent = this.dataset.id;
-                    document.getElementById('view_category').textContent = categoryNames[category] || 'N/A';
-                    document.getElementById('view_name').textContent = this.dataset.name;
-                    document.getElementById('view_description').textContent = this.dataset.description || 'Không có mô tả';
-                    document.getElementById('view_price').textContent = parseFloat(this.dataset.price).toLocaleString('vi-VN') + ' VNĐ';
+                    document.getElementById('view_code').textContent = this.dataset.code;
+                    document.getElementById('view_description').textContent = this.dataset.description;
+                    document.getElementById('view_value').textContent = this.dataset.value;
+                    document.getElementById('view_quantity').textContent = this.dataset.quantity;
+                    document.getElementById('view_start_date').textContent = formatDate(this.dataset.start);
+                    document.getElementById('view_end_date').textContent = formatDate(this.dataset.end);
                     
                     const statusSpan = document.getElementById('view_status');
-                    if (this.dataset.status === 'active') {
-                        statusSpan.innerHTML = '<span class="status-badge status-active">Đang bán</span>';
-                    } else {
-                        statusSpan.innerHTML = '<span class="status-badge status-inactive">Ngừng bán</span>';
+                    let statusClass = 'status-active';
+                    let statusText = 'Đang hoạt động';
+                    if (this.dataset.status === 'inactive') {
+                        statusClass = 'status-inactive';
+                        statusText = 'Chưa kích hoạt';
+                    } else if (this.dataset.status === 'expired') {
+                        statusClass = 'status-expired';
+                        statusText = 'Đã hết hạn';
                     }
+                    statusSpan.innerHTML = `<span class="status-badge ${statusClass}">${statusText}</span>`;
 
                     viewModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
@@ -1263,12 +1186,14 @@ if ($isSearching) {
             // Edit buttons
             document.querySelectorAll('.btn-edit').forEach(btn => {
                 btn.onclick = function() {
-                    document.getElementById('edit_product_id').value = this.dataset.id;
-                    document.getElementById('editProductCategory').value = this.dataset.category;
-                    document.getElementById('editProductName').value = this.dataset.name;
-                    document.getElementById('editProductDescription').value = this.dataset.description;
-                    document.getElementById('editProductPrice').value = this.dataset.price;
-                    document.getElementById('editProductStatus').value = this.dataset.status;
+                    document.getElementById('edit_coupon_id').value = this.dataset.id;
+                    document.getElementById('editcouponCode').value = this.dataset.code;
+                    document.getElementById('editcouponDescription').value = this.dataset.description;
+                    document.getElementById('editcouponValue').value = this.dataset.value;
+                    document.getElementById('editcouponStartDate').value = this.dataset.start;
+                    document.getElementById('editcouponEndDate').value = this.dataset.end;
+                    document.getElementById('editcouponQuantity').value = this.dataset.quantity;
+                    document.getElementById('editcouponStatus').value = this.dataset.status;
 
                     editModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
@@ -1278,8 +1203,8 @@ if ($isSearching) {
             // Delete buttons
             document.querySelectorAll('.btn-delete').forEach(btn => {
                 btn.onclick = function() {
-                    deleteProductId = this.dataset.id;
-                    document.getElementById('delete_product_name').textContent = this.dataset.name;
+                    deletecouponId = this.dataset.id;
+                    document.getElementById('delete_coupon_code').textContent = this.dataset.code;
                     deleteModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                 };
@@ -1287,14 +1212,14 @@ if ($isSearching) {
         }
 
         // Modal elements
-        const modal = document.getElementById('addProductModal');
-        const viewModal = document.getElementById('viewProductModal');
-        const editModal = document.getElementById('editProductModal');
+        const modal = document.getElementById('addcouponModal');
+        const viewModal = document.getElementById('viewcouponModal');
+        const editModal = document.getElementById('editcouponModal');
         const deleteModal = document.getElementById('deleteConfirmModal');
-        let deleteProductId = null;
+        let deletecouponId = null;
 
-        // Add product button
-        document.getElementById('btnAddProduct').onclick = () => {
+        // Add coupon button
+        document.getElementById('btnAddcoupon').onclick = () => {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         };
@@ -1303,8 +1228,7 @@ if ($isSearching) {
         function closeModal() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('addProductForm').reset();
-            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('addcouponForm').reset();
         }
 
         function closeViewModal() {
@@ -1315,14 +1239,13 @@ if ($isSearching) {
         function closeEditModal() {
             editModal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('editProductForm').reset();
-            document.getElementById('editImagePreview').innerHTML = '';
+            document.getElementById('editcouponForm').reset();
         }
 
         function closeDeleteModal() {
             deleteModal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            deleteProductId = null;
+            deletecouponId = null;
         }
 
         document.getElementById('closeModal').onclick = closeModal;
@@ -1336,10 +1259,10 @@ if ($isSearching) {
 
         // Confirm delete
         document.getElementById('confirmDeleteBtn').onclick = function() {
-            if (deleteProductId) {
+            if (deletecouponId) {
                 const currentUrl = new URL(window.location.href);
                 currentUrl.searchParams.set('action', 'delete');
-                currentUrl.searchParams.set('id', deleteProductId);
+                currentUrl.searchParams.set('id', deletecouponId);
                 window.location.href = currentUrl.toString();
             }
         };
@@ -1352,78 +1275,67 @@ if ($isSearching) {
             if (e.target === deleteModal) closeDeleteModal();
         };
 
-        // Image preview for add form
-        document.getElementById('productImage').onchange = function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('imagePreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '';
-            }
-        };
-
-        // Image preview for edit form
-        document.getElementById('editProductImage').onchange = function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('editImagePreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '';
-            }
-        };
-
         // Form validation
-        document.getElementById('addProductForm').onsubmit = (e) => {
-            const name = document.getElementById('productName').value.trim();
-            const category = document.getElementById('productCategory').value;
-            const price = document.getElementById('productPrice').value;
+        document.getElementById('addcouponForm').onsubmit = (e) => {
+            const code = document.getElementById('couponCode').value.trim();
+            const description = document.getElementById('couponDescription').value.trim();
+            const value = document.getElementById('couponValue').value.trim();
+            const startDate = document.getElementById('couponStartDate').value;
+            const endDate = document.getElementById('couponEndDate').value;
 
-            if (!name) {
+            if (!code) {
                 e.preventDefault();
-                alert('Vui lòng nhập tên sản phẩm!');
+                alert('Vui lòng nhập mã khuyến mãi!');
                 return false;
             }
-            if (!category) {
+            if (!description) {
                 e.preventDefault();
-                alert('Vui lòng chọn loại sản phẩm!');
+                alert('Vui lòng nhập mô tả!');
                 return false;
             }
-            if (!price || price <= 0) {
+            if (!value) {
                 e.preventDefault();
-                alert('Vui lòng nhập giá sản phẩm hợp lệ!');
+                alert('Vui lòng nhập giá trị khuyến mãi!');
+                return false;
+            }
+            if (!startDate || !endDate) {
+                e.preventDefault();
+                alert('Vui lòng chọn ngày bắt đầu và kết thúc!');
+                return false;
+            }
+            if (new Date(startDate) > new Date(endDate)) {
+                e.preventDefault();
+                alert('Ngày bắt đầu phải nhỏ hơn ngày kết thúc!');
                 return false;
             }
             return true;
         };
 
-        document.getElementById('editProductForm').onsubmit = (e) => {
-            const name = document.getElementById('editProductName').value.trim();
-            const category = document.getElementById('editProductCategory').value;
-            const price = document.getElementById('editProductPrice').value;
+        document.getElementById('editcouponForm').onsubmit = (e) => {
+            const code = document.getElementById('editcouponCode').value.trim();
+            const description = document.getElementById('editcouponDescription').value.trim();
+            const value = document.getElementById('editcouponValue').value.trim();
+            const startDate = document.getElementById('editcouponStartDate').value;
+            const endDate = document.getElementById('editcouponEndDate').value;
 
-            if (!name) {
+            if (!code) {
                 e.preventDefault();
-                alert('Vui lòng nhập tên sản phẩm!');
+                alert('Vui lòng nhập mã khuyến mãi!');
                 return false;
             }
-            if (!category) {
+            if (!description) {
                 e.preventDefault();
-                alert('Vui lòng chọn loại sản phẩm!');
+                alert('Vui lòng nhập mô tả!');
                 return false;
             }
-            if (!price || price <= 0) {
+            if (!value) {
                 e.preventDefault();
-                alert('Vui lòng nhập giá sản phẩm hợp lệ!');
+                alert('Vui lòng nhập giá trị khuyến mãi!');
+                return false;
+            }
+            if (new Date(startDate) > new Date(endDate)) {
+                e.preventDefault();
+                alert('Ngày bắt đầu phải nhỏ hơn ngày kết thúc!');
                 return false;
             }
             return true;
@@ -1465,7 +1377,7 @@ if ($isSearching) {
         });
 
         // Initialize on page load
-        displayProducts(currentPage);
+        displaycoupons(currentPage);
         displayPagination();
     </script>
 </body>

@@ -62,4 +62,21 @@ class AdminController extends Controller {
         $this->view('admin/home/index', $data);
     }
 
+    public function user() {
+        $userModel = $this->model('Account');
+        $data = [
+            'title' => 'Người dùng',
+            'users' => $userModel->getAllAccounts(),
+        ];
+        $this->view('admin/home/index', $data);
+    }
+    public function coupon() {
+        $couponModel = $this->model('Coupon');
+        $data = [
+            'title' => 'Khuyến mãi',
+            'coupons' => $couponModel->getAllCoupons(),
+        ];
+        $this->view('admin/home/index', $data);
+    }
+
 }

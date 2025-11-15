@@ -35,13 +35,13 @@
     [
       "title" => "Quản lý nhân viên",
       "icon"  => "fas fa-user-shield",
-      "link"  => "admin/manager/PQNV",
+      "link"  => "admin/user",
       "roles" => [1]
     ],
     [
       "title" => "Quản lý khuyến mãi",
       "icon"  => "fas fa-ticket-alt",
-      "link"  => "admin/manager/QLKM",
+      "link"  => "admin/coupon",
       "roles" => [1]
     ]
   ];

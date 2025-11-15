@@ -4,145 +4,102 @@
 $successMessage = '';
 $errorMessage = '';
 
-// Handle form submission for adding product
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_product') {
-    // Prepare data from form
-    $productData = [
-        'ID_category' => isset($_POST['category']) ? (int)$_POST['category'] : null,
+// Handle form submission for adding account
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_account') {
+    $accountData = [
         'Name' => isset($_POST['name']) ? trim($_POST['name']) : '',
-        'Description' => isset($_POST['description']) ? trim($_POST['description']) : '',
-        'Price' => isset($_POST['price']) ? (float)$_POST['price'] : 0,
-        'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active',
-        'Image' => ''
+        'Password' => isset($_POST['password']) ? trim($_POST['password']) : '',
+        'Phone' => isset($_POST['phone']) ? trim($_POST['phone']) : '',
+        'Role' => isset($_POST['role']) ? (int)$_POST['role'] : 2,
+        'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active'
     ];
 
-    // Handle image upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../../../../../public/image/products/';
-        
-        // Create directory if it doesn't exist
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        
-        if (in_array($fileExtension, $allowedExtensions)) {
-            $newFileName = uniqid('product_') . '.' . $fileExtension;
-            $uploadPath = $uploadDir . $newFileName;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                $productData['Image'] = 'public/image/products/' . $newFileName;
-            }
-        }
-    }
-
     // Validate required fields
-    if (empty($productData['Name'])) {
-        $errorMessage = 'Tên sản phẩm không được để trống!';
-    } elseif ($productData['ID_category'] === null || $productData['ID_category'] <= 0) {
-        $errorMessage = 'Vui lòng chọn loại sản phẩm!';
-    } elseif ($productData['Price'] <= 0) {
-        $errorMessage = 'Giá sản phẩm phải lớn hơn 0!';
+    if (empty($accountData['Name'])) {
+        $errorMessage = 'Tên nhân viên không được để trống!';
+    } elseif (empty($accountData['Password'])) {
+        $errorMessage = 'Mật khẩu không được để trống!';
+    } elseif (empty($accountData['Phone'])) {
+        $errorMessage = 'Số điện thoại không được để trống!';
     } else {
-        // Call model to create product
-        $productModel = new Product();
-        $result = $productModel->createProduct($productData);
+        // Hash password
+        $accountData['Password'] = password_hash($accountData['Password'], PASSWORD_DEFAULT);
+        
+        // Call model to create account
+        $accountModel = new Account();
+        $result = $accountModel->createAccount($accountData);
         
         if ($result) {
-            // Redirect to admin/menu with success message
-            header('Location: /Project_cafe_shop/admin/menu?success=add');
+            header('Location: /Project_cafe_shop/admin/user?success=add');
             exit;
         } else {
-            $errorMessage = 'Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại!';
+            $errorMessage = 'Có lỗi xảy ra khi thêm nhân viên. Vui lòng thử lại!';
         }
     }
 }
 
-// Handle form submission for updating product
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_product') {
-    $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+// Handle form submission for updating account
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_account') {
+    $accountId = isset($_POST['account_id']) ? (int)$_POST['account_id'] : 0;
     
-    if ($productId > 0) {
-        $productData = [
-            'ID_category' => isset($_POST['category']) ? (int)$_POST['category'] : null,
+    if ($accountId > 0) {
+        $accountData = [
             'Name' => isset($_POST['name']) ? trim($_POST['name']) : '',
-            'Description' => isset($_POST['description']) ? trim($_POST['description']) : '',
-            'Price' => isset($_POST['price']) ? (float)$_POST['price'] : 0,
+            'Phone' => isset($_POST['phone']) ? trim($_POST['phone']) : '',
+            'Role' => isset($_POST['role']) ? (int)$_POST['role'] : 2,
             'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active'
         ];
 
-        // Handle image upload for edit
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../../../../public/image/products/';
-            
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            
-            if (in_array($fileExtension, $allowedExtensions)) {
-                $newFileName = uniqid('product_') . '.' . $fileExtension;
-                $uploadPath = $uploadDir . $newFileName;
-                
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                    $productData['Image'] = 'public/image/products/' . $newFileName;
-                }
-            }
+        // Only update password if provided
+        if (!empty($_POST['password'])) {
+            $accountData['Password'] = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
         }
 
         // Validate
-        if (empty($productData['Name'])) {
-            $errorMessage = 'Tên sản phẩm không được để trống!';
-        } elseif ($productData['Price'] <= 0) {
-            $errorMessage = 'Giá sản phẩm phải lớn hơn 0!';
+        if (empty($accountData['Name'])) {
+            $errorMessage = 'Tên nhân viên không được để trống!';
+        } elseif (empty($accountData['Phone'])) {
+            $errorMessage = 'Số điện thoại không được để trống!';
         } else {
-            $productModel = new Product();
-            $result = $productModel->updateProduct($productId, $productData);
+            $accountModel = new Account();
+            $result = $accountModel->updateAccount($accountId, $accountData);
             
             if ($result) {
-                // Redirect to admin/menu with success message
-                header('Location: /Project_cafe_shop/admin/menu?success=edit');
+                header('Location: /Project_cafe_shop/admin/user?success=edit');
                 exit;
             } else {
-                $errorMessage = 'Có lỗi xảy ra khi cập nhật sản phẩm!';
+                $errorMessage = 'Có lỗi xảy ra khi cập nhật nhân viên!';
             }
         }
     }
 }
 
-// Handle delete product
+// Handle delete account
 if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-    $productId = (int)$_GET['id'];
-    if ($productId > 0) {
-        $productModel = new Product();
-        $result = $productModel->deleteProduct($productId);
+    $accountId = (int)$_GET['id'];
+    if ($accountId > 0) {
+        $accountModel = new Account();
+        $result = $accountModel->deleteAccount($accountId);
         if ($result) {
-            // Redirect to admin/menu with success message
-            header('Location: /Project_cafe_shop/admin/menu?success=delete');
+            header('Location: /Project_cafe_shop/admin/user?success=delete');
             exit;
         } else {
-            $errorMessage = 'Có lỗi xảy ra khi xóa sản phẩm!';
+            $errorMessage = 'Có lỗi xảy ra khi xóa nhân viên!';
         }
     }
 }
-
-
 
 // Handle success messages from redirect
 if (isset($_GET['success'])) {
     switch ($_GET['success']) {
         case 'add':
-            $successMessage = 'Thêm sản phẩm thành công!';
+            $successMessage = 'Thêm nhân viên thành công!';
             break;
         case 'edit':
-            $successMessage = 'Cập nhật sản phẩm thành công!';
+            $successMessage = 'Cập nhật nhân viên thành công!';
             break;
         case 'delete':
-            $successMessage = 'Xóa sản phẩm thành công!';
+            $successMessage = 'Xóa nhân viên thành công!';
             break;
     }
 }
@@ -151,30 +108,30 @@ if (isset($_GET['success'])) {
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 $isSearching = !empty($searchQuery);
 
-// Get products - either from data passed by controller or fetch directly
-if (!isset($products)) {
-    $productModel = new Product();
-    $allProducts = $productModel->getAllProducts();
+// Get accounts - either from data passed by controller or fetch directly
+if (!isset($accounts)) {
+    $accountModel = new Account();
+    $allAccounts = $accountModel->getAllAccounts();
 } else {
-    $allProducts = $products;
+    $allAccounts = $accounts;
 }
 
-// Filter products if searching
+// Filter accounts if searching
 if ($isSearching) {
-    $products = array_filter($allProducts, function($product) use ($searchQuery) {
+    $accounts = array_filter($allAccounts, function($account) use ($searchQuery) {
         $searchLower = strtolower($searchQuery);
-        return stripos($product['Name'], $searchLower) !== false ||
-               stripos($product['Description'], $searchLower) !== false ||
-               stripos($product['ID'], $searchLower) !== false;
+        return stripos($account['Name'], $searchLower) !== false ||
+               stripos($account['Phone'], $searchLower) !== false ||
+               stripos($account['ID'], $searchLower) !== false;
     });
-    $products = array_values($products); // Re-index array
+    $accounts = array_values($accounts); // Re-index array
 } else {
-    $products = $allProducts;
+    $accounts = $allAccounts;
 }
 
 ?>
 
-            <!-- Content Area -->
+    <!-- Content Area -->
     <div class="content">
         <!-- Success/Error Messages -->
         <?php if (!empty($successMessage)): ?>
@@ -193,13 +150,13 @@ if ($isSearching) {
 
         <!-- Content Header -->
         <div class="content-header">
-            <button class="btn btn-primary" id="btnAddProduct">
+            <button class="btn btn-primary" id="btnAddAccount">
                 <i class="fas fa-plus"></i>
-                Thêm sản phẩm
+                Thêm nhân viên
             </button>
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." value="<?php echo htmlspecialchars($searchQuery); ?>" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm nhân viên..." value="<?php echo htmlspecialchars($searchQuery); ?>" autocomplete="off">
                 <?php if ($isSearching): ?>
                     <button type="button" class="clear-search-btn" id="clearSearchBtn" title="Xóa tìm kiếm">
                         <i class="fas fa-times"></i>
@@ -211,75 +168,24 @@ if ($isSearching) {
         <?php if ($isSearching): ?>
             <div class="search-info">
                 <i class="fas fa-info-circle"></i>
-                Tìm thấy <strong><?php echo count($products); ?></strong> sản phẩm với từ khóa "<strong><?php echo htmlspecialchars($searchQuery); ?></strong>"
+                Tìm thấy <strong><?php echo count($accounts); ?></strong> nhân viên với từ khóa "<strong><?php echo htmlspecialchars($searchQuery); ?></strong>"
             </div>
         <?php endif; ?>
 
         <!-- Table Container -->
         <div class="table-container">
-            <table class="data-table" id="productTable">
+            <table class="data-table" id="accountTable">
                 <thead>
                     <tr>
-                        <th>Mã SP</th>
-                        <th>Loại</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Mô tả</th>
-                        <th>Giá</th>
+                        <th>ID</th>
+                        <th>Họ tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Vai trò</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
-                <tbody id="productBody">
-                    <?php
-                        if (!empty($products)) {
-                            foreach($products as $product) {
-                                echo '
-                                <tr>
-                                    <td>'.$product['ID'].'</td>
-                                    <td>'.$product['ID_category'].'</td>
-                                    <td>'.$product['Name'].'</td>
-                                    <td>'.$product['Description'].'</td>
-                                    <td>'.number_format($product['Price'], 0, ',', '.').' VNĐ</td>
-                                    <td>';
-                                if ($product['Status'] == 'active') {
-                                    echo '<span class="status status-active">Đang bán</span>';
-                                } else {
-                                    echo '<span class="status status-inactive">Ngừng bán</span>';
-                                }
-                                echo '</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn-icon btn-view" title="Xem chi tiết" 
-                                                data-id="'.$product['ID'].'"
-                                                data-category="'.$product['ID_category'].'"
-                                                data-name="'.htmlspecialchars($product['Name']).'"
-                                                data-description="'.htmlspecialchars($product['Description']).'"
-                                                data-price="'.$product['Price'].'"
-                                                data-status="'.$product['Status'].'">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn-icon btn-edit" title="Sửa"
-                                                data-id="'.$product['ID'].'"
-                                                data-category="'.$product['ID_category'].'"
-                                                data-name="'.htmlspecialchars($product['Name']).'"
-                                                data-description="'.htmlspecialchars($product['Description']).'"
-                                                data-price="'.$product['Price'].'"
-                                                data-status="'.$product['Status'].'">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn-icon btn-delete" title="Xóa"
-                                                data-id="'.$product['ID'].'"
-                                                data-name="'.htmlspecialchars($product['Name']).'">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>';
-                            }
-                        } else {
-                            echo '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không có sản phẩm nào.</td></tr>';
-                        }
-                    ?>
+                <tbody id="accountBody">
                 </tbody>
             </table>
         </div>
@@ -288,68 +194,56 @@ if ($isSearching) {
         <div class="pagination" id="pagination"></div>
     </div>
 
-
-    <!-- Modal Thêm Sản Phẩm -->
-    <div id="addProductModal" class="modal">
+    <!-- Modal Thêm Nhân Viên -->
+    <div id="addAccountModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới</h2>
+                <h2><i class="fas fa-user-plus"></i> Thêm Nhân Viên Mới</h2>
                 <button class="close-btn" id="closeModal">&times;</button>
             </div>
-            <form id="addProductForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="add_product">
+            <form id="addAccountForm" method="POST" action="">
+                <input type="hidden" name="action" value="add_account">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="productCategory">
-                            <i class="fas fa-list"></i> Loại sản phẩm <span class="required">*</span>
+                        <label for="accountName">
+                            <i class="fas fa-user"></i> Họ tên <span class="required">*</span>
                         </label>
-                        <select id="productCategory" name="category" required>
-                            <option value="">-- Chọn loại sản phẩm --</option>
-                            <option value="1">Cà phê</option>
-                            <option value="2">Trà</option>
-                            <option value="3">Sinh tố</option>
-                            <option value="4">Bánh ngọt</option>
-                            <option value="5">Đồ ăn nhẹ</option>
+                        <input type="text" id="accountName" name="name" placeholder="Nhập họ tên" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountPhone">
+                            <i class="fas fa-phone"></i> Số điện thoại <span class="required">*</span>
+                        </label>
+                        <input type="tel" id="accountPhone" name="phone" placeholder="Nhập số điện thoại" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountPassword">
+                            <i class="fas fa-lock"></i> Mật khẩu <span class="required">*</span>
+                        </label>
+                        <input type="password" id="accountPassword" name="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountRole">
+                            <i class="fas fa-user-tag"></i> Vai trò <span class="required">*</span>
+                        </label>
+                        <select id="accountRole" name="role" required>
+                            <option value="1">Admin</option>
+                            <option value="2" selected>Nhân viên</option>
+                            <option value="3">Quản lý</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="productName">
-                            <i class="fas fa-coffee"></i> Tên sản phẩm <span class="required">*</span>
-                        </label>
-                        <input type="text" id="productName" name="name" placeholder="Nhập tên sản phẩm" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productPrice">
-                            <i class="fas fa-dollar-sign"></i> Giá (VNĐ) <span class="required">*</span>
-                        </label>
-                        <input type="number" id="productPrice" name="price" placeholder="Nhập giá sản phẩm" min="0" step="1000" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productStatus">
+                    <div class="form-group full-width">
+                        <label for="accountStatus">
                             <i class="fas fa-toggle-on"></i> Trạng thái <span class="required">*</span>
                         </label>
-                        <select id="productStatus" name="status" required>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
+                        <select id="accountStatus" name="status" required>
+                            <option value="active">Đang hoạt động</option>
+                            <option value="inactive">Tạm dừng</option>
                         </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="productDescription">
-                            <i class="fas fa-align-left"></i> Mô tả
-                        </label>
-                        <textarea id="productDescription" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="productImage">
-                            <i class="fas fa-image"></i> Hình ảnh sản phẩm
-                        </label>
-                        <input type="file" id="productImage" name="image" accept="image/*">
-                        <div id="imagePreview" class="image-preview"></div>
                     </div>
                 </div>
 
@@ -358,43 +252,39 @@ if ($isSearching) {
                         <i class="fas fa-times"></i> Hủy
                     </button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Lưu sản phẩm
+                        <i class="fas fa-save"></i> Lưu nhân viên
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Xem Chi Tiết Sản Phẩm -->
-    <div id="viewProductModal" class="modal">
+    <!-- Modal Xem Chi Tiết -->
+    <div id="viewAccountModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-info-circle"></i> Chi Tiết Sản Phẩm</h2>
+                <h2><i class="fas fa-info-circle"></i> Chi Tiết Nhân Viên</h2>
                 <button class="close-btn" id="closeViewModal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="detail-grid">
                     <div class="detail-item">
-                        <label><i class="fas fa-hashtag"></i> Mã sản phẩm:</label>
+                        <label><i class="fas fa-hashtag"></i> ID:</label>
                         <span id="view_id"></span>
                     </div>
                     <div class="detail-item">
-                        <label><i class="fas fa-list"></i> Loại sản phẩm:</label>
-                        <span id="view_category"></span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <label><i class="fas fa-coffee"></i> Tên sản phẩm:</label>
+                        <label><i class="fas fa-user"></i> Họ tên:</label>
                         <span id="view_name"></span>
                     </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-phone"></i> Số điện thoại:</label>
+                        <span id="view_phone"></span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-user-tag"></i> Vai trò:</label>
+                        <span id="view_role"></span>
+                    </div>
                     <div class="detail-item full-width">
-                        <label><i class="fas fa-align-left"></i> Mô tả:</label>
-                        <span id="view_description"></span>
-                    </div>
-                    <div class="detail-item">
-                        <label><i class="fas fa-dollar-sign"></i> Giá:</label>
-                        <span id="view_price"></span>
-                    </div>
-                    <div class="detail-item">
                         <label><i class="fas fa-toggle-on"></i> Trạng thái:</label>
                         <span id="view_status"></span>
                     </div>
@@ -408,68 +298,57 @@ if ($isSearching) {
         </div>
     </div>
 
-    <!-- Modal Sửa Sản Phẩm -->
-    <div id="editProductModal" class="modal">
+    <!-- Modal Sửa Nhân Viên -->
+    <div id="editAccountModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-edit"></i> Sửa Sản Phẩm</h2>
+                <h2><i class="fas fa-edit"></i> Sửa Nhân Viên</h2>
                 <button class="close-btn" id="closeEditModal">&times;</button>
             </div>
-            <form id="editProductForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="edit_product">
-                <input type="hidden" name="product_id" id="edit_product_id">
+            <form id="editAccountForm" method="POST" action="">
+                <input type="hidden" name="action" value="edit_account">
+                <input type="hidden" name="account_id" id="edit_account_id">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="editProductCategory">
-                            <i class="fas fa-list"></i> Loại sản phẩm <span class="required">*</span>
+                        <label for="editAccountName">
+                            <i class="fas fa-user"></i> Họ tên <span class="required">*</span>
                         </label>
-                        <select id="editProductCategory" name="category" required>
-                            <option value="">-- Chọn loại sản phẩm --</option>
-                            <option value="1">Cà phê</option>
-                            <option value="2">Trà</option>
-                            <option value="3">Sinh tố</option>
-                            <option value="4">Bánh ngọt</option>
-                            <option value="5">Đồ ăn nhẹ</option>
+                        <input type="text" id="editAccountName" name="name" placeholder="Nhập họ tên" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editAccountPhone">
+                            <i class="fas fa-phone"></i> Số điện thoại <span class="required">*</span>
+                        </label>
+                        <input type="tel" id="editAccountPhone" name="phone" placeholder="Nhập số điện thoại" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editAccountPassword">
+                            <i class="fas fa-lock"></i> Mật khẩu mới (để trống nếu không đổi)
+                        </label>
+                        <input type="password" id="editAccountPassword" name="password" placeholder="Nhập mật khẩu mới">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editAccountRole">
+                            <i class="fas fa-user-tag"></i> Vai trò <span class="required">*</span>
+                        </label>
+                        <select id="editAccountRole" name="role" required>
+                            <option value="1">Admin</option>
+                            <option value="2">Nhân viên</option>
+                            <option value="3">Quản lý</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="editProductName">
-                            <i class="fas fa-coffee"></i> Tên sản phẩm <span class="required">*</span>
-                        </label>
-                        <input type="text" id="editProductName" name="name" placeholder="Nhập tên sản phẩm" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editProductPrice">
-                            <i class="fas fa-dollar-sign"></i> Giá (VNĐ) <span class="required">*</span>
-                        </label>
-                        <input type="number" id="editProductPrice" name="price" placeholder="Nhập giá sản phẩm" min="0" step="1000" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editProductStatus">
+                    <div class="form-group full-width">
+                        <label for="editAccountStatus">
                             <i class="fas fa-toggle-on"></i> Trạng thái <span class="required">*</span>
                         </label>
-                        <select id="editProductStatus" name="status" required>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
+                        <select id="editAccountStatus" name="status" required>
+                            <option value="active">Đang hoạt động</option>
+                            <option value="inactive">Tạm dừng</option>
                         </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editProductDescription">
-                            <i class="fas fa-align-left"></i> Mô tả
-                        </label>
-                        <textarea id="editProductDescription" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editProductImage">
-                            <i class="fas fa-image"></i> Hình ảnh sản phẩm (để trống nếu không muốn thay đổi)
-                        </label>
-                        <input type="file" id="editProductImage" name="image" accept="image/*">
-                        <div id="editImagePreview" class="image-preview"></div>
                     </div>
                 </div>
 
@@ -494,7 +373,7 @@ if ($isSearching) {
             </div>
             <div class="modal-body">
                 <p class="delete-message">
-                    Bạn có chắc chắn muốn xóa sản phẩm <strong id="delete_product_name"></strong>?
+                    Bạn có chắc chắn muốn xóa nhân viên <strong id="delete_account_name"></strong>?
                 </p>
                 <p class="delete-warning">
                     <i class="fas fa-info-circle"></i> Hành động này không thể hoàn tác!
@@ -743,6 +622,29 @@ if ($isSearching) {
             color: #721c24;
         }
 
+        .role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .role-admin {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .role-manager {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+
+        .role-staff {
+            background-color: #e2e3e5;
+            color: #41464b;
+        }
+
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -861,17 +763,6 @@ if ($isSearching) {
             max-width: 500px;
         }
 
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
         .modal-header {
             background: linear-gradient(135deg, #d7a86e 0%, #c49856 100%);
             color: #3d2817;
@@ -957,8 +848,7 @@ if ($isSearching) {
         }
 
         .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group select {
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
@@ -968,30 +858,10 @@ if ($isSearching) {
         }
 
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group select:focus {
             outline: none;
             border-color: #d7a86e;
             box-shadow: 0 0 0 3px rgba(215, 168, 110, 0.1);
-        }
-
-        .image-preview {
-            margin-top: 12px;
-            border: 2px dashed #d7a86e;
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fafafa;
-        }
-
-        .image-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            object-fit: contain;
         }
 
         .detail-grid {
@@ -1087,76 +957,68 @@ if ($isSearching) {
     </style>
 
     <script>
-        // Product data from PHP
-        const productsData = <?php echo json_encode($products); ?>;
+        // Account data from PHP
+        const accountsData = <?php echo json_encode($accounts); ?>;
         
-        // Category names mapping
-        const categoryNames = {
-            '1': 'Cà phê',
-            '2': 'Trà',
-            '3': 'Sinh tố',
-            '4': 'Bánh ngọt',
-            '5': 'Đồ ăn nhẹ'
+        // Role names mapping
+        const roleNames = {
+            '1': 'Admin',
+            '2': 'Nhân viên',
+            '3': 'Quản lý'
         };
 
         // Pagination settings
         let currentPage = 1;
         const itemsPerPage = 5;
-        let totalPages = Math.ceil(productsData.length / itemsPerPage);
+        let totalPages = Math.ceil(accountsData.length / itemsPerPage);
 
-        // Display products for current page
-        function displayProducts(page) {
-            const tbody = document.getElementById('productBody');
+        // Display accounts for current page
+        function displayAccounts(page) {
+            const tbody = document.getElementById('accountBody');
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
-            const pageProducts = productsData.slice(start, end);
+            const pageAccounts = accountsData.slice(start, end);
 
-            if (pageProducts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;">Không có sản phẩm nào</td></tr>';
+            if (pageAccounts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">Không có nhân viên nào</td></tr>';
                 return;
             }
 
             tbody.innerHTML = '';
-            pageProducts.forEach(product => {
+            pageAccounts.forEach(account => {
                 const row = document.createElement('tr');
-                const categoryName = categoryNames[product.ID_category] || 'N/A';
-                const priceFormatted = parseFloat(product.Price).toLocaleString('vi-VN') + ' VNĐ';
-                const statusClass = product.Status === 'active' ? 'status-active' : 'status-inactive';
-                const statusText = product.Status === 'active' ? 'Đang bán' : 'Ngừng bán';
-                const descShort = product.Description && product.Description.length > 50 
-                    ? product.Description.substring(0, 50) + '...' 
-                    : (product.Description || '');
+                const roleName = roleNames[account.Role] || 'Nhân viên';
+                const roleClass = account.Role == 1 ? 'role-admin' : (account.Role == 3 ? 'role-manager' : 'role-staff');
+                const statusClass = account.Status === 'active' ? 'status-active' : 'status-inactive';
+                const statusText = account.Status === 'active' ? 'Đang hoạt động' : 'Tạm dừng';
 
                 row.innerHTML = `
-                    <td>${product.ID}</td>
-                    <td>${categoryName}</td>
-                    <td>${escapeHtml(product.Name)}</td>
-                    <td>${escapeHtml(descShort)}</td>
-                    <td>${priceFormatted}</td>
+                    <td>${account.ID}</td>
+                    <td>${escapeHtml(account.Name)}</td>
+                    <td>${escapeHtml(account.Phone)}</td>
+                    <td><span class="role-badge ${roleClass}">${roleName}</span></td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
                         <div class="action-buttons">
                             <button class="btn-action btn-view" title="Xem chi tiết" 
-                                data-id="${product.ID}"
-                                data-category="${product.ID_category}"
-                                data-name="${escapeHtml(product.Name)}"
-                                data-description="${escapeHtml(product.Description || '')}"
-                                data-price="${product.Price}"
-                                data-status="${product.Status}">
+                                data-id="${account.ID}"
+                                data-name="${escapeHtml(account.Name)}"
+                                data-phone="${escapeHtml(account.Phone)}"
+                                data-role="${account.Role}"
+                                data-status="${account.Status}">
                                 <i class="fas fa-eye"></i>
                             </button>
                             <button class="btn-action btn-edit" title="Sửa"
-                                data-id="${product.ID}"
-                                data-category="${product.ID_category}"
-                                data-name="${escapeHtml(product.Name)}"
-                                data-description="${escapeHtml(product.Description || '')}"
-                                data-price="${product.Price}"
-                                data-status="${product.Status}">
+                                data-id="${account.ID}"
+                                data-name="${escapeHtml(account.Name)}"
+                                data-phone="${escapeHtml(account.Phone)}"
+                                data-role="${account.Role}"
+                                data-status="${account.Status}">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn-action btn-delete" title="Xóa"
-                                data-id="${product.ID}"
-                                data-name="${escapeHtml(product.Name)}">
+                                data-id="${account.ID}"
+                                data-name="${escapeHtml(account.Name)}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -1183,7 +1045,7 @@ if ($isSearching) {
             prevBtn.onclick = () => {
                 if (currentPage > 1) {
                     currentPage--;
-                    displayProducts(currentPage);
+                    displayAccounts(currentPage);
                     displayPagination();
                 }
             };
@@ -1200,7 +1062,7 @@ if ($isSearching) {
                 }
                 pageBtn.onclick = () => {
                     currentPage = i;
-                    displayProducts(currentPage);
+                    displayAccounts(currentPage);
                     displayPagination();
                 };
                 pagination.appendChild(pageBtn);
@@ -1214,7 +1076,7 @@ if ($isSearching) {
             nextBtn.onclick = () => {
                 if (currentPage < totalPages) {
                     currentPage++;
-                    displayProducts(currentPage);
+                    displayAccounts(currentPage);
                     displayPagination();
                 }
             };
@@ -1224,8 +1086,8 @@ if ($isSearching) {
             const pageInfo = document.createElement('span');
             pageInfo.className = 'page-info';
             pageInfo.textContent = totalPages > 0 
-                ? `Trang ${currentPage}/${totalPages} — Tổng: ${productsData.length} mục`
-                : 'Không có sản phẩm';
+                ? `Trang ${currentPage}/${totalPages} — Tổng: ${accountsData.length} mục`
+                : 'Không có nhân viên';
             pagination.appendChild(pageInfo);
         }
 
@@ -1241,18 +1103,17 @@ if ($isSearching) {
             // View buttons
             document.querySelectorAll('.btn-view').forEach(btn => {
                 btn.onclick = function() {
-                    const category = this.dataset.category;
+                    const role = this.dataset.role;
                     document.getElementById('view_id').textContent = this.dataset.id;
-                    document.getElementById('view_category').textContent = categoryNames[category] || 'N/A';
                     document.getElementById('view_name').textContent = this.dataset.name;
-                    document.getElementById('view_description').textContent = this.dataset.description || 'Không có mô tả';
-                    document.getElementById('view_price').textContent = parseFloat(this.dataset.price).toLocaleString('vi-VN') + ' VNĐ';
+                    document.getElementById('view_phone').textContent = this.dataset.phone;
+                    document.getElementById('view_role').innerHTML = `<span class="role-badge ${role == 1 ? 'role-admin' : (role == 3 ? 'role-manager' : 'role-staff')}">${roleNames[role] || 'Nhân viên'}</span>`;
                     
                     const statusSpan = document.getElementById('view_status');
                     if (this.dataset.status === 'active') {
-                        statusSpan.innerHTML = '<span class="status-badge status-active">Đang bán</span>';
+                        statusSpan.innerHTML = '<span class="status-badge status-active">Đang hoạt động</span>';
                     } else {
-                        statusSpan.innerHTML = '<span class="status-badge status-inactive">Ngừng bán</span>';
+                        statusSpan.innerHTML = '<span class="status-badge status-inactive">Tạm dừng</span>';
                     }
 
                     viewModal.style.display = 'block';
@@ -1263,12 +1124,11 @@ if ($isSearching) {
             // Edit buttons
             document.querySelectorAll('.btn-edit').forEach(btn => {
                 btn.onclick = function() {
-                    document.getElementById('edit_product_id').value = this.dataset.id;
-                    document.getElementById('editProductCategory').value = this.dataset.category;
-                    document.getElementById('editProductName').value = this.dataset.name;
-                    document.getElementById('editProductDescription').value = this.dataset.description;
-                    document.getElementById('editProductPrice').value = this.dataset.price;
-                    document.getElementById('editProductStatus').value = this.dataset.status;
+                    document.getElementById('edit_account_id').value = this.dataset.id;
+                    document.getElementById('editAccountName').value = this.dataset.name;
+                    document.getElementById('editAccountPhone').value = this.dataset.phone;
+                    document.getElementById('editAccountRole').value = this.dataset.role;
+                    document.getElementById('editAccountStatus').value = this.dataset.status;
 
                     editModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
@@ -1278,8 +1138,8 @@ if ($isSearching) {
             // Delete buttons
             document.querySelectorAll('.btn-delete').forEach(btn => {
                 btn.onclick = function() {
-                    deleteProductId = this.dataset.id;
-                    document.getElementById('delete_product_name').textContent = this.dataset.name;
+                    deleteAccountId = this.dataset.id;
+                    document.getElementById('delete_account_name').textContent = this.dataset.name;
                     deleteModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                 };
@@ -1287,14 +1147,14 @@ if ($isSearching) {
         }
 
         // Modal elements
-        const modal = document.getElementById('addProductModal');
-        const viewModal = document.getElementById('viewProductModal');
-        const editModal = document.getElementById('editProductModal');
+        const modal = document.getElementById('addAccountModal');
+        const viewModal = document.getElementById('viewAccountModal');
+        const editModal = document.getElementById('editAccountModal');
         const deleteModal = document.getElementById('deleteConfirmModal');
-        let deleteProductId = null;
+        let deleteAccountId = null;
 
-        // Add product button
-        document.getElementById('btnAddProduct').onclick = () => {
+        // Add account button
+        document.getElementById('btnAddAccount').onclick = () => {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         };
@@ -1303,8 +1163,7 @@ if ($isSearching) {
         function closeModal() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('addProductForm').reset();
-            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('addAccountForm').reset();
         }
 
         function closeViewModal() {
@@ -1315,14 +1174,13 @@ if ($isSearching) {
         function closeEditModal() {
             editModal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            document.getElementById('editProductForm').reset();
-            document.getElementById('editImagePreview').innerHTML = '';
+            document.getElementById('editAccountForm').reset();
         }
 
         function closeDeleteModal() {
             deleteModal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            deleteProductId = null;
+            deleteAccountId = null;
         }
 
         document.getElementById('closeModal').onclick = closeModal;
@@ -1336,10 +1194,10 @@ if ($isSearching) {
 
         // Confirm delete
         document.getElementById('confirmDeleteBtn').onclick = function() {
-            if (deleteProductId) {
+            if (deleteAccountId) {
                 const currentUrl = new URL(window.location.href);
                 currentUrl.searchParams.set('action', 'delete');
-                currentUrl.searchParams.set('id', deleteProductId);
+                currentUrl.searchParams.set('id', deleteAccountId);
                 window.location.href = currentUrl.toString();
             }
         };
@@ -1352,78 +1210,42 @@ if ($isSearching) {
             if (e.target === deleteModal) closeDeleteModal();
         };
 
-        // Image preview for add form
-        document.getElementById('productImage').onchange = function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('imagePreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '';
-            }
-        };
-
-        // Image preview for edit form
-        document.getElementById('editProductImage').onchange = function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('editImagePreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '';
-            }
-        };
-
         // Form validation
-        document.getElementById('addProductForm').onsubmit = (e) => {
-            const name = document.getElementById('productName').value.trim();
-            const category = document.getElementById('productCategory').value;
-            const price = document.getElementById('productPrice').value;
+        document.getElementById('addAccountForm').onsubmit = (e) => {
+            const name = document.getElementById('accountName').value.trim();
+            const phone = document.getElementById('accountPhone').value.trim();
+            const password = document.getElementById('accountPassword').value.trim();
 
             if (!name) {
                 e.preventDefault();
-                alert('Vui lòng nhập tên sản phẩm!');
+                alert('Vui lòng nhập họ tên!');
                 return false;
             }
-            if (!category) {
+            if (!phone) {
                 e.preventDefault();
-                alert('Vui lòng chọn loại sản phẩm!');
+                alert('Vui lòng nhập số điện thoại!');
                 return false;
             }
-            if (!price || price <= 0) {
+            if (!password) {
                 e.preventDefault();
-                alert('Vui lòng nhập giá sản phẩm hợp lệ!');
+                alert('Vui lòng nhập mật khẩu!');
                 return false;
             }
             return true;
         };
 
-        document.getElementById('editProductForm').onsubmit = (e) => {
-            const name = document.getElementById('editProductName').value.trim();
-            const category = document.getElementById('editProductCategory').value;
-            const price = document.getElementById('editProductPrice').value;
+        document.getElementById('editAccountForm').onsubmit = (e) => {
+            const name = document.getElementById('editAccountName').value.trim();
+            const phone = document.getElementById('editAccountPhone').value.trim();
 
             if (!name) {
                 e.preventDefault();
-                alert('Vui lòng nhập tên sản phẩm!');
+                alert('Vui lòng nhập họ tên!');
                 return false;
             }
-            if (!category) {
+            if (!phone) {
                 e.preventDefault();
-                alert('Vui lòng chọn loại sản phẩm!');
-                return false;
-            }
-            if (!price || price <= 0) {
-                e.preventDefault();
-                alert('Vui lòng nhập giá sản phẩm hợp lệ!');
+                alert('Vui lòng nhập số điện thoại!');
                 return false;
             }
             return true;
@@ -1465,7 +1287,7 @@ if ($isSearching) {
         });
 
         // Initialize on page load
-        displayProducts(currentPage);
+        displayAccounts(currentPage);
         displayPagination();
     </script>
 </body>

@@ -62,6 +62,26 @@ class ProductController extends Controller {
     }
 
     /**
+     * Paginate products
+     */
+    public function paginate($page = 1, $limit = 5) {
+        $productModel = $this->model('Product');
+        $page = (int)$page; if ($page < 1) $page = 1;
+        $limit = (int)$limit; if ($limit < 1) $limit = 5;
+        $totalItems = $productModel->countProducts();
+        $totalPages = ($totalItems > 0) ? (int)ceil($totalItems / $limit) : 1;
+        if ($page > $totalPages) $page = $totalPages;
+        $products = $productModel->getProductsByPage($page, $limit);
+        return [
+            'products' => $products,
+            'totalItems' => $totalItems,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'limit' => $limit
+        ];
+    }
+
+    /**
      * Search products with pagination for AJAX
      */
     public function search($q = '', $page = 1, $limit = 5) {
