@@ -8,7 +8,10 @@
     <!-- Địa chỉ nhận hàng -->
     <section class="address-section mb-4">
       <h3><i class="fas fa-map-marker-alt"></i> Địa Chỉ Nhận Hàng</h3>
-      <div id="selectedAddress">
+      <div id="selectedAddress"
+          data-lat="<?= $data['defaultAddress']['Latitude'] ?>"
+          data-lng="<?= $data['defaultAddress']['Longitude'] ?>">
+
         <?php if (!empty($data['defaultAddress'])): ?>
           <strong><?= htmlspecialchars($data['defaultAddress']['Name']) ?></strong> 
           (<?= htmlspecialchars($data['defaultAddress']['Phone']) ?>)<br>
@@ -18,6 +21,7 @@
           <em>Bạn chưa có địa chỉ mặc định. Vui lòng thêm địa chỉ mới.</em>
         <?php endif; ?>
       </div>
+      
       <button class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#addressModal">
         Thay đổi
       </button>
@@ -45,18 +49,13 @@
         <div class="summary-divider"></div>
 
         <div class="summary-row"><span>Tạm tính:</span><span id="subtotal">0đ</span></div>
-        <div class="summary-row"><span>Phí giao hàng:</span><span id="shipping">15.000đ</span></div>
-        <div class="summary-row"><span>Giảm giá:</span><span>0đ</span></div>
-        <div class="summary-row"><span>Điểm thưởng:</span><span>0đ</span></div>
-
-        <div class="summary-divider"></div>
-
+        <div class="summary-row"><span>Phí giao hàng:</span><span id="shipping">0đ</span></div>
         <div class="summary-row total">
           <span>Tổng cộng:</span><span id="total">0đ</span>
         </div>
 
         <div class="button-group mt-3 d-flex justify-content-between">
-          <a href="/cart" class="btn btn-secondary">
+          <a href="cart" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Quay Lại
           </a>
           <button type="submit" class="btn btn-primary">
@@ -79,7 +78,8 @@
           <?php if (!empty($data['addresses'])): ?>
             <?php foreach ($data['addresses'] as $addr): ?>
               <div class="address-item">
-                <input type="radio" name="address" value="<?= $addr['ID'] ?>" 
+                <input type="radio" name="address" value="<?= $addr['ID'] ?>"
+                  data-lat="<?= $addr['lat'] ?>" data-lng="<?= $addr['lng'] ?>"
                   <?= $addr['is_default'] ? 'checked' : '' ?>>
                 <label>
                   <strong><?= htmlspecialchars($addr['Name']) ?></strong> 
@@ -106,31 +106,115 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const shipping = 15000;
-  let subtotal = 0;
+  const stores = [
+    <?php foreach ($data['storeLocations'] as $store): ?>
+      { id: <?= $store['ID'] ?>, lat: <?= $store['lat'] ?>, lng: <?= $store['lng'] ?> },
+    <?php endforeach; ?>
+  ];
 
+  //kiểm tra có cửa hàng không
+
+  // --- Tính subtotal ---
+  let subtotal = 0;
   document.querySelectorAll(".order-item").forEach(item => {
     const price = parseInt(item.dataset.price);
     const qty = parseInt(item.dataset.quantity);
     subtotal += price * qty;
   });
-
   document.getElementById("subtotal").textContent = subtotal.toLocaleString() + "đ";
-  document.getElementById("total").textContent = (subtotal + shipping).toLocaleString() + "đ";
-});
 
-document.getElementById('confirmAddress')?.addEventListener('click', function() {
-  const selected = document.querySelector('input[name="address"]:checked');
-  if (!selected) return;
+  // Tạm tính tổng ban đầu (ship = 0)
+  document.getElementById("total").textContent = subtotal.toLocaleString() + "đ";
 
-  const label = selected.closest('.address-item').querySelector('label').innerHTML;
-  document.getElementById('selectedAddress').innerHTML = label;
-  document.getElementById('selectedAddressId').value = selected.value;
+  // --- Modal logic ---
+  const addressModal = document.getElementById('addressModal');
+  let prevAddressHtml = document.getElementById('selectedAddress').innerHTML;
+  let prevAddressId = document.getElementById('selectedAddressId')?.value || "";
+  let prevShipping = document.getElementById("shipping").textContent;
 
-  const modal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
-  modal.hide();
+  let addressConfirmed = false;
+
+  // Lưu trạng thái trước khi mở modal
+  addressModal.addEventListener('show.bs.modal', () => {
+    prevAddressHtml = document.getElementById('selectedAddress').innerHTML;
+    prevAddressId = document.getElementById('selectedAddressId')?.value || "";
+    prevShipping = document.getElementById("shipping").textContent;
+  });
+
+  // Nếu modal đóng mà chưa xác nhận, khôi phục địa chỉ và phí ship cũ
+  addressModal.addEventListener('hide.bs.modal', () => {
+    if (!addressConfirmed) {
+      document.getElementById('selectedAddress').innerHTML = prevAddressHtml;
+      if (document.getElementById('selectedAddressId')) {
+        document.getElementById('selectedAddressId').value = prevAddressId;
+      }
+      document.getElementById("shipping").textContent = prevShipping;
+
+      const subtotalVal = parseInt(document.getElementById("subtotal").textContent.replace(/\D/g, ""));
+      const shippingVal = parseInt(prevShipping.replace(/\D/g, ""));
+      document.getElementById("total").textContent = (subtotalVal + shippingVal).toLocaleString() + "đ";
+    }
+    addressConfirmed = false;
+  });
+
+  // Xác nhận địa chỉ
+  document.getElementById('confirmAddress')?.addEventListener('click', function() {
+    const selected = document.querySelector('input[name="address"]:checked');
+    if (!selected) return;
+    addressConfirmed = true;
+
+    const label = selected.closest('.address-item').querySelector('label').innerHTML;
+    document.getElementById('selectedAddress').innerHTML = label;
+
+    if (!document.getElementById('selectedAddressId')) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.id = 'selectedAddressId';
+      input.name = 'address_id';
+      document.getElementById('selectedAddress').appendChild(input);
+    }
+    document.getElementById('selectedAddressId').value = selected.value;
+
+    // Tính phí ship dựa trên khoảng cách
+    calculateShipping(selected, stores);
+
+    // Đóng modal
+    bootstrap.Modal.getInstance(addressModal).hide();
+  });
+
+  // Hàm tính khoảng cách (km)
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI/180;
+    const dLon = (lon2 - lon1) * Math.PI/180;
+    const a = Math.sin(dLat/2) ** 2 +
+              Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+              Math.sin(dLon/2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function calculateShipping(selectedAddress, stores) {
+    const userLat = parseFloat(selectedAddress.dataset.lat);
+    const userLng = parseFloat(selectedAddress.dataset.lng);
+    let minDist = Infinity;
+    stores.forEach(store => {
+      const d = getDistance(userLat, userLng, store.lat, store.lng);
+      if (d < minDist) minDist = d;
+    });
+
+    const shippingFee = Math.round(minDist * 7000); // 7k/km ví dụ
+    document.getElementById("shipping").textContent = shippingFee.toLocaleString() + "đ";
+
+    const subtotalVal = parseInt(document.getElementById("subtotal").textContent.replace(/\D/g, ""));
+    document.getElementById("total").textContent = (subtotalVal + shippingFee).toLocaleString() + "đ";
+  }
+
+  // Tính phí ship lần đầu với địa chỉ mặc định
+  const defaultSelected = document.querySelector('input[name="address"]:checked');
+  if (defaultSelected) calculateShipping(defaultSelected, stores);
 });
 </script>
+
 
 <!-- Footer -->
 <?php include 'app/views/layout/footer.php'; ?>
