@@ -9,6 +9,7 @@ class PaymentController extends Controller {
         $product = $paymentModel->getAllProductstoCart($userID);
         $defaultAddress = $paymentModel->getDefaultAddress($userID);
         $Address = $paymentModel->getAllAddress($userID);
+        $storeLocations = $paymentModel->getStoreLocations($userID);
 
         $data = [
             'title' => 'Thanh toán',
@@ -16,7 +17,8 @@ class PaymentController extends Controller {
             'css' => 'payment.css',
             'defaultAddress' => $defaultAddress,
             'addresses' => $Address, 
-            'product' => $product
+            'product' => $product,
+            'storeLocations' => $storeLocations
             // 'userID' => $userID
         ];
         $this->view('payment/index', $data);
