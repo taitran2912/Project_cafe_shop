@@ -28,7 +28,7 @@
 
             <div class="error-message" id="errorMessage"></div>
 
-            <form id="loginForm" action="<?= BASE_URL ?>login/auth" method="POST">
+            <form id="loginForm" action="login/auth" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <div class="input-wrapper">
@@ -54,20 +54,6 @@
 
                 <button type="submit" class="login-btn">Đăng nhập</button>
             </form>
-
-            <!-- <div class="divider">
-                <span>Hoặc đăng nhập với</span>
-            </div> -->
-            <!-- <div class="social-login">
-                <button class="social-btn" onclick="socialLogin('google')">
-                    <i class="fab fa-google"></i>
-                    Google
-                </button>
-                <button class="social-btn" onclick="socialLogin('facebook')">
-                    <i class="fab fa-facebook"></i>
-                    Facebook
-                </button>
-            </div> -->
 
             <div class="signup-link">
                 Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a>
@@ -115,11 +101,6 @@
                 errorMessage.style.display = 'none';
             }, 3000);
         }
-
-        // function socialLogin(provider) {
-        //     console.log('[v0] Social login with:', provider);
-        //     alert(`Đăng nhập với ${provider} (Chức năng đang phát triển)`);
-        // }
 
         // Hide error message when user starts typing
         document.querySelectorAll('input').forEach(input => {

@@ -9,9 +9,10 @@
 </div>
 
 <div class="cart-container"> 
-    <button class="checkout-btn" onclick="window.location.href='payment'">
+    <button class="checkout-btn" id="checkout-btn" onclick="window.location.href='payment'">
         Thanh toán
     </button>
+
     <button class="continue-btn" onclick="window.location.href='menu'">
         Tiếp tục mua sắm
     </button>
@@ -20,7 +21,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="<?= BASE_URL ?>public/js/cart.js"></script>
+<script src="public/js/cart.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     loadCart();
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadCart() {
   $.ajax({
-    url: '<?= BASE_URL ?>/index.php?url=cart/getCart/<?= $userID;?>',
+    url: 'cart/getCart/<?= $userID;?>',
     type: 'GET',
     dataType: 'json',
     success: function(data) {

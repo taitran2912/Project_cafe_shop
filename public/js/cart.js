@@ -3,6 +3,27 @@ function updateCartDisplay(data) {
   let html = "";
   let total = 0;
 
+  // 🔥 LẤY NÚT THANH TOÁN Ở ĐÂY
+  const checkoutBtn = document.getElementById("checkout-btn");
+
+  // ⚠️ Nếu giỏ hàng trống
+  if (cart.length === 0) {
+    html = `
+      <div class="text-center text-gray-500 py-10 text-[18px]">
+        Giỏ hàng của bạn đang trống.
+      </div>
+    `;
+
+    if (checkoutBtn) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.classList.add("disabled-btn");
+    }
+
+    document.getElementById("cart-content").innerHTML = html;
+    return;
+  }
+
+  // 🛒 Có sản phẩm
   cart.forEach(item => {
     const subtotal = item.Price * item.Quantity;
     total += subtotal;
@@ -10,7 +31,7 @@ function updateCartDisplay(data) {
     html += `
       <div class="cart-item">
         <div class="cart-item-left">
-          <img src="http://localhost/Project_cafe_shop/public/image/${item.Image}" alt="${item.Name}">
+          <img src="public/image/${item.Image}" alt="${item.Image}">
           <div class="cart-item-info">
             <h3>${item.Name}</h3>
             <p>${item.Description || ""}</p>
@@ -38,13 +59,20 @@ function updateCartDisplay(data) {
 
   const cartContent = document.getElementById("cart-content");
   if (cartContent) cartContent.innerHTML = html;
+
+  // ✔️ Có hàng → bật thanh toán
+  if (checkoutBtn) {
+    checkoutBtn.disabled = false;
+    checkoutBtn.classList.remove("disabled-btn");
+  }
 }
+
 
 /* --- ✅ Sửa lại phần updateQuantity & removeFromCart --- */
 
 function updateQuantity(productId, quantity) {
   if (quantity <= 0) return removeFromCart(productId);
-  $.post("http://localhost/Project_cafe_shop/index.php?url=cart/update", { customer_id: 1, product_id: productId, quantity })
+  $.post("cart/update", { customer_id: 1, product_id: productId, quantity })
     .done(() => {
       loadCart(); // gọi lại hàm loadCart() thay vì reload trang
     })
@@ -52,7 +80,7 @@ function updateQuantity(productId, quantity) {
 }
 
 function removeFromCart(productId) {
-  $.post("http://localhost/Project_cafe_shop/index.php?url=cart/delete", { customer_id: 1, product_id: productId })
+  $.post("cart/delete", { customer_id: 1, product_id: productId })
     .done(() => {
       loadCart(); // gọi lại loadCart() để cập nhật giao diện
     })
@@ -62,7 +90,7 @@ function removeFromCart(productId) {
 /* --- Hàm loadCart vẫn giữ nguyên --- */
 function loadCart() {
   $.ajax({
-    url: "http://localhost/Project_cafe_shop/index.php?url=cart/getCart",
+    url: "cart/getCart",
     type: "GET",
     dataType: "json",
     success: function (data) {

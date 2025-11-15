@@ -5,15 +5,11 @@
 
 class CartController extends Controller {
     public function index() {
-        $cartModel = $this->model('Cart');
-        // giả sử khách hàng đang đăng nhập có ID = 1
-
-        // $cartItems = $cartModel->getCartByCustomer($customerId);
 
         $data = [
             'title' => 'Giỏ hàng',
-            'css' => 'cart.css'
-            // 'cartItems' => $cartItems
+            'css' => 'cart.css',
+            // 'cartItems' => $cart
         ];
 
         $this->view('cart/index', $data);
@@ -21,16 +17,16 @@ class CartController extends Controller {
 
     // ✅ API lấy dữ liệu giỏ hàng (cho AJAX)
    public function getCart($customerId) {
-    $cartModel = $this->model('Cart');
-     // tạm thời cố định người dùng
+        $cartModel = $this->model('Cart');
+        // tạm thời cố định người dùng
 
-    $cartItems = $cartModel->getCartByCustomer($customerId);
+        $cartItems = $cartModel->getCartByCustomer($customerId);
 
-    // Trả về JSON thuần
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($cartItems, JSON_UNESCAPED_UNICODE);
-    exit; // đảm bảo không in thêm gì khác
-}
+        // Trả về JSON thuần
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($cartItems, JSON_UNESCAPED_UNICODE);
+        exit; // đảm bảo không in thêm gì khác
+    }
 
 
     // AJAX thêm sản phẩm

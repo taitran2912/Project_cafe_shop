@@ -199,7 +199,7 @@ function addCartEventListeners() {
 }
 
 function addToCart(item) {
-  fetch("http://localhost/Project_cafe_shop/index.php?url=menu/addToCart/<?=$userID?>", {
+  fetch("menu/addToCart/<?=$userID?>", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `id_product=${item.id}&quantity=${item.quantity}`,
