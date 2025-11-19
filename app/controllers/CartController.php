@@ -1,8 +1,4 @@
 <?php
-// $customerId = $_SESSION['user']['ID']; // tạm thời cố định người dùng
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
 class CartController extends Controller {
     public function index() {
 
