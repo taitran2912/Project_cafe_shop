@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th10 15, 2025 lúc 04:02 PM
+-- Thời gian đã tạo: Th10 20, 2025 lúc 08:46 AM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.2.4
 
@@ -142,7 +142,8 @@ CREATE TABLE `Cart_detail` (
 INSERT INTO `Cart_detail` (`ID_Cart`, `ID_Product`, `Quantity`) VALUES
 (4, 2, 1),
 (5, 2, 2),
-(2, 2, 1);
+(2, 2, 2),
+(2, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -230,9 +231,85 @@ INSERT INTO `Customer_Profile` (`ID`, `ID_account`, `Points`) VALUES
 CREATE TABLE `Inventory` (
   `ID` int(10) NOT NULL,
   `ID_Material` int(10) DEFAULT NULL,
-  `ID_Brach` int(10) DEFAULT NULL,
+  `ID_Branch` int(10) DEFAULT NULL,
   `Quantity` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `Inventory`
+--
+
+INSERT INTO `Inventory` (`ID`, `ID_Material`, `ID_Branch`, `Quantity`) VALUES
+(1, 1, 1, 100),
+(2, 2, 1, 100),
+(3, 3, 1, 100),
+(4, 4, 1, 100),
+(5, 5, 1, 100),
+(6, 6, 1, 100),
+(7, 7, 1, 100),
+(8, 8, 1, 100),
+(9, 9, 1, 100),
+(10, 10, 1, 100),
+(11, 11, 1, 100),
+(12, 12, 1, 100),
+(13, 13, 1, 100),
+(14, 14, 1, 100),
+(15, 1, 2, 100),
+(16, 2, 2, 100),
+(17, 3, 2, 100),
+(18, 4, 2, 100),
+(19, 5, 2, 100),
+(20, 6, 2, 100),
+(21, 7, 2, 100),
+(22, 8, 2, 100),
+(23, 9, 2, 100),
+(24, 10, 2, 100),
+(25, 11, 2, 100),
+(26, 12, 2, 100),
+(27, 13, 2, 100),
+(28, 14, 2, 100),
+(29, 1, 3, 0),
+(30, 2, 3, 0),
+(31, 3, 3, 0),
+(32, 4, 3, 0),
+(33, 5, 3, 0),
+(34, 6, 3, 0),
+(35, 7, 3, 0),
+(36, 8, 3, 0),
+(37, 9, 3, 0),
+(38, 10, 3, 0),
+(39, 11, 3, 0),
+(40, 12, 3, 0),
+(41, 13, 3, 0),
+(42, 14, 3, 0),
+(43, 1, 4, 0),
+(44, 2, 4, 0),
+(45, 3, 4, 0),
+(46, 4, 4, 0),
+(47, 5, 4, 0),
+(48, 6, 4, 0),
+(49, 7, 4, 0),
+(50, 8, 4, 0),
+(51, 9, 4, 0),
+(52, 10, 4, 0),
+(53, 11, 4, 0),
+(54, 12, 4, 0),
+(55, 13, 4, 0),
+(56, 14, 4, 0),
+(57, 1, 5, 0),
+(58, 2, 5, 0),
+(59, 3, 5, 0),
+(60, 4, 5, 0),
+(61, 5, 5, 0),
+(62, 6, 5, 0),
+(63, 7, 5, 0),
+(64, 8, 5, 0),
+(65, 9, 5, 0),
+(66, 10, 5, 0),
+(67, 11, 5, 0),
+(68, 12, 5, 0),
+(69, 13, 5, 0),
+(70, 14, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -275,25 +352,16 @@ INSERT INTO `Material` (`ID`, `Name`, `Unit`, `Update_at`) VALUES
 
 CREATE TABLE `Orders` (
   `ID` int(10) NOT NULL,
-  `ID_customer` int(10) DEFAULT NULL,
-  `ID_branch` int(10) DEFAULT NULL,
-  `ID_table` int(10) DEFAULT NULL,
+  `ID_Customer` int(10) DEFAULT NULL,
+  `ID_Branch` int(10) DEFAULT NULL,
+  `ID_Table` int(10) DEFAULT NULL,
   `Status` varchar(10) DEFAULT NULL,
   `Time` time DEFAULT NULL,
   `Address` varchar(100) NOT NULL,
+  `Shipping_Cost` decimal(10,0) NOT NULL,
+  `Total` decimal(10,0) NOT NULL,
   `Payment_status` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Đang đổ dữ liệu cho bảng `Orders`
---
-
-INSERT INTO `Orders` (`ID`, `ID_customer`, `ID_branch`, `ID_table`, `Status`, `Time`, `Address`, `Payment_status`) VALUES
-(1, 1, 1, NULL, 'completed', '09:15:00', '', 'paid'),
-(2, 2, 2, NULL, 'completed', '10:30:00', '', 'paid'),
-(3, 3, 3, NULL, 'completed', '14:20:00', '', 'paid'),
-(4, 4, 4, NULL, 'completed', '16:45:00', '', 'paid'),
-(5, 5, 5, NULL, 'completed', '18:10:00', '', 'paid');
 
 -- --------------------------------------------------------
 
@@ -308,37 +376,6 @@ CREATE TABLE `Order_detail` (
   `Quantity` int(10) DEFAULT NULL,
   `Price` decimal(10,0) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Đang đổ dữ liệu cho bảng `Order_detail`
---
-
-INSERT INTO `Order_detail` (`ID`, `ID_order`, `ID_product`, `Quantity`, `Price`) VALUES
-(6, 1, 1, 2, 25000),
-(7, 1, 2, 1, 28000),
-(8, 1, 4, 1, 35000),
-(9, 1, 7, 1, 45000),
-(10, 1, 11, 2, 55000),
-(11, 2, 3, 1, 30000),
-(12, 2, 5, 2, 25000),
-(13, 2, 6, 1, 40000),
-(14, 2, 9, 1, 38000),
-(15, 2, 14, 2, 15000),
-(16, 3, 1, 1, 25000),
-(17, 3, 2, 2, 28000),
-(18, 3, 8, 1, 40000),
-(19, 3, 10, 1, 35000),
-(20, 3, 13, 1, 55000),
-(21, 4, 5, 2, 25000),
-(22, 4, 6, 1, 40000),
-(23, 4, 9, 1, 38000),
-(24, 4, 12, 1, 55000),
-(25, 4, 14, 1, 15000),
-(26, 5, 3, 1, 30000),
-(27, 5, 7, 1, 45000),
-(28, 5, 8, 2, 40000),
-(29, 5, 11, 1, 55000),
-(30, 5, 15, 1, 18000);
 
 -- --------------------------------------------------------
 
@@ -410,8 +447,8 @@ INSERT INTO `Product` (`ID`, `ID_category`, `Name`, `Description`, `Price`, `Sta
 
 CREATE TABLE `Product_detail` (
   `ID` int(10) NOT NULL,
-  `ID_product` int(10) DEFAULT NULL,
-  `ID_material` int(10) DEFAULT NULL,
+  `ID_Product` int(10) DEFAULT NULL,
+  `ID_Material` int(10) DEFAULT NULL,
   `Quantity` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -419,7 +456,7 @@ CREATE TABLE `Product_detail` (
 -- Đang đổ dữ liệu cho bảng `Product_detail`
 --
 
-INSERT INTO `Product_detail` (`ID`, `ID_product`, `ID_material`, `Quantity`) VALUES
+INSERT INTO `Product_detail` (`ID`, `ID_Product`, `ID_Material`, `Quantity`) VALUES
 (1, 1, 1, 25),
 (2, 1, 4, 10),
 (3, 1, 12, 150),
@@ -601,7 +638,7 @@ ALTER TABLE `Customer_Profile`
 ALTER TABLE `Inventory`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `ID_Material` (`ID_Material`),
-  ADD KEY `ID_Brach` (`ID_Brach`);
+  ADD KEY `ID_Brach` (`ID_Branch`);
 
 --
 -- Chỉ mục cho bảng `Material`
@@ -614,9 +651,9 @@ ALTER TABLE `Material`
 --
 ALTER TABLE `Orders`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_customer` (`ID_customer`),
-  ADD KEY `ID_branch` (`ID_branch`),
-  ADD KEY `ID_table` (`ID_table`);
+  ADD KEY `ID_customer` (`ID_Customer`),
+  ADD KEY `ID_branch` (`ID_Branch`),
+  ADD KEY `ID_table` (`ID_Table`);
 
 --
 -- Chỉ mục cho bảng `Order_detail`
@@ -644,7 +681,7 @@ ALTER TABLE `Product`
 --
 ALTER TABLE `Product_detail`
   ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID_product` (`ID_product`);
+  ADD KEY `ID_product` (`ID_Product`);
 
 --
 -- Chỉ mục cho bảng `Reviews`
@@ -724,7 +761,7 @@ ALTER TABLE `Customer_Profile`
 -- AUTO_INCREMENT cho bảng `Inventory`
 --
 ALTER TABLE `Inventory`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT cho bảng `Material`
@@ -821,7 +858,7 @@ ALTER TABLE `Customer_Profile`
 --
 ALTER TABLE `Inventory`
   ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`ID_Material`) REFERENCES `Material` (`ID`),
-  ADD CONSTRAINT `inventory_ibfk_2` FOREIGN KEY (`ID_Brach`) REFERENCES `Branches` (`ID`);
+  ADD CONSTRAINT `inventory_ibfk_2` FOREIGN KEY (`ID_Branch`) REFERENCES `Branches` (`ID`);
 
 --
 -- Các ràng buộc cho bảng `Orders`
