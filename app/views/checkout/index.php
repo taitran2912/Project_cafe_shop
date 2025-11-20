@@ -92,9 +92,7 @@
 
                     <!-- Payment Method -->
                     <div class="mb-3">
-                        <h5>Phương Thức Thanh Toán</h5>
-
-                        <p class="text-muted">Quét mã QR để thanh toán</p>
+                        <h5>Quét mã QR để thanh toánn</h5>
 
                         <div class="d-flex justify-content-center mb-3">
                             <img src="<?= htmlspecialchars($data['QR']) ?>"

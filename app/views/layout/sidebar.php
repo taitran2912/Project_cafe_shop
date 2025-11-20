@@ -14,6 +14,7 @@
   $currentAction = isset($urlParts[1]) ? strtolower($urlParts[1]) : 'index';
 
   $menuItems = [
+//Quản lý chuỗi
     [
       "title" => "Quản lý thực đơn",
       "icon"  => "fas fa-utensils",
@@ -43,7 +44,45 @@
       "icon"  => "fas fa-ticket-alt",
       "link"  => "admin/coupon",
       "roles" => [1]
-    ]
+    ],
+// Nhân viên
+    [
+      "title" => "Xem thực đơn",//dùng để gọi món cho khách tại quán
+      "icon"  => "",
+      "link"  => "admin/",
+      "roles" => [3]// nhân viên
+    ],
+    [
+      "title" => "Nhận đơn hàng",//xem và cập nhật trạng thái đơn hàng
+      "icon"  => "",
+      "link"  => "admin/",
+      "roles" => [3]// nhân viên
+    ],
+// Quản lý từng cửa hàng
+    [
+      "title" => "Đơn hàng",// Xem đơn hàng - ko được thêm xoá sửa 
+      "icon"  => "",
+      "link"  => "admin/",
+      "roles" => [2]// quản lý cửa hàng
+    ],
+    [
+      "title" => "Đánh giá",// Xem và trả lời đánh giá
+      "icon"  => "",
+      "link"  => "admin/",
+      "roles" => [2]// quản lý cửa hàng
+    ],
+    [
+      "title" => "Quản lý kho",// Cập nhật số lượng hàng hoá trong kho - có quyền thêm nguyên liệu mới
+      "icon"  => "",
+      "link"  => "admin/",
+      "roles" => [2]// quản lý cửa hàng
+    ],
+    [
+      "title" => "Bàn",// Quản lý bàn tại cửa hàng
+      "icon"  => "",
+      "link"  => "admin/",
+      "roles" => [2]// quản lý cửa hàng
+    ],
   ];
   ?>
 

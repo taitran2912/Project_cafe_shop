@@ -13,14 +13,12 @@ class CheckoutController extends Controller {
             // Tính toán đơn hàng
             $orderCode = "ORD" . time() . rand(1000, 9999);
 
-
             $sepayConfig = [
                 'account_number' => '91902203843',
                 'account_name' => 'TranTanTai',
                 'bank_code' => 'TPBank',
                 'template' => 'compact',
             ];
-
 
             $checkoutModel = $this->model('Checkout');
             $cart = $checkoutModel->getCartItems($userID);
