@@ -1,3 +1,42 @@
+<?php 
+// Form submissions are handled in index.php BEFORE HTML output
+
+// Initialize messages
+$successMessage = '';
+$errorMessage = '';
+
+// Handle success messages from redirect
+if (isset($_GET['success'])) {
+    switch ($_GET['success']) {
+        case 'add':
+            $successMessage = 'Thêm chi nhánh thành công!';
+            break;
+        case 'edit':
+            $successMessage = 'Cập nhật chi nhánh thành công!';
+            break;
+        case 'delete':
+            $successMessage = 'Xóa chi nhánh thành công!';
+            break;
+    }
+}
+
+// Get all branches
+$branchModel = new Branch();
+$branches = $branchModel->getAllBranch();
+?>
+
+<?php if ($successMessage): ?>
+<div class="alert alert-success" style="margin-bottom: 20px; padding: 12px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px;">
+    <?= htmlspecialchars($successMessage) ?>
+</div>
+<?php endif; ?>
+
+<?php if ($errorMessage): ?>
+<div class="alert alert-danger" style="margin-bottom: 20px; padding: 12px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px;">
+    <?= htmlspecialchars($errorMessage) ?>
+</div>
+<?php endif; ?>
+
 <div class="content-header">
           <button class="btn btn-primary" id="addBranchBtn">
             <i class="fas fa-plus"></i>
@@ -23,8 +62,8 @@
             </thead>
             <tbody id="branchBody">
 
-              <?php if (!empty($data['branches'])): ?>
-                <?php foreach ($data['branches'] as $branch): ?>
+              <?php if (!empty($branches)): ?>
+                <?php foreach ($branches as $branch): ?>
                   <tr>
                     <td><?= htmlspecialchars($branch['ID']) ?></td>
                     <td><?= htmlspecialchars($branch['Name']) ?></td>
@@ -70,7 +109,8 @@
       <h2>Thêm chi nhánh mới</h2>
       <span class="close">&times;</span>
     </div>
-    <form id="addBranchForm">
+    <form id="addBranchForm" method="POST">
+      <input type="hidden" name="action" value="add_branch">
       <div class="form-group">
         <label for="branchName">Tên chi nhánh <span class="required">*</span></label>
         <input type="text" id="branchName" name="name" required placeholder="Nhập tên chi nhánh">
@@ -81,7 +121,7 @@
       </div>
       <div class="form-group">
         <label for="branchPhone">Số điện thoại <span class="required">*</span></label>
-        <input type="tel" id="branchPhone" name="phone" required placeholder="Nhập số điện thoại (10-11 số)">
+        <input type="tel" id="branchPhone" name="phone" required placeholder="Nhập số điện thoại (10-11 số)" pattern="[0-9]{10,11}">
       </div>
       <div class="form-group">
         <label for="branchStatus">Trạng thái</label>
@@ -154,7 +194,7 @@
 
 <script>
 // Lấy dữ liệu chi nhánh từ PHP
-const branches = <?= json_encode($data['branches'], JSON_UNESCAPED_UNICODE); ?>;
+const branches = <?= json_encode($branches, JSON_UNESCAPED_UNICODE); ?>;
 
 // Cấu hình
 const rowsPerPage = 5;
@@ -219,9 +259,8 @@ displayBranches(currentPage);
 // Xử lý modal thêm chi nhánh
 const modal = document.getElementById('addBranchModal');
 const addBranchBtn = document.getElementById('addBranchBtn');
-const closeBtn = document.querySelector('.close');
-const cancelBtn = document.getElementById('cancelBtn');
 const addBranchForm = document.getElementById('addBranchForm');
+const cancelBtn = document.getElementById('cancelBtn');
 
 // Mở modal khi nhấn nút "Thêm chi nhánh"
 addBranchBtn.addEventListener('click', () => {

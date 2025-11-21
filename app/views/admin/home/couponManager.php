@@ -1,97 +1,9 @@
 <?php 
-require_once __DIR__ . '/../../../models/Coupon.php';
+// Form submissions are handled in index.php BEFORE HTML output
 
 // Initialize messages
 $successMessage = '';
 $errorMessage = '';
-
-// Handle form submission for adding coupon
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_coupon') {
-    $couponData = [
-        'Code' => isset($_POST['code']) ? trim($_POST['code']) : '',
-        'Description' => isset($_POST['description']) ? trim($_POST['description']) : '',
-        'Value' => isset($_POST['value']) ? trim($_POST['value']) : '',
-        'StartDate' => isset($_POST['start_date']) ? trim($_POST['start_date']) : '',
-        'EndDate' => isset($_POST['end_date']) ? trim($_POST['end_date']) : '',
-        'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active',
-        'Quantity' => isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0
-    ];
-
-    // Validate required fields
-    if (empty($couponData['Code'])) {
-        $errorMessage = 'Mã khuyến mãi không được để trống!';
-    } elseif (empty($couponData['Description'])) {
-        $errorMessage = 'Mô tả không được để trống!';
-    } elseif (empty($couponData['Value'])) {
-        $errorMessage = 'Giá trị khuyến mãi không được để trống!';
-    } elseif (empty($couponData['StartDate'])) {
-        $errorMessage = 'Ngày bắt đầu không được để trống!';
-    } elseif (empty($couponData['EndDate'])) {
-        $errorMessage = 'Ngày kết thúc không được để trống!';
-    } else {
-        // Call model to create coupon
-        $couponModel = new Coupon();
-        $result = $couponModel->createCoupon($couponData);
-        
-        if ($result) {
-            header('Location: /Project_cafe_shop/admin/coupon?success=add');
-            exit;
-        } else {
-            $errorMessage = 'Có lỗi xảy ra khi thêm khuyến mãi. Vui lòng thử lại!';
-        }
-    }
-}
-
-// Handle form submission for updating coupon
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_coupon') {
-    $couponId = isset($_POST['coupon_id']) ? (int)$_POST['coupon_id'] : 0;
-    
-    if ($couponId > 0) {
-        $couponData = [
-            'Code' => isset($_POST['code']) ? trim($_POST['code']) : '',
-            'Description' => isset($_POST['description']) ? trim($_POST['description']) : '',
-            'Value' => isset($_POST['value']) ? trim($_POST['value']) : '',
-            'StartDate' => isset($_POST['start_date']) ? trim($_POST['start_date']) : '',
-            'EndDate' => isset($_POST['end_date']) ? trim($_POST['end_date']) : '',
-            'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active',
-            'Quantity' => isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0
-        ];
-
-        // Validate
-        if (empty($couponData['Code'])) {
-            $errorMessage = 'Mã khuyến mãi không được để trống!';
-        } elseif (empty($couponData['Description'])) {
-            $errorMessage = 'Mô tả không được để trống!';
-        } elseif (empty($couponData['Value'])) {
-            $errorMessage = 'Giá trị khuyến mãi không được để trống!';
-        } else {
-            $couponModel = new Coupon();
-            $result = $couponModel->updateCoupon($couponId, $couponData);
-            
-            if ($result) {
-                header('Location: /Project_cafe_shop/admin/coupon?success=edit');
-                exit;
-            } else {
-                $errorMessage = 'Có lỗi xảy ra khi cập nhật khuyến mãi!';
-            }
-        }
-    }
-}
-
-// Handle delete coupon
-if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-    $couponId = (int)$_GET['id'];
-    if ($couponId > 0) {
-        $couponModel = new Coupon();
-        $result = $couponModel->deleteCoupon($couponId);
-        if ($result) {
-            header('Location: /Project_cafe_shop/admin/coupon?success=delete');
-            exit;
-        } else {
-            $errorMessage = 'Có lỗi xảy ra khi xóa khuyến mãi!';
-        }
-    }
-}
 
 // Handle success messages from redirect
 if (isset($_GET['success'])) {

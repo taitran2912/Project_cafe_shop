@@ -1,93 +1,9 @@
 <?php 
+// Form submissions are handled in index.php BEFORE HTML output
 
 // Initialize messages
 $successMessage = '';
 $errorMessage = '';
-
-// Handle form submission for adding account
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_account') {
-    $accountData = [
-        'Name' => isset($_POST['name']) ? trim($_POST['name']) : '',
-        'Password' => isset($_POST['password']) ? trim($_POST['password']) : '',
-        'Phone' => isset($_POST['phone']) ? trim($_POST['phone']) : '',
-        'Role' => isset($_POST['role']) ? (int)$_POST['role'] : 2,
-        'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active'
-    ];
-
-    // Validate required fields
-    if (empty($accountData['Name'])) {
-        $errorMessage = 'Tên nhân viên không được để trống!';
-    } elseif (empty($accountData['Password'])) {
-        $errorMessage = 'Mật khẩu không được để trống!';
-    } elseif (empty($accountData['Phone'])) {
-        $errorMessage = 'Số điện thoại không được để trống!';
-    } else {
-        // Hash password
-        $accountData['Password'] = password_hash($accountData['Password'], PASSWORD_DEFAULT);
-        
-        // Call model to create account
-        $accountModel = new Account();
-        $result = $accountModel->createAccount($accountData);
-        
-        if ($result) {
-            header('Location: /Project_cafe_shop/admin/user?success=add');
-            exit;
-        } else {
-            $errorMessage = 'Có lỗi xảy ra khi thêm nhân viên. Vui lòng thử lại!';
-        }
-    }
-}
-
-// Handle form submission for updating account
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_account') {
-    $accountId = isset($_POST['account_id']) ? (int)$_POST['account_id'] : 0;
-    
-    if ($accountId > 0) {
-        $accountData = [
-            'Name' => isset($_POST['name']) ? trim($_POST['name']) : '',
-            'Phone' => isset($_POST['phone']) ? trim($_POST['phone']) : '',
-            'Role' => isset($_POST['role']) ? (int)$_POST['role'] : 2,
-            'Status' => isset($_POST['status']) ? trim($_POST['status']) : 'active'
-        ];
-
-        // Only update password if provided
-        if (!empty($_POST['password'])) {
-            $accountData['Password'] = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
-        }
-
-        // Validate
-        if (empty($accountData['Name'])) {
-            $errorMessage = 'Tên nhân viên không được để trống!';
-        } elseif (empty($accountData['Phone'])) {
-            $errorMessage = 'Số điện thoại không được để trống!';
-        } else {
-            $accountModel = new Account();
-            $result = $accountModel->updateAccount($accountId, $accountData);
-            
-            if ($result) {
-                header('Location: /Project_cafe_shop/admin/user?success=edit');
-                exit;
-            } else {
-                $errorMessage = 'Có lỗi xảy ra khi cập nhật nhân viên!';
-            }
-        }
-    }
-}
-
-// Handle delete account
-if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-    $accountId = (int)$_GET['id'];
-    if ($accountId > 0) {
-        $accountModel = new Account();
-        $result = $accountModel->deleteAccount($accountId);
-        if ($result) {
-            header('Location: /Project_cafe_shop/admin/user?success=delete');
-            exit;
-        } else {
-            $errorMessage = 'Có lỗi xảy ra khi xóa nhân viên!';
-        }
-    }
-}
 
 // Handle success messages from redirect
 if (isset($_GET['success'])) {
