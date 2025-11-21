@@ -1,6 +1,6 @@
 <?php
-  
-  session_start();
+  if(!isset($_SESSION))
+    session_start();
   $role = $_SESSION['user']['Role'];
   $userID = $_SESSION['user']['ID'];
   $name = $_SESSION['user']['Name'];
@@ -27,7 +27,6 @@
     require_once 'app/models/Branch.php';
   }
 
-  // Handle form submissions BEFORE any HTML output to prevent "headers already sent" errors
   
   // ========== USER MANAGEMENT ==========
   if ($action === 'user') {
@@ -295,11 +294,7 @@
               include_once 'app/views/admin/home/couponManager.php';
               break;
             default:
-<<<<<<< HEAD
-              include_once 'app/views/admin/home/menu.php'; // Tuỳ theo action để include file tương ứng
-=======
               include_once 'app/views/admin/home/couponManager.php';
->>>>>>> cf446b571561cdf5cf30c7a7cea19b764c80a9de
               break;
           }
       ?>
