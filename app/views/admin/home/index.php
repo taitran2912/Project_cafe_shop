@@ -1,21 +1,9 @@
 <?php
-  if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-  }
+  
+  session_start();
   $role = $_SESSION['user']['Role'];
   $userID = $_SESSION['user']['ID'];
   $name = $_SESSION['user']['Name'];
-  switch ($role) {
-    case 1:
-      $roleName = "Admin";
-      break;
-    case 2:
-      $roleName = "Nhân viên";
-      break;
-    case 3:
-      $roleName = "Quản lý";
-      break;
-  }
 
   $uri = $_SERVER['REQUEST_URI'];
   $base = '/Project_cafe_shop/admin/';
@@ -283,6 +271,9 @@
 <!-- Sidebar -->
   <?php include_once 'app/views/layout/sidebar.php'; ?>
 <!-- Main Content -->
+ <!-- <h1>
+  <?php echo $role ?>
+</h1> -->
 <main class="main-content">
 
   <?php include_once 'app/views/layout/headerAdmin.php'; ?>  
@@ -304,7 +295,11 @@
               include_once 'app/views/admin/home/couponManager.php';
               break;
             default:
+<<<<<<< HEAD
               include_once 'app/views/admin/home/menu.php'; // Tuỳ theo action để include file tương ứng
+=======
+              include_once 'app/views/admin/home/couponManager.php';
+>>>>>>> cf446b571561cdf5cf30c7a7cea19b764c80a9de
               break;
           }
       ?>

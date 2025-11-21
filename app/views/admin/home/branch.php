@@ -77,25 +77,13 @@ $branches = $branchModel->getAllBranch();
                     </td>
                     <td>
                       <div class="action-buttons">
-                        <button class="btn-action btn-view" title="Xem chi tiết" 
-                                data-id="<?= $branch['ID'] ?>"
-                                data-name="<?= htmlspecialchars($branch['Name']) ?>"
-                                data-address="<?= htmlspecialchars($branch['Address']) ?>"
-                                data-phone="<?= htmlspecialchars($branch['Phone']) ?>"
-                                data-status="<?= $branch['Status'] ?>">
+                        <button class="btn-action btn-view" title="Xem chi tiết" data-id="<?= $branch['ID'] ?>">
                           <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn-action btn-edit" title="Sửa" 
-                                data-id="<?= $branch['ID'] ?>"
-                                data-name="<?= htmlspecialchars($branch['Name']) ?>"
-                                data-address="<?= htmlspecialchars($branch['Address']) ?>"
-                                data-phone="<?= htmlspecialchars($branch['Phone']) ?>"
-                                data-status="<?= $branch['Status'] ?>">
+                        <button class="btn-action btn-edit" title="Sửa" data-id="<?= $branch['ID'] ?>">
                           <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn-action btn-delete" title="Xóa" 
-                                data-id="<?= $branch['ID'] ?>"
-                                data-name="<?= htmlspecialchars($branch['Name']) ?>">
+                        <button class="btn-action btn-delete" title="Xóa" data-id="<?= $branch['ID'] ?>">
                           <i class="fas fa-trash"></i>
                         </button>
                       </div>
