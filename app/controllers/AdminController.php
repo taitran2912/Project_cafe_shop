@@ -1,4 +1,5 @@
 <?php
+
 class AdminController extends Controller {
     public function index() {
         if (!isset($_SESSION['user']) || empty($_SESSION['user']['ID'])) {
@@ -24,6 +25,8 @@ class AdminController extends Controller {
 
         $data = [
             'title' => 'admin',
+            'role' => $role,
+            'userID' => $userID
         ];
         $this->view('admin/home/index', $data);
     }

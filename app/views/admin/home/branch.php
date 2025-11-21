@@ -38,13 +38,13 @@
                     </td>
                     <td>
                       <div class="action-buttons">
-                        <button class="btn-action btn-view" title="Xem chi tiết" data-id="<?= $branch['id'] ?>">
+                        <button class="btn-action btn-view" title="Xem chi tiết" data-id="<?= $branch['ID'] ?>">
                           <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn-action btn-edit" title="Sửa" data-id="<?= $branch['id'] ?>">
+                        <button class="btn-action btn-edit" title="Sửa" data-id="<?= $branch['ID'] ?>">
                           <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn-action btn-delete" title="Xóa" data-id="<?= $branch['id'] ?>">
+                        <button class="btn-action btn-delete" title="Xóa" data-id="<?= $branch['ID'] ?>">
                           <i class="fas fa-trash"></i>
                         </button>
                       </div>
@@ -335,13 +335,13 @@ function renderPagination() {
 displayBranches(currentPage);
 
 // 🎯 Xử lý nút "Xem chi tiết"
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.btn-view')) {
-        const btn = e.target.closest('.btn-view');
-        const id = btn.closest('tr').querySelector('td').textContent.trim(); // Lấy ID từ cột đầu tiên
-        window.location.href = `http://localhost/Project_cafe_shop/admin/branch_detail/${id}`;
-    }
-});
+// document.addEventListener('click', function(e) {
+//     if (e.target.closest('.btn-view')) {
+//         const btn = e.target.closest('.btn-view');
+//         const id = btn.closest('tr').querySelector('td').textContent.trim(); // Lấy ID từ cột đầu tiên
+//         window.location.href = `branch_detail/${id}`;
+//     }
+// });
 
 // Modal functionality
 const modal = document.getElementById('addBranchModal');

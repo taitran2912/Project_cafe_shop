@@ -5,20 +5,23 @@
   </div>
 
   <?php
-  // Lấy URL hiện tại từ tham số `url` mà Router đang xử lý
+  // ===== LẤY URL HIỆN TẠI TỪ ROUTER =====
   $url = isset($_GET['url']) ? trim($_GET['url'], '/') : '';
   $urlParts = explode('/', $url);
-  
-  // Xác định controller và action
-  $currentController = isset($urlParts[0]) ? strtolower($urlParts[0]) : 'home';
-  $currentAction = isset($urlParts[1]) ? strtolower($urlParts[1]) : 'index';
 
+  // controller/action hiện tại
+  $currentController = strtolower($urlParts[0] ?? 'home');
+  $currentAction     = strtolower($urlParts[1] ?? 'index');
+
+  // ===== LẤY QUYỀN NGƯỜI DÙNG TỪ SESSION =====
+
+  // ===== DANH SÁCH MENU =====
   $menuItems = [
-//Quản lý chuỗi
+    // Quản lý chuỗi
     [
       "title" => "Quản lý thực đơn",
       "icon"  => "fas fa-utensils",
-      "link"  => "admin/menu",   // admin trỏ đến AdminController, menu là action trỏ đến function menu() được viết trong AdminController
+      "link"  => "admin/menu",
       "roles" => [1]
     ],
     [
@@ -45,77 +48,74 @@
       "link"  => "admin/coupon",
       "roles" => [1]
     ],
-// Nhân viên
+
+    // Nhân viên
     [
-      "title" => "Xem thực đơn",//dùng để gọi món cho khách tại quán
-      "icon"  => "",
-      "link"  => "admin/",
-      "roles" => [3]// nhân viên
+      "title" => "Xem thực đơn",
+      "icon"  => "fas fa-list",
+      "link"  => "admin/menu",
+      "roles" => [3]
     ],
     [
-      "title" => "Nhận đơn hàng",//xem và cập nhật trạng thái đơn hàng
-      "icon"  => "",
-      "link"  => "admin/",
-      "roles" => [3]// nhân viên
+      "title" => "Nhận đơn hàng",
+      "icon"  => "fas fa-receipt",
+      "link"  => "admin/orders",
+      "roles" => [3]
     ],
-// Quản lý từng cửa hàng
+
+    // Quản lý cửa hàng
     [
-      "title" => "Đơn hàng",// Xem đơn hàng - ko được thêm xoá sửa 
-      "icon"  => "",
-      "link"  => "admin/",
-      "roles" => [2]// quản lý cửa hàng
-    ],
-    [
-      "title" => "Đánh giá",// Xem và trả lời đánh giá
-      "icon"  => "",
-      "link"  => "admin/",
-      "roles" => [2]// quản lý cửa hàng
+      "title" => "Đơn hàng",
+      "icon"  => "fas fa-shopping-cart",
+      "link"  => "admin/orders",
+      "roles" => [2]
     ],
     [
-      "title" => "Quản lý kho",// Cập nhật số lượng hàng hoá trong kho - có quyền thêm nguyên liệu mới
-      "icon"  => "",
-      "link"  => "admin/",
-      "roles" => [2]// quản lý cửa hàng
+      "title" => "Đánh giá",
+      "icon"  => "fas fa-comments",
+      "link"  => "admin/review",
+      "roles" => [2]
     ],
     [
-      "title" => "Bàn",// Quản lý bàn tại cửa hàng
-      "icon"  => "",
-      "link"  => "admin/",
-      "roles" => [2]// quản lý cửa hàng
+      "title" => "Quản lý kho",
+      "icon"  => "fas fa-boxes",
+      "link"  => "admin/warehouse",
+      "roles" => [2]
+    ],
+    [
+      "title" => "Bàn",
+      "icon"  => "fas fa-chair",
+      "link"  => "admin/table",
+      "roles" => [2]
     ],
   ];
   ?>
 
   <nav class="nav-menu">
     <?php foreach ($menuItems as $item): ?>
-        <?php
-          // Tách controller/action từ link menu
-          $parts = explode('/', $item['link']);
-          $itemController = strtolower($parts[0] ?? '');
-          $itemAction = strtolower($parts[1] ?? 'index');
 
-          // So sánh controller/action hiện tại với link menu
-          $isActive = ($currentController === $itemController && $currentAction === $itemAction);
-        ?>
-        <a href="/Project_cafe_shop/<?= $item['link'] ?>"
-           class="nav-item <?= $isActive ? 'active' : '' ?>">
-          <i class="<?= $item['icon'] ?>"></i>
-          <span><?= $item['title'] ?></span>
-        </a>
-      
+      <?php if (!in_array($role, $item['roles'])) continue; ?>
+
+      <?php
+        // Tách link thành controller/action
+        $parts = explode('/', trim($item['link'], '/'));
+
+        $itemController = strtolower($parts[0] ?? '');
+        $itemAction     = strtolower($parts[1] ?? 'index');
+
+        // Kiểm tra active
+        $isActive = (
+            $currentController === $itemController &&
+            $currentAction     === $itemAction
+        );
+      ?>
+
+      <a href="/Project_cafe_shop/<?= $item['link'] ?>"
+         class="nav-item <?= $isActive ? 'active' : '' ?>">
+        <i class="<?= $item['icon'] ?>"></i>
+        <span><?= $item['title'] ?></span>
+      </a>
+
     <?php endforeach; ?>
   </nav>
-
-  <!-- <div class="sidebar-footer">
-    <div class="user-info">
-      <i class="fas fa-user-circle"></i>
-      <div>
-        <div class="user-name"><?= $name ?></div>
-        <div class="user-role"><?= $roleName ?></div>
-      </div>
-    </div>
-    <button class="btn-logout">
-      <i class="fas fa-sign-out-alt"></i>
-    </button>
-  </div> -->
 </aside>
