@@ -1,3 +1,42 @@
+<?php 
+// Form submissions are handled in index.php BEFORE HTML output
+
+// Initialize messages
+$successMessage = '';
+$errorMessage = '';
+
+// Handle success messages from redirect
+if (isset($_GET['success'])) {
+    switch ($_GET['success']) {
+        case 'add':
+            $successMessage = 'Thêm chi nhánh thành công!';
+            break;
+        case 'edit':
+            $successMessage = 'Cập nhật chi nhánh thành công!';
+            break;
+        case 'delete':
+            $successMessage = 'Xóa chi nhánh thành công!';
+            break;
+    }
+}
+
+// Get all branches
+$branchModel = new Branch();
+$branches = $branchModel->getAllBranch();
+?>
+
+<?php if ($successMessage): ?>
+<div class="alert alert-success" style="margin-bottom: 20px; padding: 12px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px;">
+    <?= htmlspecialchars($successMessage) ?>
+</div>
+<?php endif; ?>
+
+<?php if ($errorMessage): ?>
+<div class="alert alert-danger" style="margin-bottom: 20px; padding: 12px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px;">
+    <?= htmlspecialchars($errorMessage) ?>
+</div>
+<?php endif; ?>
+
 <div class="content-header">
           <button class="btn btn-primary" id="addBranchBtn">
             <i class="fas fa-plus"></i>
@@ -23,8 +62,8 @@
             </thead>
             <tbody id="branchBody">
 
-              <?php if (!empty($data['branches'])): ?>
-                <?php foreach ($data['branches'] as $branch): ?>
+              <?php if (!empty($branches)): ?>
+                <?php foreach ($branches as $branch): ?>
                   <tr>
                     <td><?= htmlspecialchars($branch['ID']) ?></td>
                     <td><?= htmlspecialchars($branch['Name']) ?></td>
@@ -38,13 +77,25 @@
                     </td>
                     <td>
                       <div class="action-buttons">
-                        <button class="btn-action btn-view" title="Xem chi tiết" data-id="<?= $branch['id'] ?>">
+                        <button class="btn-action btn-view" title="Xem chi tiết" 
+                                data-id="<?= $branch['ID'] ?>"
+                                data-name="<?= htmlspecialchars($branch['Name']) ?>"
+                                data-address="<?= htmlspecialchars($branch['Address']) ?>"
+                                data-phone="<?= htmlspecialchars($branch['Phone']) ?>"
+                                data-status="<?= $branch['Status'] ?>">
                           <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn-action btn-edit" title="Sửa" data-id="<?= $branch['id'] ?>">
+                        <button class="btn-action btn-edit" title="Sửa" 
+                                data-id="<?= $branch['ID'] ?>"
+                                data-name="<?= htmlspecialchars($branch['Name']) ?>"
+                                data-address="<?= htmlspecialchars($branch['Address']) ?>"
+                                data-phone="<?= htmlspecialchars($branch['Phone']) ?>"
+                                data-status="<?= $branch['Status'] ?>">
                           <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn-action btn-delete" title="Xóa" data-id="<?= $branch['id'] ?>">
+                        <button class="btn-action btn-delete" title="Xóa" 
+                                data-id="<?= $branch['ID'] ?>"
+                                data-name="<?= htmlspecialchars($branch['Name']) ?>">
                           <i class="fas fa-trash"></i>
                         </button>
                       </div>
@@ -70,7 +121,8 @@
       <h2>Thêm chi nhánh mới</h2>
       <span class="close">&times;</span>
     </div>
-    <form id="addBranchForm">
+    <form id="addBranchForm" method="POST">
+      <input type="hidden" name="action" value="add_branch">
       <div class="form-group">
         <label for="branchName">Tên chi nhánh <span class="required">*</span></label>
         <input type="text" id="branchName" name="name" required placeholder="Nhập tên chi nhánh">
@@ -81,7 +133,7 @@
       </div>
       <div class="form-group">
         <label for="branchPhone">Số điện thoại <span class="required">*</span></label>
-        <input type="tel" id="branchPhone" name="phone" required placeholder="Nhập số điện thoại (10-11 số)">
+        <input type="tel" id="branchPhone" name="phone" required placeholder="Nhập số điện thoại (10-11 số)" pattern="[0-9]{10,11}">
       </div>
       <div class="form-group">
         <label for="branchStatus">Trạng thái</label>
@@ -98,68 +150,379 @@
   </div>
 </div>
 
+<!-- Modal Sửa Chi Nhánh -->
+<div id="editBranchModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Chỉnh sửa chi nhánh</h2>
+      <span class="close" data-modal="edit">&times;</span>
+    </div>
+    <form id="editBranchForm" method="POST">
+      <input type="hidden" name="action" value="edit_branch">
+      <input type="hidden" id="editBranchId" name="branch_id">
+      <div class="form-group">
+        <label for="editBranchName">Tên chi nhánh <span class="required">*</span></label>
+        <input type="text" id="editBranchName" name="name" required placeholder="Nhập tên chi nhánh">
+      </div>
+      <div class="form-group">
+        <label for="editBranchAddress">Địa chỉ <span class="required">*</span></label>
+        <textarea id="editBranchAddress" name="address" required placeholder="Nhập địa chỉ chi nhánh" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="editBranchPhone">Số điện thoại <span class="required">*</span></label>
+        <input type="tel" id="editBranchPhone" name="phone" required placeholder="Nhập số điện thoại (10-11 số)" pattern="[0-9]{10,11}">
+      </div>
+      <div class="form-group">
+        <label for="editBranchStatus">Trạng thái</label>
+        <select id="editBranchStatus" name="status">
+          <option value="active">Đang hoạt động</option>
+          <option value="inactive">Ngưng hoạt động</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="cancelEditBtn">Hủy</button>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Xem Chi Tiết -->
+<div id="viewBranchModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Chi tiết chi nhánh</h2>
+      <span class="close" data-modal="view">&times;</span>
+    </div>
+    <div style="padding: 20px;">
+      <div class="detail-row">
+        <strong>ID:</strong>
+        <span id="viewBranchId"></span>
+      </div>
+      <div class="detail-row">
+        <strong>Tên chi nhánh:</strong>
+        <span id="viewBranchName"></span>
+      </div>
+      <div class="detail-row">
+        <strong>Địa chỉ:</strong>
+        <span id="viewBranchAddress"></span>
+      </div>
+      <div class="detail-row">
+        <strong>Số điện thoại:</strong>
+        <span id="viewBranchPhone"></span>
+      </div>
+      <div class="detail-row">
+        <strong>Trạng thái:</strong>
+        <span id="viewBranchStatus"></span>
+      </div>
+      <div class="form-actions" style="margin-top: 20px;">
+        <button type="button" class="btn btn-secondary" id="closeViewBtn">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-  /* Căn giữa và tạo style cho pagination */
+  /* ========== PAGINATION ========== */
   #pagination {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 24px;
   }
 
   #pagination .page-btn {
-    border: none;
-    background-color: #eee;
-    padding: 6px 12px;
-    border-radius: 6px;
+    min-width: 40px;
+    height: 40px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    color: #666;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  #pagination .page-btn:hover {
-    background-color: #d4a373;
-    color: #fff;
+  #pagination .page-btn:hover:not(.active) {
+    background: linear-gradient(135deg, #d4a373 0%, #b87333 100%);
+    color: white;
+    border-color: #b87333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 115, 51, 0.3);
   }
 
   #pagination .page-btn.active {
-    background-color: #b87333;
-    color: #fff;
+    background: linear-gradient(135deg, #b87333 0%, #a0621c 100%);
+    color: white;
+    border-color: #a0621c;
+    box-shadow: 0 4px 12px rgba(184, 115, 51, 0.4);
+    transform: scale(1.05);
   }
 
-  /* Modal Styles */
+  /* ========== MODAL OVERLAY ========== */
   .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 9999;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    animation: fadeIn 0.3s;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { 
+      opacity: 0;
+      backdrop-filter: blur(0);
+    }
+    to { 
+      opacity: 1;
+      backdrop-filter: blur(4px);
+    }
   }
 
+  /* ========== MODAL CONTENT ========== */
   .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
+    background: white;
+    margin: 3% auto;
     padding: 0;
-    border-radius: 8px;
+    border-radius: 16px;
     width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    animation: slideDown 0.3s;
+    max-width: 550px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
   }
 
   @keyframes slideDown {
     from {
-      transform: translateY(-50px);
+      transform: translateY(-100px) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* ========== MODAL HEADER ========== */
+  .modal-header {
+    padding: 24px 28px;
+    background: linear-gradient(135deg, #b87333 0%, #a0621c 100%);
+    color: white;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  /* ========== CLOSE BUTTON ========== */
+  .close {
+    color: white;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .close:hover,
+  .close:focus {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+
+  /* ========== FORM STYLES ========== */
+  #addBranchForm,
+  #editBranchForm {
+    padding: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 14px;
+  }
+
+  .required {
+    color: #e53e3e;
+    margin-left: 2px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+    background: #f8fafc;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: #b87333;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(184, 115, 51, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  /* ========== FORM ACTIONS ========== */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+  }
+
+  .btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn:active::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #b87333 0%, #a0621c 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(184, 115, 51, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #a0621c 0%, #8b5217 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(184, 115, 51, 0.4);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-secondary:hover {
+    background: #cbd5e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(0);
+  }
+
+  /* ========== DETAIL VIEW STYLES ========== */
+  .detail-row {
+    padding: 16px 0;
+    border-bottom: 2px solid #f0f0f0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .detail-row:last-child {
+    border-bottom: none;
+  }
+  
+  .detail-row strong {
+    min-width: 140px;
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  
+  .detail-row span {
+    color: #4a5568;
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ========== ALERT STYLES ========== */
+  .alert {
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideInDown 0.4s ease;
+  }
+
+  @keyframes slideInDown {
+    from {
+      transform: translateY(-20px);
       opacity: 0;
     }
     to {
@@ -168,111 +531,60 @@
     }
   }
 
-  .modal-header {
-    padding: 20px;
-    background-color: #b87333;
-    color: white;
-    border-radius: 8px 8px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border: 2px solid #b1dfbb;
   }
 
-  .modal-header h2 {
-    margin: 0;
-    font-size: 20px;
+  .alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border: 2px solid #f1b0b7;
   }
 
-  .close {
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 95%;
+      margin: 10% auto;
+    }
 
-  .close:hover,
-  .close:focus {
-    color: #f1f1f1;
-  }
+    .modal-header {
+      padding: 18px 20px;
+    }
 
-  #addBranchForm {
-    padding: 20px;
-  }
+    .modal-header h2 {
+      font-size: 18px;
+    }
 
-  .form-group {
-    margin-bottom: 15px;
-  }
+    #addBranchForm,
+    #editBranchForm {
+      padding: 20px;
+    }
 
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #333;
-  }
+    .form-actions {
+      flex-direction: column-reverse;
+    }
 
-  .required {
-    color: red;
-  }
+    .btn {
+      width: 100%;
+    }
 
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-    box-sizing: border-box;
-  }
+    .detail-row {
+      flex-direction: column;
+      gap: 8px;
+    }
 
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: #b87333;
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s;
-  }
-
-  .btn-primary {
-    background-color: #b87333;
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background-color: #a0621c;
-  }
-
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-
-  .btn-secondary:hover {
-    background-color: #5a6268;
+    .detail-row strong {
+      min-width: auto;
+    }
   }
 </style>
 
 <script>
 // Lấy dữ liệu chi nhánh từ PHP
-const branches = <?= json_encode($data['branches'], JSON_UNESCAPED_UNICODE); ?>;
+const branches = <?= json_encode($branches, JSON_UNESCAPED_UNICODE); ?>;
 
 // Cấu hình
 const rowsPerPage = 5;
@@ -300,9 +612,27 @@ function displayBranches(page) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <button class="btn-action btn-view" title="Xem chi tiết"><i class="fas fa-eye"></i></button>
-                        <button class="btn-action btn-edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                        <button class="btn-action btn-delete" title="Xóa"><i class="fas fa-trash"></i></button>
+                        <button class="btn-action btn-view" title="Xem chi tiết" 
+                                data-id="${branch.ID}"
+                                data-name="${branch.Name}"
+                                data-address="${branch.Address}"
+                                data-phone="${branch.Phone || ''}"
+                                data-status="${branch.Status}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-action btn-edit" title="Sửa"
+                                data-id="${branch.ID}"
+                                data-name="${branch.Name}"
+                                data-address="${branch.Address}"
+                                data-phone="${branch.Phone || ''}"
+                                data-status="${branch.Status}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-action btn-delete" title="Xóa"
+                                data-id="${branch.ID}"
+                                data-name="${branch.Name}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -334,79 +664,125 @@ function renderPagination() {
 // Hiển thị trang đầu tiên
 displayBranches(currentPage);
 
-// 🎯 Xử lý nút "Xem chi tiết"
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.btn-view')) {
-        const btn = e.target.closest('.btn-view');
-        const id = btn.closest('tr').querySelector('td').textContent.trim(); // Lấy ID từ cột đầu tiên
-        window.location.href = `http://localhost/Project_cafe_shop/admin/branch_detail/${id}`;
-    }
-});
-
-// Modal functionality
-const modal = document.getElementById('addBranchModal');
+// ========== ADD MODAL ==========
+const addModal = document.getElementById('addBranchModal');
 const addBranchBtn = document.getElementById('addBranchBtn');
-const closeBtn = document.querySelector('.close');
-const cancelBtn = document.getElementById('cancelBtn');
 const addBranchForm = document.getElementById('addBranchForm');
+const cancelBtn = document.getElementById('cancelBtn');
 
-// Open modal
 addBranchBtn.addEventListener('click', function() {
-    modal.style.display = 'block';
-});
-
-// Close modal
-closeBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-    addBranchForm.reset();
+    addModal.style.display = 'block';
 });
 
 cancelBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
+    addModal.style.display = 'none';
     addBranchForm.reset();
+});
+
+addBranchForm.addEventListener('submit', function(e) {
+    const phone = document.getElementById('branchPhone').value;
+    if (!/^[0-9]{10,11}$/.test(phone)) {
+        e.preventDefault();
+        alert('Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
+        return false;
+    }
+    return true;
+});
+
+// ========== EDIT MODAL ==========
+const editModal = document.getElementById('editBranchModal');
+const editBranchForm = document.getElementById('editBranchForm');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+cancelEditBtn.addEventListener('click', function() {
+    editModal.style.display = 'none';
+    editBranchForm.reset();
+});
+
+editBranchForm.addEventListener('submit', function(e) {
+    const phone = document.getElementById('editBranchPhone').value;
+    if (!/^[0-9]{10,11}$/.test(phone)) {
+        e.preventDefault();
+        alert('Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
+        return false;
+    }
+    return true;
+});
+
+// ========== VIEW MODAL ==========
+const viewModal = document.getElementById('viewBranchModal');
+const closeViewBtn = document.getElementById('closeViewBtn');
+
+closeViewBtn.addEventListener('click', function() {
+    viewModal.style.display = 'none';
+});
+
+// ========== BUTTON HANDLERS ==========
+document.addEventListener('click', function(e) {
+    // View button
+    if (e.target.closest('.btn-view')) {
+        const btn = e.target.closest('.btn-view');
+        document.getElementById('viewBranchId').textContent = btn.dataset.id;
+        document.getElementById('viewBranchName').textContent = btn.dataset.name;
+        document.getElementById('viewBranchAddress').textContent = btn.dataset.address;
+        document.getElementById('viewBranchPhone').textContent = btn.dataset.phone;
+        document.getElementById('viewBranchStatus').innerHTML = 
+            `<span class="status-badge ${btn.dataset.status === 'active' ? 'status-active' : 'status-inactive'}">
+                ${btn.dataset.status === 'active' ? 'Đang hoạt động' : 'Ngưng hoạt động'}
+            </span>`;
+        viewModal.style.display = 'block';
+    }
+    
+    // Edit button
+    if (e.target.closest('.btn-edit')) {
+        const btn = e.target.closest('.btn-edit');
+        document.getElementById('editBranchId').value = btn.dataset.id;
+        document.getElementById('editBranchName').value = btn.dataset.name;
+        document.getElementById('editBranchAddress').value = btn.dataset.address;
+        document.getElementById('editBranchPhone').value = btn.dataset.phone;
+        document.getElementById('editBranchStatus').value = btn.dataset.status;
+        editModal.style.display = 'block';
+    }
+    
+    // Delete button
+    if (e.target.closest('.btn-delete')) {
+        const btn = e.target.closest('.btn-delete');
+        const id = btn.dataset.id;
+        const name = btn.dataset.name;
+        if (confirm(`Bạn có chắc chắn muốn xóa chi nhánh "${name}"?`)) {
+            window.location.href = `/Project_cafe_shop/admin/branch?action=delete&id=${id}`;
+        }
+    }
+});
+
+// ========== CLOSE MODALS ==========
+document.querySelectorAll('.close').forEach(closeBtn => {
+    closeBtn.addEventListener('click', function() {
+        const modalType = this.dataset.modal;
+        if (modalType === 'edit') {
+            editModal.style.display = 'none';
+            editBranchForm.reset();
+        } else if (modalType === 'view') {
+            viewModal.style.display = 'none';
+        } else {
+            addModal.style.display = 'none';
+            addBranchForm.reset();
+        }
+    });
 });
 
 // Close modal when clicking outside
 window.addEventListener('click', function(event) {
-    if (event.target == modal) {
-        modal.style.display = 'none';
+    if (event.target == addModal) {
+        addModal.style.display = 'none';
         addBranchForm.reset();
     }
-});
-
-// Handle form submission
-addBranchForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(addBranchForm);
-    const phone = formData.get('phone');
-    
-    // Validate phone number
-    if (!/^[0-9]{10,11}$/.test(phone)) {
-        alert('Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
-        return;
+    if (event.target == editModal) {
+        editModal.style.display = 'none';
+        editBranchForm.reset();
     }
-    
-    // Send AJAX request
-    fetch('<?= BASE_URL ?>branch/add', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            modal.style.display = 'none';
-            addBranchForm.reset();
-            // Reload page to show new branch
-            window.location.reload();
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra khi thêm chi nhánh!');
-    });
+    if (event.target == viewModal) {
+        viewModal.style.display = 'none';
+    }
 });
 </script>
