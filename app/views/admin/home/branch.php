@@ -98,177 +98,59 @@
   </div>
 </div>
 
-<style>
-  /* Căn giữa và tạo style cho pagination */
-  #pagination {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 20px;
-  }
+<!-- Modal Sửa Chi Nhánh -->
+<div id="editBranchModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Sửa chi nhánh</h2>
+      <span class="close edit-close">&times;</span>
+    </div>
+    <form id="editBranchForm">
+      <input type="hidden" id="editBranchID" name="id">
 
-  #pagination .page-btn {
-    border: none;
-    background-color: #eee;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s ease;
-  }
+      <div class="form-group">
+        <label>Tên chi nhánh *</label>
+        <input type="text" id="editBranchName" name="name" required>
+      </div>
 
-  #pagination .page-btn:hover {
-    background-color: #d4a373;
-    color: #fff;
-  }
+      <div class="form-group">
+        <label>Địa chỉ *</label>
+        <textarea id="editBranchAddress" name="address" required rows="3"></textarea>
+      </div>
 
-  #pagination .page-btn.active {
-    background-color: #b87333;
-    color: #fff;
-  }
+      <div class="form-group">
+        <label>Số điện thoại *</label>
+        <input type="tel" id="editBranchPhone" name="phone" required>
+      </div>
 
-  /* Modal Styles */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    animation: fadeIn 0.3s;
-  }
+      <div class="form-group">
+        <label>Trạng thái</label>
+        <select id="editBranchStatus" name="status">
+          <option value="active">Đang hoạt động</option>
+          <option value="inactive">Ngưng hoạt động</option>
+        </select>
+      </div>
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary edit-cancel">Hủy</button>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Modal Xóa Chi Nhánh -->
+<div id="deleteBranchModal" class="modal">
+  <div class="modal-content small">
+    <h3>Bạn có chắc muốn xóa chi nhánh này không?</h3>
+    <p>Hành động này không thể hoàn tác.</p>
 
-  .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 0;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    animation: slideDown 0.3s;
-  }
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Hủy</button>
+      <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+    </div>
+  </div>
+</div>
 
-  @keyframes slideDown {
-    from {
-      transform: translateY(-50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .modal-header {
-    padding: 20px;
-    background-color: #b87333;
-    color: white;
-    border-radius: 8px 8px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .modal-header h2 {
-    margin: 0;
-    font-size: 20px;
-  }
-
-  .close {
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: #f1f1f1;
-  }
-
-  #addBranchForm {
-    padding: 20px;
-  }
-
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #333;
-  }
-
-  .required {
-    color: red;
-  }
-
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-    box-sizing: border-box;
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: #b87333;
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s;
-  }
-
-  .btn-primary {
-    background-color: #b87333;
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background-color: #a0621c;
-  }
-
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-</style>
 
 <script>
 // Lấy dữ liệu chi nhánh từ PHP
@@ -300,9 +182,9 @@ function displayBranches(page) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <button class="btn-action btn-view" title="Xem chi tiết"><i class="fas fa-eye"></i></button>
-                        <button class="btn-action btn-edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                        <button class="btn-action btn-delete" title="Xóa"><i class="fas fa-trash"></i></button>
+                        <!-- <button class="btn-action btn-view" title="Xem chi tiết" data-id="${branch.ID}"><i class="fas fa-eye"></i></button> -->
+                        <button class="btn-action btn-edit" title="Sửa" data-id="${branch.ID}"><i class="fas fa-edit"></i></button>
+                        <button class="btn-action btn-delete" title="Xóa" data-id="${branch.ID}"><i class="fas fa-trash"></i></button>
                     </div>
                 </td>
             </tr>
@@ -334,79 +216,155 @@ function renderPagination() {
 // Hiển thị trang đầu tiên
 displayBranches(currentPage);
 
-// 🎯 Xử lý nút "Xem chi tiết"
-// document.addEventListener('click', function(e) {
-//     if (e.target.closest('.btn-view')) {
-//         const btn = e.target.closest('.btn-view');
-//         const id = btn.closest('tr').querySelector('td').textContent.trim(); // Lấy ID từ cột đầu tiên
-//         window.location.href = `branch_detail/${id}`;
-//     }
-// });
-
-// Modal functionality
+// Xử lý modal thêm chi nhánh
 const modal = document.getElementById('addBranchModal');
 const addBranchBtn = document.getElementById('addBranchBtn');
 const closeBtn = document.querySelector('.close');
 const cancelBtn = document.getElementById('cancelBtn');
 const addBranchForm = document.getElementById('addBranchForm');
 
-// Open modal
-addBranchBtn.addEventListener('click', function() {
+// Mở modal khi nhấn nút "Thêm chi nhánh"
+addBranchBtn.addEventListener('click', () => {
     modal.style.display = 'block';
 });
 
-// Close modal
-closeBtn.addEventListener('click', function() {
+// Đóng modal khi nhấn nút "x"
+closeBtn.addEventListener('click', () => {
     modal.style.display = 'none';
     addBranchForm.reset();
 });
 
-cancelBtn.addEventListener('click', function() {
+// Đóng modal khi nhấn nút "Hủy"
+cancelBtn.addEventListener('click', () => {
     modal.style.display = 'none';
     addBranchForm.reset();
 });
 
-// Close modal when clicking outside
-window.addEventListener('click', function(event) {
-    if (event.target == modal) {
+// Đóng modal khi nhấn ra ngoài modal
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
         modal.style.display = 'none';
         addBranchForm.reset();
     }
 });
 
-// Handle form submission
 addBranchForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(addBranchForm);
     const phone = formData.get('phone');
-    
-    // Validate phone number
+
     if (!/^[0-9]{10,11}$/.test(phone)) {
         alert('Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
         return;
     }
-    
-    // Send AJAX request
-    fetch('<?= BASE_URL ?>branch/add', {
+
+    fetch('store', { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.success) {
+                modal.style.display = 'none';
+                addBranchForm.reset();
+                window.location.href = 'branch'; // reload trang
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Có lỗi xảy ra!');
+        });
+});
+
+// ---- Modal Sửa ----
+const editModal = document.getElementById("editBranchModal");
+const editClose = document.querySelector(".edit-close");
+const editCancel = document.querySelector(".edit-cancel");
+const editForm = document.getElementById("editBranchForm");
+
+// Gán sự kiện nút sửa
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.btn-edit')) {
+        const id = e.target.closest('.btn-edit').dataset.id;
+        const branch = branches.find(b => b.ID == id);
+
+        // Đổ dữ liệu vào form
+        document.getElementById('editBranchID').value = branch.ID;
+        document.getElementById('editBranchName').value = branch.Name;
+        document.getElementById('editBranchAddress').value = branch.Address;
+        document.getElementById('editBranchPhone').value = branch.Phone;
+        document.getElementById('editBranchStatus').value = branch.Status;
+
+        editModal.style.display = 'block';
+    }
+});
+
+// Đóng modal edit
+editClose.addEventListener('click', () => editModal.style.display = 'none');
+editCancel.addEventListener('click', () => editModal.style.display = 'none');
+window.addEventListener('click', e => { if (e.target === editModal) editModal.style.display = 'none'; });
+
+// Submit edit form (fetch)
+editForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(editForm);
+
+    fetch('update', {  // route: admin/branch/update
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(r => r.json())
     .then(data => {
+        alert(data.message);
         if (data.success) {
-            alert(data.message);
-            modal.style.display = 'none';
-            addBranchForm.reset();
-            // Reload page to show new branch
             window.location.reload();
-        } else {
-            alert(data.message);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra khi thêm chi nhánh!');
     });
 });
+
+// ---- Modal Xóa ----
+const deleteModal = document.getElementById("deleteBranchModal");
+const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+let deleteID = null;
+
+// Mở modal xóa
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.btn-delete')) {
+        deleteID = e.target.closest('.btn-delete').dataset.id;
+        deleteModal.style.display = 'block';
+    }
+});
+
+// Đóng modal xóa
+cancelDeleteBtn.addEventListener('click', () => {
+    deleteModal.style.display = 'none';
+    deleteID = null;
+});
+
+// Xác nhận xóa
+confirmDeleteBtn.addEventListener('click', () => {
+    let formData = new FormData();
+    formData.append("id", deleteID);
+
+    fetch("delete", {
+        method: "POST",
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        if (data.success) {
+            window.location.reload();
+        }
+    });
+});
+
+// Click ra ngoài modal
+window.addEventListener('click', e => {
+    if (e.target === deleteModal) deleteModal.style.display = 'none';
+});
+
+
 </script>

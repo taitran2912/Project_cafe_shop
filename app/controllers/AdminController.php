@@ -42,17 +42,59 @@ class AdminController extends Controller {
          
     }   
 
-    public function branch_detail($idBranch) {
-        // Hủy session và chuyển hướng về trang đăng nhập
-        $detail = $this->model('Branch');
-        // $branchDetail = $detail->getBranchById($idBranch);
-        
-        $data = [
-            'title' => 'Chi tiết chi nhánh',
-            // 'detail' => $branchDetail
-        ];
-        $this->view('admin/home/index', $data);
+    public function store() {
+        $name    = $_POST['name'] ?? '';
+        $address = $_POST['address'] ?? '';
+        $phone   = $_POST['phone'] ?? '';
+        $status  = $_POST['status'] ?? 'active';
+
+        $branchModel = $this->model('Branch');
+        $result = $branchModel->addBranch($name, $address, $phone, $status);
+
+        header('Content-Type: application/json');
+
+        if ($result) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Thêm chi nhánh thành công!'
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Thêm chi nhánh thất bại! Vui lòng thử lại.'
+            ]);
+        }
+        exit;
     }
+    public function update() {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $phone = $_POST['phone'];
+        $status = $_POST['status'];
+
+        $branchModel = $this->model('Branch');
+
+        $ok = $branchModel->updateBranch($id, $name, $address, $phone, $status);
+
+        echo json_encode([
+            "success" => $ok,
+            "message" => $ok ? "Cập nhật thành công!" : "Cập nhật thất bại!"
+        ]);
+    }
+
+    public function delete() {
+        $id = $_POST['id'];
+
+        $branchModel = $this->model('Branch');
+        $ok = $branchModel->deleteBranch($id);
+
+        echo json_encode([
+            "success" => $ok,
+            "message" => $ok ? "Xóa thành công!" : "Xóa thất bại!"
+        ]);
+    }
+
 
     public function menu() { // từ function menu render ra view thực đơn ở trang index
         $productModel = $this->model('Product');
