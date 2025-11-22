@@ -41,6 +41,17 @@ class AdminController extends Controller {
         $this->view('admin/home/index', $data);
          
     }   
+    public function inventory() {
+        $inventory = $this->model('Inventory');
+        $inventories = $inventory->getAllInventory();
+
+        $data = [
+            'title' => 'Quản lý kho',
+            'inventories' => $inventories
+        ];
+        $this->view('admin/home/index', $data);
+         
+    }   
 
     public function store() {
         $name    = $_POST['name'] ?? '';
