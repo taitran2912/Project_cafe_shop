@@ -25,8 +25,57 @@
     require_once 'app/models/Coupon.php';
   } elseif ($action === 'branch') {
     require_once 'app/models/Branch.php';
+  } elseif ($action === 'warehouse') {
+    require_once 'app/models/Inventory.php';
+    require_once 'app/models/Material.php';
+  } elseif ($action === 'orders') {
+    require_once 'app/models/Order.php';
   }
 
+  
+  // ========== ORDERS MANAGEMENT ==========
+  if ($action === 'orders') {
+    // Handle AJAX request for pending count
+    if (isset($_GET['action']) && $_GET['action'] === 'get_pending_count') {
+        $orderModel = new Order();
+        $count = $orderModel->getPendingCount();
+        header('Content-Type: application/json');
+        echo json_encode(['count' => $count]);
+        exit;
+    }
+
+    // Handle confirm order
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'confirm_order') {
+        $orderId = (int)($_POST['order_id'] ?? 0);
+        if ($orderId > 0) {
+            $orderModel = new Order();
+            if ($orderModel->confirmOrder($orderId)) {
+                header('Location: /Project_cafe_shop/admin/orders?success=confirm');
+                exit;
+            }
+        }
+        header('Location: /Project_cafe_shop/admin/orders?error=confirm');
+        exit;
+    }
+
+    // Handle AJAX update item status
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_item_status') {
+        $itemId = (int)($_POST['item_id'] ?? 0);
+        $status = $_POST['status'] ?? '';
+        
+        $validStatuses = ['pending', 'preparing', 'completed', 'served'];
+        if ($itemId > 0 && in_array($status, $validStatuses)) {
+            // For now, just return success (item status tracking can be added to DB later)
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true]);
+            exit;
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false]);
+        exit;
+    }
+  }
   
   // ========== USER MANAGEMENT ==========
   if ($action === 'user') {
@@ -264,6 +313,52 @@
         }
     }
   }
+
+  // ==================== INVENTORY MANAGEMENT ====================
+  if ($action === 'inventory') {
+    // Add item
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_item') {
+        $id_material = (int)($_POST['id_material'] ?? 0);
+        $id_branch = (int)($_POST['id_branch'] ?? 0);
+        $quantity = (int)($_POST['quantity'] ?? 0);
+        
+        if ($id_material > 0 && $id_branch > 0) {
+            $inventoryModel = new Inventory();
+            if ($inventoryModel->createInventory($id_material, $id_branch, $quantity)) {
+                header('Location: /Project_cafe_shop/admin/inventory?success=add');
+                exit;
+            }
+        }
+    }
+    // Edit item
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_item') {
+        $itemId = (int)($_POST['item_id'] ?? 0);
+        if ($itemId > 0) {
+            $id_material = (int)($_POST['id_material'] ?? 0);
+            $id_branch = (int)($_POST['id_branch'] ?? 0);
+            $quantity = (int)($_POST['quantity'] ?? 0);
+            
+            if ($id_material > 0 && $id_branch > 0) {
+                $inventoryModel = new Inventory();
+                if ($inventoryModel->updateInventory($itemId, $id_material, $id_branch, $quantity)) {
+                    header('Location: /Project_cafe_shop/admin/inventory?success=edit');
+                    exit;
+                }
+            }
+        }
+    }
+    // Delete item
+    if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
+        $itemId = (int)$_GET['id'];
+        if ($itemId > 0) {
+            $inventoryModel = new Inventory();
+            if ($inventoryModel->deleteInventory($itemId)) {
+                header('Location: /Project_cafe_shop/admin/inventory?success=delete');
+                exit;
+            }
+        }
+    }
+  }
 ?>
 <!-- Head html -->
   <?php include_once 'app/views/layout/adminHead.php'; ?>
@@ -293,8 +388,14 @@
             case 'coupon':
               include_once 'app/views/admin/home/couponManager.php';
               break;
+            case 'inventory':
+              include_once 'app/views/admin/home/inventory.php';
+              break;
+            case 'orders':
+              include_once 'app/views/admin/home/orders.php';
+              break;
             default:
-              include_once 'app/views/admin/home/couponManager.php';
+              include_once 'app/views/admin/home/menu.php';
               break;
           }
       ?>

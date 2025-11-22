@@ -48,6 +48,18 @@
       "link"  => "admin/coupon",
       "roles" => [1]
     ],
+    [
+      "title" => "Quản lý kho",
+      "icon"  => "fas fa-boxes",
+      "link"  => "admin/inventory",
+      "roles" => [1]
+    ],
+    [
+      "title" => "Nhận đơn hàng",
+      "icon"  => "fas fa-receipt",
+      "link"  => "admin/orders",
+      "roles" => [1]
+    ],
 
     // Nhân viên
     [
@@ -79,7 +91,7 @@
     [
       "title" => "Quản lý kho",
       "icon"  => "fas fa-boxes",
-      "link"  => "admin/warehouse",
+      "link"  => "admin/inventory",
       "roles" => [2]
     ],
     [
