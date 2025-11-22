@@ -27,8 +27,55 @@
     require_once 'app/models/Branch.php';
   } elseif ($action === 'warehouse') {
     require_once 'app/models/Inventory.php';
+    require_once 'app/models/Material.php';
+  } elseif ($action === 'orders') {
+    require_once 'app/models/Order.php';
   }
 
+  
+  // ========== ORDERS MANAGEMENT ==========
+  if ($action === 'orders') {
+    // Handle AJAX request for pending count
+    if (isset($_GET['action']) && $_GET['action'] === 'get_pending_count') {
+        $orderModel = new Order();
+        $count = $orderModel->getPendingCount();
+        header('Content-Type: application/json');
+        echo json_encode(['count' => $count]);
+        exit;
+    }
+
+    // Handle confirm order
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'confirm_order') {
+        $orderId = (int)($_POST['order_id'] ?? 0);
+        if ($orderId > 0) {
+            $orderModel = new Order();
+            if ($orderModel->confirmOrder($orderId)) {
+                header('Location: /Project_cafe_shop/admin/orders?success=confirm');
+                exit;
+            }
+        }
+        header('Location: /Project_cafe_shop/admin/orders?error=confirm');
+        exit;
+    }
+
+    // Handle AJAX update item status
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_item_status') {
+        $itemId = (int)($_POST['item_id'] ?? 0);
+        $status = $_POST['status'] ?? '';
+        
+        $validStatuses = ['pending', 'preparing', 'completed', 'served'];
+        if ($itemId > 0 && in_array($status, $validStatuses)) {
+            // For now, just return success (item status tracking can be added to DB later)
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true]);
+            exit;
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false]);
+        exit;
+    }
+  }
   
   // ========== USER MANAGEMENT ==========
   if ($action === 'user') {
@@ -341,11 +388,14 @@
             case 'coupon':
               include_once 'app/views/admin/home/couponManager.php';
               break;
-            case 'warehouse':
+            case 'inventory':
               include_once 'app/views/admin/home/inventory.php';
               break;
+            case 'orders':
+              include_once 'app/views/admin/home/orders.php';
+              break;
             default:
-              include_once 'app/views/admin/home/couponManager.php';
+              include_once 'app/views/admin/home/menu.php';
               break;
           }
       ?>
