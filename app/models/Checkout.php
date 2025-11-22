@@ -1,19 +1,35 @@
 <?php
 class Checkout extends Model {
-    public function createOrder($userID, $addressId, $storeId, $shippingFee) {
-        $query = "INSERT INTO Orders (ID_Customer, ID_Address, ID_Store, Shipping_Fee, Order_Date, Status)
-                  VALUES (?, ?, ?, ?, NOW(), 'Pending')";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("iiid", $userID, $addressId, $storeId, $shippingFee);
-        $stmt->execute();
-        $orderId = $this->db->insert_id;
-        $stmt->close();
 
+    public function getAddressById($addressId) {
+        $query = "SELECT * FROM Address WHERE ID = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $addressId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $address = $result->fetch_assoc();
+        $stmt->close();
+        return $address;
+    }
+
+    public function createOrder($userID, $address, $storeId, $shippingFee) {
+        $query = "
+            INSERT INTO Orders(ID_Customer, ID_Branch, Address, Status, Time, Shipping_Cost, Payment_status)
+            VALUES (?, ?, ?, 'Pending', NOW(), ?, 'Unpaid')
+        ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("iisd", $userID, $storeId, $address, $shippingFee);
+        $stmt->execute();
+
+        $orderId = $this->db->insert_id;
+
+        $stmt->close();
         return $orderId;
     }
 
     public function getCartItems($customerId) {
-        $query = "SELECT p.Name Name, p.Price Price, cd.Quantity Quantity 
+        $query = "SELECT p.ID ID, p.Name Name, p.Price Price, cd.Quantity Quantity 
                     FROM Cart c 
                     JOIN Cart_detail cd on c.ID = cd.ID_Cart 
                     JOIN Product p on cd.ID_Product = p.ID 
@@ -45,4 +61,58 @@ class Checkout extends Model {
         );
         return $url;
     }
+    
+    public function addOrderDetail($orderId, $product, $quantity, $price) {
+        $query = "
+            INSERT INTO Order_detail (ID_order, ID_product, Quantity, Price)
+            VALUES (?, ?, ?, ?)
+        ";
+
+        $stmt = $this->db->prepare($query);
+
+        if (!$stmt) {
+            die("Prepare failed: " . $this->db->error);
+        }
+
+        $stmt->bind_param("iiid", $orderId, $product, $quantity, $price);
+
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
+
+        $stmt->close();
+    }
+
+    public function deleteOrderById($orderID) {
+        $orderID = (int)$orderID;
+        $query = "
+            DELETE FROM Order_detail WHERE ID_order = ?
+        ";
+        $stmt = $this->db->prepare($query);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->db->error);
+        }
+        $stmt->bind_param("i", $orderID);
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
+        $stmt->close();
+    }
+
+    public function deleteOrder($orderID) {
+        $orderID = (int)$orderID;
+        $query = "
+            DELETE FROM Orders WHERE ID = ?
+        ";
+        $stmt = $this->db->prepare($query);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->db->error);
+        }
+        $stmt->bind_param("i", $orderID);
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
+        $stmt->close();
+    }
+
 }

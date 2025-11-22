@@ -21,13 +21,17 @@ class CheckoutController extends Controller {
             ];
 
             $checkoutModel = $this->model('Checkout');
+            $address = $checkoutModel->getAddressById($addressId);
+
             $cart = $checkoutModel->getCartItems($userID);
+            $createOrder = $checkoutModel->createOrder($userID, $address['Address'], $storeId, $shippingFee);
             
             $subtotal = 0;
             if (!empty($cart)){
                 foreach ($cart as $item):
                     $totalItem = $item['Price'] * $item['Quantity'];
                     $subtotal += $totalItem;
+                    $checkoutModel->addOrderDetail($createOrder, $item['ID'], $item['Quantity'],  $item['Price']);
                 endforeach;
             }
             $finalTotal = $subtotal + $shippingFee;
@@ -38,12 +42,13 @@ class CheckoutController extends Controller {
             // Truyền dữ liệu sang view hiển thị tóm tắt
             $data = [
                 'title' => 'Xác nhận đơn hàng',
-                // 'css' => 'checkout.css',
+                
                 'address_id' => $addressId,
                 'store_id' => $storeId,
                 'shipping_fee' => $shippingFee,
                 'bank' => $sepayConfig,
                 'OrderCode' => $orderCode,
+                'orderID' => $createOrder,
                 'userID' => $userID,
                 'QR' => $qrCodeUrl,
                 'cart' => $cart
@@ -55,6 +60,21 @@ class CheckoutController extends Controller {
             // Nếu truy cập trực tiếp không qua POST
             header('Location: payment');
             exit;
+        }
+    }
+    // AJAX xoá toàn bộ giỏ hàng
+    public function clear() {
+        // Lấy orderID từ POST
+        $orderID = isset($_POST['orderID']) ? (int)$_POST['orderID'] : 0;
+
+        if ($orderID > 0) {
+            $checkoutModel = $this->model('Checkout');
+            $checkoutModel->deleteOrderById($orderID);
+            $checkoutModel->deleteOrder($orderID);
+
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
         }
     }
 }

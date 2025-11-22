@@ -12,7 +12,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="mb-3">
-                        <i class="fas fa-coffee"></i> Sản Phẩm Đã Chọn
+                        <i class="fas fa-coffee"></i> Sản Phẩm Đã Chọn <?= $data['orderID'] ?>
                     </h4>
 
                     <div id="orderItems">
@@ -100,6 +100,10 @@
                                  style="max-width: 250px;"
                                  alt="QR Code Thanh Toán">
                         </div>
+                        <div class="text-center mb-3">
+                            <h5>Thời gian còn lại để thanh toán:</h5>
+                            <span id="countdownTimer" class="fw-bold fs-4 text-danger"></span>
+                        </div>
 
                         <div class="text-center">
                             <p class="mb-1 fw-semibold">
@@ -124,6 +128,43 @@
         </div>
 
     </div>
+
+    <script>
+        function clearOrder(orderID) {
+        $.ajax({
+            url: 'clear',        // URL endpoint xử lý xóa đơn hàng
+            type: 'POST',                  // dùng POST để an toàn hơn
+            data: { orderID: orderID },    // gửi dữ liệu orderID
+            success: function(response) {
+            // Sau khi xóa xong, chuyển về trang giỏ hàng
+            window.location.href = '../cart';
+            },
+            error: function(xhr) {
+            console.error("Không xóa được đơn hàng:", xhr.responseText);
+            }
+        });
+        }
+
+        // Ví dụ dùng với countdown:
+        let countdown = 600; // 10 phút
+        const timerElement = document.getElementById('countdownTimer');
+
+        const timerInterval = setInterval(() => {
+        let minutes = Math.floor(countdown / 60);
+        let seconds = countdown % 60;
+        timerElement.textContent =
+            (minutes < 10 ? '0' + minutes : minutes) + ':' +
+            (seconds < 10 ? '0' + seconds : seconds);
+
+        if (countdown <= 0) {
+            clearInterval(timerInterval);
+            clearOrder(<?= $data['orderID'] ?>); // gọi AJAX xóa đơn
+        }
+
+        countdown--;
+        }, 1000);
+
+    </script>
 
 </div>
 </main>
