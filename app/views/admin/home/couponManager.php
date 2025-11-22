@@ -116,11 +116,11 @@ if ($isSearching) {
     <!-- Modal Thêm Khuyến Mãi -->
     <div id="addcouponModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-ticket-alt"></i> Thêm Khuyến Mãi Mới</h2>
-                <button class="close-btn" id="closeModal">&times;</button>
-            </div>
             <form id="addcouponForm" method="POST" action="">
+                <div class="modal-header">
+                    <h2><i class="fas fa-ticket-alt"></i> Thêm Khuyến Mãi Mới</h2>
+                    <button type="button" class="close-btn" id="closeModal">&times;</button>
+                </div>
                 <input type="hidden" name="action" value="add_coupon">
                 <div class="form-grid">
                     <div class="form-group">
@@ -194,7 +194,7 @@ if ($isSearching) {
         <div class="modal-content">
             <div class="modal-header">
                 <h2><i class="fas fa-info-circle"></i> Chi Tiết Khuyến Mãi</h2>
-                <button class="close-btn" id="closeViewModal">&times;</button>
+                <button type="button" class="close-btn" id="closeViewModal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="detail-grid">
@@ -243,11 +243,11 @@ if ($isSearching) {
     <!-- Modal Sửa Khuyến Mãi -->
     <div id="editcouponModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-edit"></i> Sửa Khuyến Mãi</h2>
-                <button class="close-btn" id="closeEditModal">&times;</button>
-            </div>
             <form id="editcouponForm" method="POST" action="">
+                <div class="modal-header">
+                    <h2><i class="fas fa-edit"></i> Sửa Khuyến Mãi</h2>
+                    <button type="button" class="close-btn" id="closeEditModal">&times;</button>
+                </div>
                 <input type="hidden" name="action" value="edit_coupon">
                 <input type="hidden" name="coupon_id" id="edit_coupon_id">
                 <div class="form-grid">
@@ -322,7 +322,7 @@ if ($isSearching) {
         <div class="modal-content modal-small">
             <div class="modal-header modal-header-danger">
                 <h2><i class="fas fa-exclamation-triangle"></i> Xác Nhận Xóa</h2>
-                <button class="close-btn" id="closeDeleteModal">&times;</button>
+                <button type="button" class="close-btn" id="closeDeleteModal">&times;</button>
             </div>
             <div class="modal-body">
                 <p class="delete-message">
@@ -351,7 +351,7 @@ if ($isSearching) {
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background-color: #f5f5f5;
         }
 
@@ -363,26 +363,32 @@ if ($isSearching) {
         }
 
         .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 15px;
-            animation: slideDown 0.4s ease;
+            font-weight: 500;
+            animation: slideDown 0.3s ease-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .alert-success {
-            background-color: #d4edda;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             border-left: 4px solid #28a745;
             color: #155724;
         }
 
         .alert-error {
-            background-color: #f8d7da;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             border-left: 4px solid #dc3545;
             color: #721c24;
+        }
+
+        .alert i {
+            font-size: 20px;
         }
 
         @keyframes slideDown {
@@ -416,43 +422,51 @@ if ($isSearching) {
         .btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
+            letter-spacing: 0.3px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #d7a86e 0%, #c49856 100%);
-            color: #3d2817;
-            box-shadow: 0 4px 12px rgba(215, 168, 110, 0.3);
+            background: linear-gradient(135deg, #d4a574 0%, #c49254 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
         }
 
         .btn-primary:hover {
+            background: linear-gradient(135deg, #c49254 0%, #b38043 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(215, 168, 110, 0.4);
+            box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4);
         }
 
         .btn-secondary {
-            background-color: #6c757d;
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
         }
 
         .btn-secondary:hover {
-            background-color: #5a6268;
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(108, 117, 125, 0.3);
         }
 
         .btn-danger {
-            background-color: #dc3545;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
         }
 
         .btn-danger:hover {
-            background-color: #c82333;
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
         }
 
         .search-box {
@@ -468,12 +482,14 @@ if ($isSearching) {
             border-radius: 25px;
             font-size: 14px;
             transition: all 0.3s ease;
+            background: white;
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: #d7a86e;
-            box-shadow: 0 0 0 3px rgba(215, 168, 110, 0.1);
+            border-color: #d4a574;
+            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.15);
+            background: #fefdfb;
         }
 
         .search-box i.fa-search {
@@ -481,7 +497,8 @@ if ($isSearching) {
             left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: #d4a574;
+            font-size: 16px;
         }
 
         .clear-search-btn {
@@ -497,30 +514,39 @@ if ($isSearching) {
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
         }
 
         .clear-search-btn:hover {
-            color: #d7a86e;
+            color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
         }
 
         .search-info {
-            background-color: #e8f4fd;
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4ebf8 100%);
             border-left: 4px solid #0288d1;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: #01579b;
+            box-shadow: 0 2px 8px rgba(2, 136, 209, 0.1);
+        }
+
+        .search-info i {
+            font-size: 18px;
         }
 
         .table-container {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .data-table {
@@ -529,55 +555,60 @@ if ($isSearching) {
         }
 
         .data-table thead {
-            background: linear-gradient(135deg, #3d2817 0%, #5d3d24 100%);
+            background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
             color: white;
         }
 
         .data-table th {
-            padding: 16px;
+            padding: 18px 16px;
             text-align: left;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
         }
 
         .data-table tbody tr {
             border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .data-table tbody tr:hover {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #fef9f3 0%, #fef5e7 100%);
+            transform: scale(1.005);
+            box-shadow: 0 2px 8px rgba(212, 165, 116, 0.1);
         }
 
         .data-table td {
-            padding: 14px 16px;
+            padding: 16px;
             font-size: 14px;
             color: #333;
         }
 
         .status-badge {
-            padding: 6px 12px;
+            padding: 7px 14px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .status-active {
-            background-color: #d4edda;
-            color: #155724;
+            background: linear-gradient(135deg, #70ad47 0%, #5a9335 100%);
+            color: white;
         }
 
         .status-inactive {
-            background-color: #fff3cd;
-            color: #856404;
+            background: linear-gradient(135deg, #ffd966 0%, #ffcc33 100%);
+            color: #3e2723;
         }
 
         .status-expired {
-            background-color: #f8d7da;
-            color: #721c24;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
         }
 
         .action-buttons {
@@ -586,42 +617,46 @@ if ($isSearching) {
         }
 
         .btn-action {
-            padding: 8px 12px;
+            padding: 10px 14px;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .btn-view {
-            background-color: #17a2b8;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
             color: white;
         }
 
         .btn-view:hover {
-            background-color: #138496;
+            background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
         }
 
         .btn-edit {
-            background-color: #ffc107;
-            color: #3d2817;
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+            color: white;
         }
 
         .btn-edit:hover {
-            background-color: #e0a800;
+            background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
         }
 
         .btn-delete {
-            background-color: #dc3545;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
         }
 
         .btn-delete:hover {
-            background-color: #c82333;
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
         }
 
         .pagination {
@@ -629,52 +664,63 @@ if ($isSearching) {
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 24px;
             flex-wrap: wrap;
         }
 
         .page-btn {
-            padding: 10px 16px;
-            border: 2px solid #d7a86e;
-            background-color: white;
-            color: #3d2817;
-            border-radius: 8px;
+            padding: 12px 18px;
+            border: 2px solid #d4a574;
+            background: white;
+            color: #3e2723;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
-            min-width: 45px;
+            min-width: 48px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         .page-btn:hover:not(:disabled) {
-            background-color: #d7a86e;
+            background: linear-gradient(135deg, #d4a574 0%, #c49254 100%);
             color: white;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
         }
 
         .page-btn:disabled {
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.5;
+            background: #e0e0e0;
+            border-color: #e0e0e0;
+            color: #999;
         }
 
         .page-info {
             margin-left: 15px;
-            color: #666;
+            color: #3e2723;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 9999;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
             background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal.show {
+            display: block;
             animation: fadeIn 0.3s ease;
         }
 
@@ -683,15 +729,31 @@ if ($isSearching) {
             to { opacity: 1; }
         }
 
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .modal-content {
             background-color: white;
-            margin: 3% auto;
+            margin: 2% auto;
             padding: 0;
             border-radius: 16px;
-            width: 90%;
-            max-width: 800px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 85%;
+            max-width: 750px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             animation: slideDown 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-small {
@@ -699,34 +761,41 @@ if ($isSearching) {
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #d7a86e 0%, #c49856 100%);
-            color: #3d2817;
-            padding: 20px 25px;
-            border-radius: 16px 16px 0 0;
+            background: linear-gradient(135deg, #d4a574 0%, #c49254 100%);
+            color: white;
+            padding: 20px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .modal-header-danger {
             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
         }
 
         .modal-header h2 {
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.3px;
+            margin: 0;
+        }
+
+        .modal-header h2 i {
+            font-size: 20px;
         }
 
         .close-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-            font-size: 32px;
+            font-size: 24px;
             cursor: pointer;
-            color: inherit;
+            color: white;
             line-height: 1;
             padding: 0;
             width: 32px;
@@ -734,29 +803,41 @@ if ($isSearching) {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .close-btn:hover {
-            transform: scale(1.2);
+            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .modal-body {
-            padding: 25px;
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        form .modal-body {
+            padding: 0;
         }
 
         .modal-footer {
-            padding: 20px 25px;
-            border-top: 1px solid #e9ecef;
+            padding: 16px 24px;
+            border-top: 2px solid #f0f0f0;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
             display: flex;
             justify-content: flex-end;
             gap: 12px;
+            flex-shrink: 0;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 18px;
+            padding: 24px;
         }
 
         .form-group {
@@ -771,38 +852,70 @@ if ($isSearching) {
         .form-group label {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #3d2817;
-            font-size: 14px;
+            color: #3e2723;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
+        .form-group label i {
+            color: #d4a574;
+            font-size: 14px;
+        }
+
         .required {
             color: #dc3545;
+            font-weight: 700;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            padding: 12px;
+            padding: 11px 14px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
             font-family: inherit;
+            background: white;
+            width: 100%;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #d7a86e;
-            box-shadow: 0 0 0 3px rgba(215, 168, 110, 0.1);
+            border-color: #d4a574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.15);
+            background: #fefdfb;
+        }
+
+        .form-group input[type="date"] {
+            cursor: pointer;
+        }
+
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: opacity(0.6);
+        }
+
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            filter: opacity(1);
         }
 
         .form-group textarea {
             resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
         }
 
         .detail-grid {
@@ -822,40 +935,63 @@ if ($isSearching) {
         }
 
         .detail-item label {
-            font-weight: 600;
+            font-weight: 700;
             color: #666;
             font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-item label i {
+            color: #d4a574;
+            font-size: 16px;
         }
 
         .detail-item span {
             font-size: 15px;
             color: #333;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 6px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 100%);
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            font-weight: 500;
         }
 
         .delete-message {
-            font-size: 16px;
+            font-size: 17px;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .delete-message strong {
+            color: #dc3545;
+            font-weight: 700;
         }
 
         .delete-warning {
-            background-color: #fff3cd;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
             border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 14px 16px;
+            border-radius: 10px;
             color: #856404;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.1);
         }
 
+        .delete-warning i {
+            font-size: 18px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .content {
                 padding: 15px;
@@ -883,7 +1019,19 @@ if ($isSearching) {
 
             .modal-content {
                 width: 95%;
-                margin: 10% auto;
+                margin: 5% auto;
+            }
+
+            .modal-header h2 {
+                font-size: 18px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-footer {
+                padding: 15px 20px;
             }
 
             .data-table {
@@ -894,6 +1042,20 @@ if ($isSearching) {
             .data-table td {
                 padding: 10px 8px;
             }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+        }
+
+        /* Fix for body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
         }
     </style>
 
@@ -1090,8 +1252,7 @@ if ($isSearching) {
                     }
                     statusSpan.innerHTML = `<span class="status-badge ${statusClass}">${statusText}</span>`;
 
-                    viewModal.style.display = 'block';
-                    document.body.style.overflow = 'hidden';
+                    openModal(viewModal);
                 };
             });
 
@@ -1107,8 +1268,7 @@ if ($isSearching) {
                     document.getElementById('editcouponQuantity').value = this.dataset.quantity;
                     document.getElementById('editcouponStatus').value = this.dataset.status;
 
-                    editModal.style.display = 'block';
-                    document.body.style.overflow = 'hidden';
+                    openModal(editModal);
                 };
             });
 
@@ -1117,8 +1277,7 @@ if ($isSearching) {
                 btn.onclick = function() {
                     deletecouponId = this.dataset.id;
                     document.getElementById('delete_coupon_code').textContent = this.dataset.code;
-                    deleteModal.style.display = 'block';
-                    document.body.style.overflow = 'hidden';
+                    openModal(deleteModal);
                 };
             });
         }
@@ -1130,33 +1289,43 @@ if ($isSearching) {
         const deleteModal = document.getElementById('deleteConfirmModal');
         let deletecouponId = null;
 
+        // Helper functions for modal
+        function openModal(modalElement) {
+            modalElement.style.display = 'block';
+            modalElement.classList.add('show');
+            document.body.classList.add('modal-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModalElement(modalElement) {
+            modalElement.style.display = 'none';
+            modalElement.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = 'auto';
+        }
+
         // Add coupon button
         document.getElementById('btnAddcoupon').onclick = () => {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            openModal(modal);
         };
 
         // Close modals
         function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closeModalElement(modal);
             document.getElementById('addcouponForm').reset();
         }
 
         function closeViewModal() {
-            viewModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closeModalElement(viewModal);
         }
 
         function closeEditModal() {
-            editModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closeModalElement(editModal);
             document.getElementById('editcouponForm').reset();
         }
 
         function closeDeleteModal() {
-            deleteModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closeModalElement(deleteModal);
             deletecouponId = null;
         }
 
@@ -1283,9 +1452,18 @@ if ($isSearching) {
 
             // Keep modal open if error
             <?php if (!empty($errorMessage)): ?>
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
+                openModal(modal);
             <?php endif; ?>
+        });
+
+        // Add keyboard support (ESC to close)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (modal.style.display === 'block') closeModal();
+                if (viewModal.style.display === 'block') closeViewModal();
+                if (editModal.style.display === 'block') closeEditModal();
+                if (deleteModal.style.display === 'block') closeDeleteModal();
+            }
         });
 
         // Initialize on page load

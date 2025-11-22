@@ -326,26 +326,38 @@ if ($isSearching) {
         }
 
         .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 15px;
+            gap: 14px;
+            font-size: 14.5px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             animation: slideDown 0.4s ease;
         }
 
         .alert-success {
-            background-color: #d4edda;
-            border-left: 4px solid #28a745;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
             color: #155724;
         }
 
+        .alert-success i {
+            font-size: 22px;
+            color: #28a745;
+        }
+
         .alert-error {
-            background-color: #f8d7da;
-            border-left: 4px solid #dc3545;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 5px solid #dc3545;
             color: #721c24;
+        }
+
+        .alert-error i {
+            font-size: 22px;
+            color: #dc3545;
         }
 
         @keyframes slideDown {
@@ -377,74 +389,109 @@ if ($isSearching) {
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 12px 26px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #d7a86e 0%, #c49856 100%);
             color: #3d2817;
-            box-shadow: 0 4px 12px rgba(215, 168, 110, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(215, 168, 110, 0.4);
+            background: linear-gradient(135deg, #c49856 0%, #b38846 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(215, 168, 110, 0.4);
         }
 
         .btn-secondary {
-            background-color: #6c757d;
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
             color: white;
         }
 
         .btn-secondary:hover {
-            background-color: #5a6268;
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
         }
 
         .btn-danger {
-            background-color: #dc3545;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
         }
 
         .btn-danger:hover {
-            background-color: #c82333;
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
         }
 
         .search-box {
             position: relative;
-            flex: 0 0 400px;
-            max-width: 400px;
+            flex: 0 0 420px;
+            max-width: 420px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px 45px 12px 45px;
+            padding: 13px 48px 13px 48px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            border-radius: 30px;
+            font-size: 14.5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: #d7a86e;
-            box-shadow: 0 0 0 3px rgba(215, 168, 110, 0.1);
+            border-color: transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #d7a86e 0%, #c49856 100%) border-box;
+            box-shadow: 0 4px 16px rgba(215, 168, 110, 0.25);
+            transform: translateY(-2px);
         }
 
         .search-box i.fa-search {
             position: absolute;
-            left: 18px;
+            left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: #d7a86e;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .search-box input:focus ~ i.fa-search {
+            color: #c49856;
         }
 
         .clear-search-btn {
@@ -452,30 +499,42 @@ if ($isSearching) {
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             border: none;
-            color: #999;
+            color: white;
             cursor: pointer;
-            padding: 5px;
+            padding: 6px 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3);
         }
 
         .clear-search-btn:hover {
-            color: #d7a86e;
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
         }
 
         .search-info {
-            background-color: #e8f4fd;
-            border-left: 4px solid #0288d1;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #e8f4fd 0%, #dceef9 100%);
+            border-left: 5px solid #0288d1;
+            padding: 14px 22px;
+            margin-bottom: 22px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: #01579b;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(2, 136, 209, 0.15);\n        }
+
+        .search-info i {
+            font-size: 20px;
         }
 
         .table-container {
@@ -492,117 +551,131 @@ if ($isSearching) {
         }
 
         .data-table thead {
-            background: linear-gradient(135deg, #3d2817 0%, #5d3d24 100%);
+            background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .data-table th {
-            padding: 16px;
+            padding: 18px;
             text-align: left;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 13.5px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
         }
 
         .data-table tbody tr {
             border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .data-table tbody tr:hover {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #fff9f5 0%, #fff5ed 100%);
+            transform: scale(1.005);
+            box-shadow: 0 2px 8px rgba(215, 168, 110, 0.15);
         }
 
         .data-table td {
-            padding: 14px 16px;
-            font-size: 14px;
+            padding: 16px 18px;
+            font-size: 14.5px;
             color: #333;
         }
 
         .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 25px;
+            font-size: 11.5px;
+            font-weight: 700;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .status-active {
-            background-color: #d4edda;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             color: #155724;
         }
 
         .status-inactive {
-            background-color: #f8d7da;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             color: #721c24;
         }
 
         .role-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 25px;
+            font-size: 11.5px;
+            font-weight: 700;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .role-admin {
-            background-color: #fff3cd;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
             color: #856404;
         }
 
         .role-manager {
-            background-color: #cfe2ff;
+            background: linear-gradient(135deg, #cfe2ff 0%, #b6d4fe 100%);
             color: #084298;
         }
 
         .role-staff {
-            background-color: #e2e3e5;
+            background: linear-gradient(135deg, #e2e3e5 0%, #d3d3d4 100%);
             color: #41464b;
         }
 
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-action {
-            padding: 8px 12px;
+            padding: 9px 14px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            font-weight: 500;
         }
 
         .btn-view {
-            background-color: #17a2b8;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
             color: white;
         }
 
         .btn-view:hover {
-            background-color: #138496;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.4);
         }
 
         .btn-edit {
-            background-color: #ffc107;
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
             color: #3d2817;
         }
 
         .btn-edit:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
         }
 
         .btn-delete {
-            background-color: #dc3545;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
         }
 
         .btn-delete:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
         }
 
         .pagination {
