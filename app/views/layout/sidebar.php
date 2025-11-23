@@ -49,16 +49,10 @@
       "roles" => [1]
     ],
     [
-      "title" => "Quản lý kho",
-      "icon"  => "fas fa-boxes",
-      "link"  => "admin/inventory",
-      "roles" => [1]
-    ],
-    [
       "title" => "Nhận đơn hàng",
       "icon"  => "fas fa-receipt",
       "link"  => "admin/orders",
-      "roles" => [1]
+      "roles" => [3]
     ],
 
     // Nhân viên
@@ -82,12 +76,12 @@
       "link"  => "admin/orders",
       "roles" => [2]
     ],
-    [
-      "title" => "Đánh giá",
-      "icon"  => "fas fa-comments",
-      "link"  => "admin/review",
-      "roles" => [2]
-    ],
+    // [
+    //   "title" => "Đánh giá",
+    //   "icon"  => "fas fa-comments",
+    //   "link"  => "admin/review",
+    //   "roles" => [2]
+    // ],
     [
       "title" => "Quản lý kho",
       "icon"  => "fas fa-boxes",
