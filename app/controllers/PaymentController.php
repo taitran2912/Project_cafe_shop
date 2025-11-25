@@ -9,7 +9,7 @@ class PaymentController extends Controller {
         $product = $paymentModel->getAllProductstoCart($userID);
         $defaultAddress = $paymentModel->getDefaultAddress($userID);
         $Address = $paymentModel->getAllAddress($userID);
-        $storeLocations = $paymentModel->getStoreLocations($userID);
+        $storeLocations = $paymentModel->getStoreLocations();
 
         $data = [
             'title' => 'Thanh toán',

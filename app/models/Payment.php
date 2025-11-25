@@ -54,7 +54,7 @@ class Payment extends Model {
         }
     }
 
-    public function getStoreLocations($customerId) {
+    public function getStoreLocations() {
         // Giả sử có bảng Store với các cột ID, Name, Latitude, Longitude
         $query = "SELECT b.ID AS BranchID, b.Name AS BranchName, b.Address, b.Latitude, b.Longitude 
                     FROM Branches b WHERE NOT EXISTS ( 
