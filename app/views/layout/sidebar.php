@@ -116,7 +116,7 @@
         );
       ?>
 
-      <a href="/Project_cafe_shop/<?= $item['link'] ?>"
+      <a href="/<?= $item['link'] ?>"
          class="nav-item <?= $isActive ? 'active' : '' ?>">
         <i class="<?= $item['icon'] ?>"></i>
         <span><?= $item['title'] ?></span>
