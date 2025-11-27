@@ -1,15 +1,32 @@
 <?php
-  if(!isset($_SESSION))
-    session_start();
-  $role = $_SESSION['user']['Role'];
-  $userID = $_SESSION['user']['ID'];
-  $name = $_SESSION['user']['Name'];
+//   if(!isset($_SESSION))
+//     session_start();
+//   $role = $_SESSION['user']['Role'];
+//   $userID = $_SESSION['user']['ID'];
+//   $name = $_SESSION['user']['Name'];
 
+<<<<<<< HEAD
+// $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// // Tìm vị trí "/admin/"
+// $pos = strpos($uriPath, '/admin/');
+
+// // Lấy chuỗi sau "/admin/"
+// $action = $pos !== false ? substr($uriPath, $pos + strlen('/admin/')) : '';
+
+// $action = trim($action, '/');
+
+// // Nếu không có action → mặc định là menu
+// if ($action === '') {
+//     $action = 'menu';
+// }
+=======
   $uri = $_SERVER['REQUEST_URI'];
   $base = '/admin/';
   // Remove query string to get clean action
   $uriWithoutQuery = strtok($uri, '?');
   $action = trim(str_replace($base, '', $uriWithoutQuery), '/');
+>>>>>>> dc05dd19bb54e8b6f22efab29ff5412e98518b19
   
 //   // Set default action to menu if empty
 //   if (empty($action)) {
