@@ -5,7 +5,6 @@
 //   $userID = $_SESSION['user']['ID'];
 //   $name = $_SESSION['user']['Name'];
 
-<<<<<<< HEAD
 // $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // // Tìm vị trí "/admin/"
@@ -20,13 +19,6 @@
 // if ($action === '') {
 //     $action = 'menu';
 // }
-=======
-  $uri = $_SERVER['REQUEST_URI'];
-  $base = '/admin/';
-  // Remove query string to get clean action
-  $uriWithoutQuery = strtok($uri, '?');
-  $action = trim(str_replace($base, '', $uriWithoutQuery), '/');
->>>>>>> dc05dd19bb54e8b6f22efab29ff5412e98518b19
   
 //   // Set default action to menu if empty
 //   if (empty($action)) {
