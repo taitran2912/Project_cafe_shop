@@ -62,7 +62,7 @@
     <script>
         // Data Management
         let tables = [
-<?php foreach ($data['table'] as $table): ?>
+<?php foreach ($data['tables'] as $table): ?>
             { 
                 id: <?= $tables['ID'] ?>, 
                 number: <?= $tables['No'] ?>, 
