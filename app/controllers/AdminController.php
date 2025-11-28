@@ -27,6 +27,7 @@ class AdminController extends Controller {
         $data = [
             'title' => 'Dashboard'
         ];
+        $this->view('admin/home/index', $data);
     }
 
     /**
