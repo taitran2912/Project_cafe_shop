@@ -28,37 +28,37 @@
       "title" => "Quản lý thực đơn",
       "icon"  => "fas fa-utensils",
       "link"  => "admin/menu",
-      "roles" => [1]
+      "roles" => [0, 1]
     ],
     [
       "title" => "Quản lý chi nhánh",
       "icon"  => "fas fa-store",
       "link"  => "admin/branch",
-      "roles" => [1]
+      "roles" => [0, 1]
     ],
     [
       "title" => "Thống kê báo cáo",
       "icon"  => "fas fa-chart-bar",
       "link"  => "admin/manager/TKBC",
-      "roles" => [1]
+      "roles" => [0, 1]
     ],
     [
       "title" => "Quản lý nhân viên",
       "icon"  => "fas fa-user-shield",
       "link"  => "admin/user",
-      "roles" => [1]
+      "roles" => [0, 1]
     ],
     [
       "title" => "Quản lý khuyến mãi",
       "icon"  => "fas fa-ticket-alt",
       "link"  => "admin/coupon",
-      "roles" => [1]
+      "roles" => [0, 1]
     ],
     [
       "title" => "Nhận đơn hàng",
       "icon"  => "fas fa-receipt",
       "link"  => "admin/orders",
-      "roles" => [3]
+      "roles" => [0, 3]
     ],
 
     // Nhân viên
@@ -66,13 +66,13 @@
       "title" => "Xem thực đơn",
       "icon"  => "fas fa-list",
       "link"  => "admin/menu",
-      "roles" => [3]
+      "roles" => [0, 3]
     ],
     [
       "title" => "Nhận đơn hàng",
       "icon"  => "fas fa-receipt",
       "link"  => "admin/orders",
-      "roles" => [3]
+      "roles" => [0, 3]
     ],
 
     // Quản lý cửa hàng
@@ -80,25 +80,19 @@
       "title" => "Đơn hàng",
       "icon"  => "fas fa-shopping-cart",
       "link"  => "admin/orders",
-      "roles" => [2]
+      "roles" => [0, 2]
     ],
-    // [
-    //   "title" => "Đánh giá",
-    //   "icon"  => "fas fa-comments",
-    //   "link"  => "admin/review",
-    //   "roles" => [2]
-    // ],
     [
       "title" => "Quản lý kho",
       "icon"  => "fas fa-boxes",
       "link"  => "admin/inventory",
-      "roles" => [2]
+      "roles" => [0, 2]
     ],
     [
       "title" => "Bàn",
       "icon"  => "fas fa-chair",
       "link"  => "admin/table",
-      "roles" => [2]
+      "roles" => [0, 2]
     ],
     
   ];
