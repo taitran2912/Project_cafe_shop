@@ -19,7 +19,7 @@ $action = $pos !== false ? substr($uriPath, $pos + strlen('/admin/')) : '';
   <?php include_once 'app/views/layout/sidebar.php'; ?>
 <!-- Main Content -->
  <!-- <h1>
-  <?php echo $role ?>
+  <?php echo $action ?>
 </h1> -->
 <main class="main-content">
 
