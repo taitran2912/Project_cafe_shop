@@ -19,7 +19,7 @@
 
         <!-- Logout -->
         <a href="https://caffeshop.hieuthuocyentam.id.vn/logout"
-           class="flex items-center gap-2 px-3 py-1.5 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition">
+           class="flex items-center gap-2 px-3 py-1.5 bg-red-500 text-dark text-sm rounded-lg hover:bg-red-600 transition">
             <i class="fas fa-sign-out-alt"></i>
             Đăng xuất
         </a>
