@@ -6,7 +6,7 @@ class TableController extends Controller {
         
         // Load tables
         $tableModel = $this->model('Table');
-        $tables = $tableModel->getAllTables();
+        // $tables = $tableModel->getAllTables();
         
         $data = [
             'title' => 'Quản lý bàn',
