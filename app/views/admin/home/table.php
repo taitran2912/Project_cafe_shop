@@ -80,32 +80,35 @@
             grid.innerHTML = '';
 
             tablesToRender.forEach(table => {
-                const tableCard = document.createElement('div');
-                tableCard.className = 'table-card';
+            const tableCard = document.createElement('div');
+            tableCard.className = 'table-card';
 
+            // Khai báo statusClass và statusText dựa trên table.status
+            const statusClass = table.status === 'occupied' ? 'occupied' : '';
+            const statusText = table.status === 'occupied' ? 'Đang có khách' : 'Trống';
 
-                tableCard.innerHTML = `
-                    <div class="table-number">Bàn ${table.number}</div>
-                    <span class="table-status ${statusClass}">${statusText}</span>
-                    <div class="table-info">
-                        <div class="info-row">
-                            <span class="info-label">Chi nhánh:</span>
-                            <span class="info-value">${table.branch}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Vị trí:</span>
-                            <span class="info-value">${table.location}</span>
-                        </div>
+            tableCard.innerHTML = `
+                <div class="table-number">Bàn ${table.number}</div>
+                <span class="table-status ${statusClass}">${statusText}</span>
+                <div class="table-info">
+                    <div class="info-row">
+                        <span class="info-label">Chi nhánh:</span>
+                        <span class="info-value">${table.branch}</span>
                     </div>
-                    <div class="table-actions">
-                        <button class="btn-action btn-edit" onclick="editTable(${table.id})">Sửa</button>
-                        <button class="btn-action btn-delete" onclick="deleteTable(${table.id})">Xoá</button>
-                        <button class="btn-action btn-qrcode" onclick="showQRCode(${table.id})">QR</button>
+                    <div class="info-row">
+                        <span class="info-label">Vị trí:</span>
+                        <span class="info-value">${table.location}</span>
                     </div>
-                `;
+                </div>
+                <div class="table-actions">
+                    <button class="btn-action btn-edit" onclick="editTable(${table.id})">Sửa</button>
+                    <button class="btn-action btn-delete" onclick="deleteTable(${table.id})">Xoá</button>
+                    <button class="btn-action btn-qrcode" onclick="showQRCode(${table.id})">QR</button>
+                </div>
+            `;
 
-                grid.appendChild(tableCard);
-            });
+            grid.appendChild(tableCard);
+        });
         }
         renderTables();
     </script>
