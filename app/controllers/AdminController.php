@@ -45,9 +45,22 @@ class AdminController extends Controller {
      * Route to Product admin (menu management)
      */
     public function menu() {
-        require_once __DIR__ . '/ProductController.php';
-        $productController = new ProductController();
-        $productController->adminIndex();
+        // require_once __DIR__ . '/ProductController.php';
+        // $productController = new ProductController();
+        // $productController->adminIndex();
+
+        $productModel = $this->model('Menu');
+
+        $categories = $productModel->getAllCategory();
+        $products = $productModel->getAll();
+
+        $data = [
+            'title' => 'Thực đơn',
+            'categories' => $categories,
+            'products' => $products,
+            'js' => 'menu'
+        ];
+        $this->view('admin/home/index', $data);
     }
     
     /**
