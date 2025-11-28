@@ -162,9 +162,19 @@ class AdminController extends Controller {
     }
 
     public function table() {
-        require_once __DIR__ . '/TableController.php';
-        $tableController = new TableController();
-        $tableController->adminIndex();
+        // require_once __DIR__ . '/TableController.php';
+        // $tableController = new TableController();
+        // $tableController->adminIndex();
+         // Load tables
+        // $tableModel = $this->model('Table');
+        // $tables = $tableModel->getAllTables();
+        
+        $data = [
+            'title' => 'Quản lý bàn'
+            // 'tables' => $tables
+        ];
+        // Pass data to the view
+        $this->view('admin/home/index', $data);
     }
 
 }
