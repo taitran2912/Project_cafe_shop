@@ -82,19 +82,18 @@
             <h2><i class="fas fa-edit"></i> Sửa Sản Phẩm</h2>
             <button class="close-btn">&times;</button>
         </div>
-        <form id="editProductForm" method="POST" enctype="multipart/form-data">
+        <form id="editProductForm" method="POST">
             <input type="hidden" name="action" value="edit_product">
             <input type="hidden" name="product_id" id="edit_product_id">
             <div class="form-grid">
                 <div class="form-group">
                     <label>Loại sản phẩm</label>
                     <select id="editProductCategory" name="category" required>
-                        <option value="">-- Chọn loại sản phẩm --</option>
-                        <option value="1">Cà phê</option>
-                        <option value="2">Trà</option>
-                        <option value="3">Sinh tố</option>
-                        <option value="4">Bánh ngọt</option>
-                        <option value="5">Đồ ăn nhẹ</option>
+                        <?php foreach ($data['categories'] as $category): ?>
+                            <option value="<?= (int)$category['ID'] ?>">
+                                <?= htmlspecialchars($category['Name'], ENT_QUOTES) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
@@ -150,14 +149,32 @@
 
 <!-- JS mở/đóng modal -->
 <script>
+// 1️⃣ Đóng tất cả modal bằng nút .close-btn
 document.querySelectorAll('.close-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         btn.closest('.modal').style.display = 'none';
     });
 });
 
-// Ví dụ: mở modal thêm sản phẩm
+// 2️⃣ Mở modal thêm sản phẩm
 document.getElementById('btnAddProduct').addEventListener('click', () => {
     document.getElementById('addProductModal').style.display = 'block';
 });
+
+// 3️⃣ Mở modal sửa sản phẩm và điền dữ liệu
+document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const modal = document.getElementById('editProductModal');
+        modal.style.display = 'block';
+
+        // Lấy dữ liệu từ data-attributes
+        document.getElementById('edit_product_id').value = btn.dataset.id;
+        document.getElementById('editProductName').value = btn.dataset.name;
+        document.getElementById('editProductPrice').value = btn.dataset.price;
+        document.getElementById('editProductDescription').value = btn.dataset.description;
+        document.getElementById('editProductCategory').value = btn.dataset.category;
+        document.getElementById('editProductStatus').value = btn.dataset.status;
+    });
+});
+
 </script>
