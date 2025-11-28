@@ -23,6 +23,12 @@ class AdminController extends Controller {
         }
     }
 
+    public function dashboard() {
+        $data = [
+            'title' => 'Dashboard'
+        ];
+    }
+
     /**
      * Admin dashboard - default redirects to menu
      */
