@@ -4,7 +4,12 @@ $role = $_SESSION['user']['Role'];
 $userID = $_SESSION['user']['ID'];
 $name = $_SESSION['user']['Name'];
   
-$action = $_GET['action'];
+$uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$pos = strpos($uriPath, '/admin/');
+
+// Lấy chuỗi sau "/admin/"
+$action = $pos !== false ? substr($uriPath, $pos + strlen('/admin/')) : '';
 
 // include_once 'app/views/layout/xuly.php';
 ?>
