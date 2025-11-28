@@ -1,9 +1,15 @@
 <?php
-  if(!isset($_SESSION))
-    session_start();
-  $role = $_SESSION['user']['Role'];
-  $userID = $_SESSION['user']['ID'];
-  $name = $_SESSION['user']['Name'];
+/**
+ * Admin Home View - Main Dashboard Router
+ * 
+ * This view ONLY handles display logic - no business logic here.
+ * All form handling and CRUD operations are done in AdminController.
+ * 
+ * Data passed from controller in $data array:
+ * - $data['title']: Page title
+ * - $data['action']: Current action (menu, user, coupon, branch, inventory, orders)
+ * - $data['products'], $data['accounts'], $data['coupons'], etc.: Data to display
+ */
 
 $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -359,40 +365,39 @@ $action = trim($action, '/');
     }
   }
 ?>
-<!-- Head html -->
-  <?php include_once 'app/views/layout/adminHead.php'; ?>
-<!-- Sidebar -->
-  <?php include_once 'app/views/layout/sidebar.php'; ?>
-<!-- Main Content -->
- <!-- <h1>
-  <?php echo $role ?>
-</h1> -->
-<main class="main-content">
 
-  <?php include_once 'app/views/layout/headerAdmin.php'; ?>  
+<!-- Head html -->
+<?php include_once 'app/views/layout/adminHead.php'; ?>
+
+<!-- Sidebar -->
+<?php include_once 'app/views/layout/sidebar.php'; ?>
+
+<!-- Main Content -->
+<main class="main-content">
+    <?php include_once 'app/views/layout/headerAdmin.php'; ?>  
 
     <div class="content-wrapper">
-
-      <?php  
-          switch ($action) {
+        <?php  
+        // Route to appropriate view based on action
+        switch ($action) {
             case 'branch':
-              include_once 'app/views/admin/home/branch.php';
-              break;
+                include_once 'app/views/admin/home/branch.php';
+                break;
             case 'menu':
-              include_once 'app/views/admin/home/menu.php'; // Tuỳ theo action để include file tương ứng
-              break;
+                include_once 'app/views/admin/home/menu.php';
+                break;
             case 'user':
-              include_once 'app/views/admin/home/userManager.php';
-              break;
+                include_once 'app/views/admin/home/userManager.php';
+                break;
             case 'coupon':
-              include_once 'app/views/admin/home/couponManager.php';
-              break;
+                include_once 'app/views/admin/home/couponManager.php';
+                break;
             case 'inventory':
-              include_once 'app/views/admin/home/inventory.php';
-              break;
+                include_once 'app/views/admin/home/inventory.php';
+                break;
             case 'orders':
-              include_once 'app/views/admin/home/orders.php';
-              break;
+                include_once 'app/views/admin/home/orders.php';
+                break;
             default:
               include_once 'app/views/admin/home/menu.php';
               break;
