@@ -30,7 +30,7 @@ class AdminController extends Controller {
         $this->checkAuth();
         
         // Redirect to menu by default
-        header('Location: ' . BASE_URL . 'admin/menu');
+        header('Location: ' . BASE_URL . 'admin/dashboard');
         exit;
     }
     
