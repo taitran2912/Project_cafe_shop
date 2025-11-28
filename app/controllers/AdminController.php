@@ -114,16 +114,16 @@ class AdminController extends Controller {
         }
     }
     
-    private function deleteAccount($accountId) {
-        require_once __DIR__ . '/AccountController.php';
-        $accountController = new AccountController();
-        if ($accountController->delete($accountId)) {
-            header('Location: ' . BASE_URL . 'admin/user?success=delete');
-        } else {
-            header('Location: ' . BASE_URL . 'admin/user?error=delete');
-        }
-        exit;
-    }
+    // private function deleteAccount($accountId) {
+    //     require_once __DIR__ . '/AccountController.php';
+    //     $accountController = new AccountController();
+    //     if ($accountController->delete($accountId)) {
+    //         header('Location: ' . BASE_URL . 'admin/user?success=delete');
+    //     } else {
+    //         header('Location: ' . BASE_URL . 'admin/user?error=delete');
+    //     }
+    //     exit;
+    // }
     
     /**
      * Route to Coupon admin
@@ -160,4 +160,11 @@ class AdminController extends Controller {
         $orderController = new OrderController();
         $orderController->adminIndex();
     }
+
+    public function table() {
+        require_once __DIR__ . '/TableController.php';
+        $tableController = new TableController();
+        $tableController->adminIndex();
+    }
+
 }

@@ -47,6 +47,9 @@ $action = $pos !== false ? substr($uriPath, $pos + strlen('/admin/')) : '';
             case 'orders':
               include_once 'app/views/admin/home/orders.php';
               break;
+            case 'table':
+              include_once 'app/views/admin/home/table.php';
+              break;
             default:
               include_once 'app/views/admin/home/dashboard.php';
               break;

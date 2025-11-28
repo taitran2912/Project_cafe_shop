@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Bàn - Cafe Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f1ed;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background-color: #5d3f2d;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d4a574;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #6d4e3a;
+        }
+
+        .logo-icon {
+            font-size: 18px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #b8a89a;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: #6d4e3a;
+            color: #d4a574;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0d5c7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 20px;
+            color: #3a2f2a;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 8px 15px;
+            border: 1px solid #d4a574;
+            border-radius: 4px;
+            width: 250px;
+            font-size: 13px;
+            background-color: #faf8f5;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .btn-add {
+            background-color: #d4a574;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #c09460;
+        }
+
+        /* Table Grid */
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .table-card {
+            background-color: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #d4a574;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .table-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .table-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3a2f2a;
+            margin-bottom: 12px;
+        }
+
+        .table-info {
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #5d3f2d;
+        }
+
+        .info-value {
+            color: #3a2f2a;
+        }
+
+        .table-status {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: #e8f4e8;
+            color: #2d6a2d;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .table-status.occupied {
+            background-color: #ffe8e8;
+            color: #b81c1c;
+        }
+
+        /* Action Buttons */
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #138496;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .btn-qrcode {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-qrcode:hover {
+            background-color: #5a6268;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 6px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3a2f2a;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #5d3f2d;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            background-color: #e0d5c7;
+            color: #5d3f2d;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-cancel:hover {
+            background-color: #d0c5b7;
+        }
+
+        .btn-submit {
+            background-color: #d4a574;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-submit:hover {
+            background-color: #c09460;
+        }
+
+        /* QR Code Modal */
+        .qr-code-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .qr-code-container canvas {
+            border: 2px solid #d4a574;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .qr-code-info {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .btn-print {
+            background-color: #d4a574;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-print:hover {
+            background-color: #c09460;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 15px 10px;
+            }
+
+            .logo {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .table-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">☕</div>
+            <span>Cafe Manager</span>
+        </div>
+        <div class="menu-item active" data-menu="tables">📊 Quản lý Bàn</div>
+        <div class="menu-item" data-menu="products">🍵 Sản phẩm</div>
+        <div class="menu-item" data-menu="branches">🏢 Chi nhánh</div>
+        <div class="menu-item" data-menu="orders">📋 Đơn hàng</div>
+        <div class="menu-item" data-menu="staff">👥 Nhân viên</div>
+        <div class="menu-item" data-menu="reports">📈 Báo cáo</div>
+        <div class="menu-item" data-menu="settings">⚙️ Cài đặt</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">Quản lý Bàn</div>
+            <div class="header-actions">
+                <input type="text" class="search-box" id="searchBox" placeholder="Tìm kiếm bàn...">
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="content-header">
+                <h2>Danh sách các bàn</h2>
+                <button class="btn-add" id="btnAddTable">+ Thêm bàn</button>
+            </div>
+
+            <div class="table-grid" id="tableGrid">
+                <!-- Tables will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Table Modal -->
+    <div class="modal" id="tableModal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">Thêm bàn mới</div>
+            <form id="tableForm">
+                <div class="form-group">
+                    <label for="tableNumber">Số bàn:</label>
+                    <input type="number" id="tableNumber" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="branchSelect">Chi nhánh:</label>
+                    <select id="branchSelect" required>
+                        <option value="">-- Chọn chi nhánh --</option>
+                        <option value="Chi nhánh 1">Chi nhánh 1</option>
+                        <option value="Chi nhánh 2">Chi nhánh 2</option>
+                        <option value="Chi nhánh 3">Chi nhánh 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="capacity">Sức chứa (người):</label>
+                    <input type="number" id="capacity" required min="1" max="20">
+                </div>
+                <div class="form-group">
+                    <label for="location">Vị trí:</label>
+                    <input type="text" id="location" placeholder="VD: Tầng 1, cạnh cửa sổ">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btnCloseModal">Hủy</button>
+                    <button type="submit" class="btn-submit">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <div class="modal-header">QR Code Bàn <span id="qrTableNumber"></span></div>
+            <div class="qr-code-container">
+                <p class="qr-code-info" id="qrInfo">Chi nhánh: <span id="qrBranch"></span></p>
+                <canvas id="qrCanvas"></canvas>
+                <div>
+                    <button type="button" class="btn-print" id="btnPrintQR">🖨️ In QR Code</button>
+                </div>
+                <button type="button" class="btn-cancel" style="width: 100%; margin-top: 10px;" id="btnCloseQRModal">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Data Management
+        let tables = [
+            { id: 1, number: 1, branch: 'Chi nhánh 1', capacity: 4, location: 'Tầng 1', status: 'empty' },
+            { id: 2, number: 2, branch: 'Chi nhánh 1', capacity: 6, location: 'Tầng 1', status: 'occupied' },
+            { id: 3, number: 3, branch: 'Chi nhánh 2', capacity: 4, location: 'Tầng 2', status: 'empty' },
+            { id: 4, number: 4, branch: 'Chi nhánh 2', capacity: 8, location: 'Tầng 2', status: 'empty' },
+            { id: 5, number: 5, branch: 'Chi nhánh 1', capacity: 2, location: 'Bar', status: 'empty' },
+            { id: 6, number: 6, branch: 'Chi nhánh 3', capacity: 4, location: 'Tầng 1', status: 'occupied' },
+            { id: 7, number: 7, branch: 'Chi nhánh 3', capacity: 6, location: 'Tầng 1', status: 'empty' },
+            { id: 8, number: 8, branch: 'Chi nhánh 1', capacity: 4, location: 'Tầng 1', status: 'empty' }
+        ];
+
+        let editingTableId = null;
+
+        // Render Tables
+        function renderTables(tablesToRender = tables) {
+            const grid = document.getElementById('tableGrid');
+            grid.innerHTML = '';
+
+            tablesToRender.forEach(table => {
+                const tableCard = document.createElement('div');
+                tableCard.className = 'table-card';
+                
+                const statusClass = table.status === 'occupied' ? 'occupied' : '';
+                const statusText = table.status === 'occupied' ? 'Đang có khách' : 'Trống';
+
+                tableCard.innerHTML = `
+                    <div class="table-number">Bàn ${table.number}</div>
+                    <span class="table-status ${statusClass}">${statusText}</span>
+                    <div class="table-info">
+                        <div class="info-row">
+                            <span class="info-label">Chi nhánh:</span>
+                            <span class="info-value">${table.branch}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Sức chứa:</span>
+                            <span class="info-value">${table.capacity} người</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Vị trí:</span>
+                            <span class="info-value">${table.location}</span>
+                        </div>
+                    </div>
+                    <div class="table-actions">
+                        <button class="btn-action btn-view" onclick="viewTable(${table.id})">Xem</button>
+                        <button class="btn-action btn-edit" onclick="editTable(${table.id})">Sửa</button>
+                        <button class="btn-action btn-delete" onclick="deleteTable(${table.id})">Xoá</button>
+                        <button class="btn-action btn-qrcode" onclick="showQRCode(${table.id})">QR</button>
+                    </div>
+                `;
+
+                grid.appendChild(tableCard);
+            });
+        }
+
+        // Add Table
+        document.getElementById('btnAddTable').addEventListener('click', () => {
+            editingTableId = null;
+            document.getElementById('modalTitle').textContent = 'Thêm bàn mới';
+            document.getElementById('tableForm').reset();
+            document.getElementById('tableModal').classList.add('active');
+        });
+
+        // Edit Table
+        function editTable(id) {
+            const table = tables.find(t => t.id === id);
+            if (!table) return;
+
+            editingTableId = id;
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa bàn';
+            document.getElementById('tableNumber').value = table.number;
+            document.getElementById('branchSelect').value = table.branch;
+            document.getElementById('capacity').value = table.capacity;
+            document.getElementById('location').value = table.location;
+            document.getElementById('tableModal').classList.add('active');
+        }
+
+        // View Table
+        function viewTable(id) {
+            const table = tables.find(t => t.id === id);
+            if (!table) return;
+            alert(`Bàn ${table.number}\nChi nhánh: ${table.branch}\nVị trí: ${table.location}\nSức chứa: ${table.capacity} người\nTrạng thái: ${table.status === 'occupied' ? 'Đang có khách' : 'Trống'}`);
+        }
+
+        // Delete Table
+        function deleteTable(id) {
+            if (confirm('Bạn chắc chắn muốn xoá bàn này?')) {
+                tables = tables.filter(t => t.id !== id);
+                renderTables();
+            }
+        }
+
+        // Save Table
+        document.getElementById('tableForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const tableNumber = parseInt(document.getElementById('tableNumber').value);
+            const branch = document.getElementById('branchSelect').value;
+            const capacity = parseInt(document.getElementById('capacity').value);
+            const location = document.getElementById('location').value;
+
+            if (editingTableId) {
+                const table = tables.find(t => t.id === editingTableId);
+                if (table) {
+                    table.number = tableNumber;
+                    table.branch = branch;
+                    table.capacity = capacity;
+                    table.location = location;
+                }
+            } else {
+                const newId = Math.max(...tables.map(t => t.id), 0) + 1;
+                tables.push({
+                    id: newId,
+                    number: tableNumber,
+                    branch: branch,
+                    capacity: capacity,
+                    location: location,
+                    status: 'empty'
+                });
+            }
+
+            document.getElementById('tableModal').classList.remove('active');
+            renderTables();
+        });
+
+        // Close Modal
+        document.getElementById('btnCloseModal').addEventListener('click', () => {
+            document.getElementById('tableModal').classList.remove('active');
+        });
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = tables.filter(table => 
+                table.number.toString().includes(searchTerm) ||
+                table.branch.toLowerCase().includes(searchTerm) ||
+                table.location.toLowerCase().includes(searchTerm)
+            );
+            renderTables(filtered);
+        });
+
+        // QR Code
+        function showQRCode(id) {
+            const table = tables.find(t => t.id === id);
+            if (!table) return;
+
+            document.getElementById('qrTableNumber').textContent = table.number;
+            document.getElementById('qrBranch').textContent = table.branch;
+
+            const qrCanvas = document.getElementById('qrCanvas');
+            qrCanvas.innerHTML = '';
+
+            const qrData = `Table ${table.number}\nBranch: ${table.branch}\nCapacity: ${table.capacity}\nLocation: ${table.location}`;
+
+            new QRCode(qrCanvas, {
+                text: qrData,
+                width: 250,
+                height: 250,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('qrModal').classList.add('active');
+        }
+
+        document.getElementById('btnCloseQRModal').addEventListener('click', () => {
+            document.getElementById('qrModal').classList.remove('active');
+        });
+
+        document.getElementById('btnPrintQR').addEventListener('click', () => {
+            const canvas = document.getElementById('qrCanvas').querySelector('canvas');
+            if (canvas) {
+                const printWindow = window.open();
+                printWindow.document.write(`
+                    <html>
+                    <head><title>In QR Code</title></head>
+                    <body style="text-align: center; padding: 20px;">
+                        <h2>QR Code Bàn ${document.getElementById('qrTableNumber').textContent}</h2>
+                        <img src="${canvas.toDataURL()}" style="width: 400px; height: 400px; border: 2px solid black; padding: 20px;">
+                        <p>${document.getElementById('qrInfo').textContent}</p>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                setTimeout(() => printWindow.print(), 250);
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('tableModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('tableModal')) {
+                document.getElementById('tableModal').classList.rsemove('active');
+            }
+        });
+
+        document.getElementById('qrModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('qrModal')) {
+                document.getElementById('qrModal').classList.remove('active');
+            }
+        });
+
+        // Initial render
+        renderTables();
+    </script>
+</body>
+</html>
