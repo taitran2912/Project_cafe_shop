@@ -10,7 +10,7 @@
                         <i class="fas fa-map-marker-alt me-1"></i> <?= $data['storeName'] ?> - <?= $data['storeAddress'] ?>
                     </div>
                     <div class="small text-muted">
-                        <span class="me-3"><i class="far fa-clock me-1"></i> 07:00 - 22:30 <?= $data['userID'] ?></span>
+                        <span class="me-3"><i class="far fa-clock me-1"></i> 07:00 - 22:30</span>
                     </div>
                 </div>
             </div>
