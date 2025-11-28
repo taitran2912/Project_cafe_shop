@@ -39,8 +39,8 @@
                                 <?= date('H:i', strtotime($order['Time'])) ?>
                             </div>
                         </div>
-                        <span class="order-status <?= $order['Status'] === 'pending' ? 'status-pending' : 'status-confirmed' ?>">
-                            <?= $order['Status'] === 'pending' ? 'Chờ xác nhận' : 'Đã xác nhận' ?>
+                        <span class="order-status <?= $order['Status'] === 'Pending' ? 'status-pending' : 'status-confirmed' ?>">
+                            <?= $order['Status'] === 'Pending' ? 'Chờ xác nhận' : 'Đã xác nhận' ?>
                         </span>
                     </div>
 
