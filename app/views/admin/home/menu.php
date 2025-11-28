@@ -44,7 +44,7 @@
     <div class="pagination" id="pagination"></div>
 
     <!-- Modals -->
-    <?php include 'modal/menuModal.php'; // Chứa các modal: add, edit, view, delete ?>
+    <?php include 'modals/menuModal.php'; ?>
 
 </div>
 
