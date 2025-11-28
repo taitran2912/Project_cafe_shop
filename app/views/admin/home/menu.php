@@ -1,413 +1,134 @@
-
-
-        <!-- Content Header -->
-        <div class="content-header">
-            <button class="btn btn-primary" id="btnAddProduct">
-                <i class="fas fa-plus"></i>
-                Thêm sản phẩm
-            </button> 
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." value="<?= isset($searchQuery) ? htmlspecialchars($searchQuery) : '' ?>" autocomplete="off">
-                <?php if (isset($isSearching) && $isSearching): ?>
-                    <button type="button" class="clear-search-btn" id="clearSearchBtn" title="Xóa tìm kiếm">
-                        <i class="fas fa-times"></i>
-                    </button>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <?php if (isset($isSearching) && $isSearching && isset($products)): ?>
-            <div class="search-info">
-                <i class="fas fa-info-circle"></i>
-                Tìm thấy <strong><?= count($products) ?></strong> sản phẩm với từ khóa "<strong><?= htmlspecialchars($searchQuery) ?></strong>"
-            </div>
-        <?php endif; ?>
-
-        <!-- Table Container -->
-        <div class="table-container">
-            <table class="data-table" id="productTable">
-                <thead>
-                    <tr>
-                        <th>Mã SP</th>
-                        <th>Loại</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Mô tả</th>
-                        <th>Giá</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody id="productBody">
-                    <!-- Products will be rendered by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="pagination" id="pagination"></div>
-    </div>
-
-
-    <!-- Modal Thêm Sản Phẩm -->
-    <div id="addProductModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới</h2>
-                <button class="close-btn" id="closeModal">&times;</button>
-            </div>
-            <form id="addProductForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="add_product">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="productCategory">
-                            <i class="fas fa-list"></i> Loại sản phẩm <span class="required">*</span>
-                        </label>
-                        <select id="productCategory" name="category" required>
-                            <option value="">-- Chọn loại sản phẩm --</option>
-                            <option value="1">Cà phê</option>
-                            <option value="2">Trà</option>
-                            <option value="3">Sinh tố</option>
-                            <option value="4">Bánh ngọt</option>
-                            <option value="5">Đồ ăn nhẹ</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productName">
-                            <i class="fas fa-coffee"></i> Tên sản phẩm <span class="required">*</span>
-                        </label>
-                        <input type="text" id="productName" name="name" placeholder="Nhập tên sản phẩm" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productPrice">
-                            <i class="fas fa-dollar-sign"></i> Giá (VNĐ) <span class="required">*</span>
-                        </label>
-                        <input type="number" id="productPrice" name="price" placeholder="Nhập giá sản phẩm" min="0" step="1000" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productStatus">
-                            <i class="fas fa-toggle-on"></i> Trạng thái <span class="required">*</span>
-                        </label>
-                        <select id="productStatus" name="status" required>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="productDescription">
-                            <i class="fas fa-align-left"></i> Mô tả
-                        </label>
-                        <textarea id="productDescription" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="productImage">
-                            <i class="fas fa-image"></i> Hình ảnh sản phẩm
-                        </label>
-                        <input type="file" id="productImage" name="image" accept="image/*">
-                        <div id="imagePreview" class="image-preview"></div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelBtn">
-                        <i class="fas fa-times"></i> Hủy
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Lưu sản phẩm
-                    </button>
-                </div>
-            </form>
+    <!-- Content Header -->
+    <div class="content-header">
+        <button class="btn btn-primary" id="btnAddProduct">
+            <i class="fas fa-plus"></i> Thêm sản phẩm
+        </button>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." 
+                   value="<?= isset($searchQuery) ? htmlspecialchars($searchQuery) : '' ?>" autocomplete="off">
+            <?php if (isset($isSearching) && $isSearching): ?>
+                <button type="button" class="clear-search-btn" id="clearSearchBtn" title="Xóa tìm kiếm">
+                    <i class="fas fa-times"></i>
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 
-    <!-- Modal Xem Chi Tiết Sản Phẩm -->
-    <div id="viewProductModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-info-circle"></i> Chi Tiết Sản Phẩm</h2>
-                <button class="close-btn" id="closeViewModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <label><i class="fas fa-hashtag"></i> Mã sản phẩm:</label>
-                        <span id="view_id"></span>
-                    </div>
-                    <div class="detail-item">
-                        <label><i class="fas fa-list"></i> Loại sản phẩm:</label>
-                        <span id="view_category"></span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <label><i class="fas fa-coffee"></i> Tên sản phẩm:</label>
-                        <span id="view_name"></span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <label><i class="fas fa-align-left"></i> Mô tả:</label>
-                        <span id="view_description"></span>
-                    </div>
-                    <div class="detail-item">
-                        <label><i class="fas fa-dollar-sign"></i> Giá:</label>
-                        <span id="view_price"></span>
-                    </div>
-                    <div class="detail-item">
-                        <label><i class="fas fa-toggle-on"></i> Trạng thái:</label>
-                        <span id="view_status"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="closeViewBtn">
-                    <i class="fas fa-times"></i> Đóng
-                </button>
-            </div>
+    <?php if (isset($isSearching) && $isSearching && !empty($products)): ?>
+        <div class="search-info">
+            <i class="fas fa-info-circle"></i>
+            Tìm thấy <strong><?= count($products) ?></strong> sản phẩm với từ khóa "<strong><?= htmlspecialchars($searchQuery) ?></strong>"
         </div>
-    </div>
-
-    <!-- Modal Sửa Sản Phẩm -->
-    <div id="editProductModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-edit"></i> Sửa Sản Phẩm</h2>
-                <button class="close-btn" id="closeEditModal">&times;</button>
-            </div>
-            <form id="editProductForm" method="POST" action="" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="edit_product">
-                <input type="hidden" name="product_id" id="edit_product_id">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="editProductCategory">
-                            <i class="fas fa-list"></i> Loại sản phẩm <span class="required">*</span>
-                        </label>
-                        <select id="editProductCategory" name="category" required>
-                            <option value="">-- Chọn loại sản phẩm --</option>
-                            <option value="1">Cà phê</option>
-                            <option value="2">Trà</option>
-                            <option value="3">Sinh tố</option>
-                            <option value="4">Bánh ngọt</option>
-                            <option value="5">Đồ ăn nhẹ</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editProductName">
-                            <i class="fas fa-coffee"></i> Tên sản phẩm <span class="required">*</span>
-                        </label>
-                        <input type="text" id="editProductName" name="name" placeholder="Nhập tên sản phẩm" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editProductPrice">
-                            <i class="fas fa-dollar-sign"></i> Giá (VNĐ) <span class="required">*</span>
-                        </label>
-                        <input type="number" id="editProductPrice" name="price" placeholder="Nhập giá sản phẩm" min="0" step="1000" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editProductStatus">
-                            <i class="fas fa-toggle-on"></i> Trạng thái <span class="required">*</span>
-                        </label>
-                        <select id="editProductStatus" name="status" required>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editProductDescription">
-                            <i class="fas fa-align-left"></i> Mô tả
-                        </label>
-                        <textarea id="editProductDescription" name="description" rows="3" placeholder="Nhập mô tả sản phẩm"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="editProductImage">
-                            <i class="fas fa-image"></i> Hình ảnh sản phẩm (để trống nếu không muốn thay đổi)
-                        </label>
-                        <input type="file" id="editProductImage" name="image" accept="image/*">
-                        <div id="editImagePreview" class="image-preview"></div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelEditBtn">
-                        <i class="fas fa-times"></i> Hủy
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Cập nhật
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Xác Nhận Xóa-->
-    <div id="deleteConfirmModal" class="modal">
-        <div class="modal-content modal-small">
-            <div class="modal-header modal-header-danger">
-                <h2><i class="fas fa-exclamation-triangle"></i> Xác Nhận Xóa</h2>
-                <button class="close-btn" id="closeDeleteModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p class="delete-message">
-                    Bạn có chắc chắn muốn xóa sản phẩm <strong id="delete_product_name"></strong>?
-                </p>
-                <p class="delete-warning">
-                    <i class="fas fa-info-circle"></i> Hành động này không thể hoàn tác!
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">
-                    <i class="fas fa-times"></i> Hủy
-                </button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-                    <i class="fas fa-trash"></i> Xóa
-                </button>
-            </div>
-        </div>
-    </div> 
-
-
-</html>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">
-                    <i class="fas fa-times"></i> Hủy
-                </button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-                    <i class="fas fa-trash"></i> Xóa
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Embed product data for JavaScript -->
-    <script>
-        const productsDataFromPHP = <?= json_encode(isset($products) ? $products : []) ?>;
-        const BASE_URL = '<?= BASE_URL ?>';
-        const hasErrorMessage = <?= (isset($errorMessage) && !empty($errorMessage)) ? 'true' : 'false' ?>;
-    </script>
-    
-    <!-- Link to external JavaScript -->
-
-<?php $data['products'] = $products; ?>
-<script>
-   // Menu data
-    const menuItems = [
-    <?php if (!empty($data['products'])): ?>
-    <?php foreach ($data['products'] as $index => $product): ?>
-        {
-        id: <?= (int)$product['ID'] ?>,
-        name: "<?= htmlspecialchars($product['Name'], ENT_QUOTES) ?>",
-        price: <?= (int)$product['Price'] ?>,
-        category: "<?= htmlspecialchars($product['Name_Category'], ENT_QUOTES) ?>",
-        image: "<?= BASE_URL ?>/public/image/<?= htmlspecialchars($product['Image'], ENT_QUOTES) ?>",
-        description: "<?= htmlspecialchars($product['Description'], ENT_QUOTES) ?>",
-        }<?= $index < count($data['products']) - 1 ? ',' : '' ?>
-
-    <?php endforeach; ?>
     <?php endif; ?>
-    ];
 
-    // 1️⃣ Khai báo biến TRƯỚC
-    let currentCategory = "all";
+    <!-- Table Container -->
+    <div class="table-container">
+        <table class="data-table" id="productTable">
+            <thead>
+                <tr>
+                    <th>Mã SP</th>
+                    <th>Loại</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Mô tả</th>
+                    <th>Giá</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="productBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
+    <!-- Modals -->
+    <?php include 'modals.php'; // Chứa các modal: add, edit, view, delete ?>
+
+</div>
+
+<!-- Embed product data for JavaScript -->
+<script>
+    const productsData = <?= json_encode(isset($products) ? $products : []) ?>;
+    const BASE_URL = '<?= BASE_URL ?>';
+    const hasErrorMessage = <?= (isset($errorMessage) && !empty($errorMessage)) ? 'true' : 'false' ?>;
+
+    // ================== Khai báo biến ==================
+    let currentCategory = 'all';
     let displayedItems = 0;
     const itemsPerLoad = 9;
 
-    // 2️⃣ Khai báo hàm TRƯỚC KHI GỌI
-    function getFilteredItems() {
-        return menuItems.filter(item => 
-            currentCategory === "all" || item.category === currentCategory
-        );
-    }
-
+    // ================== Hàm hiển thị sản phẩm ==================
     function formatPrice(price) {
-        return new Intl.NumberFormat("vi-VN").format(price) + "đ";
+        return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
     }
 
-    function createMenuItemHTML(item) {
+    function createProductRow(item) {
         return `
-            <div class="menu-item ${item.category} card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
-                <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
-                    <p class="text-gray-600 mb-4">${item.description}</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-2xl font-bold text-primary">${formatPrice(item.price)}</span>
-                        <button class="btn-primary text-sm px-4 py-2 add-to-cart" 
-                                data-id="${item.id}"
-                                data-name="${item.name}" 
-                                data-price="${item.price}"
-                                data-image="${item.image}">
-                            Thêm vào giỏ
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>${item.ID}</td>
+                <td>${item.Name_Category}</td>
+                <td>${item.Name}</td>
+                <td>${item.Description}</td>
+                <td>${formatPrice(item.Price)}</td>
+                <td>${item.Status || 'Đang bán'}</td>
+                <td>
+                    <button class="btn btn-info view-btn" data-id="${item.ID}">Xem</button>
+                    <button class="btn btn-warning edit-btn" data-id="${item.ID}">Sửa</button>
+                    <button class="btn btn-danger delete-btn" data-id="${item.ID}" data-name="${item.Name}">Xóa</button>
+                </td>
+            </tr>
         `;
     }
 
-    function loadMenuItems() {
-        const filteredItems = getFilteredItems();
-        const menuGrid = document.getElementById("menu-grid");
-        const loadMoreBtn = document.getElementById("load-more-btn");
-
-        if (displayedItems === 0) menuGrid.innerHTML = "";
-
-        const itemsToShow = filteredItems.slice(displayedItems, displayedItems + itemsPerLoad);
-
-        itemsToShow.forEach((item) => {
-            menuGrid.innerHTML += createMenuItemHTML(item);
+    function loadProducts() {
+        const tbody = document.getElementById('productBody');
+        tbody.innerHTML = '';
+        productsData.forEach(product => {
+            tbody.innerHTML += createProductRow(product);
         });
-
-        displayedItems += itemsToShow.length;
-
-        if (displayedItems >= filteredItems.length) {
-            loadMoreBtn.style.display = "none";
-        } else {
-            loadMoreBtn.style.display = "inline-block";
-        }
-
-        setTimeout(() => {
-            document.querySelectorAll(".fade-in:not(.visible)").forEach((el) => {
-                el.classList.add("visible");
-            });
-        }, 100);
-
-        addCartEventListeners();
+        addProductEventListeners();
     }
 
-    // 3️⃣ Bây giờ mới được log
-    console.log("Menu Items:", menuItems);
-    console.log("Filtered Items:", getFilteredItems());
-
-    // 4️⃣ Cuối cùng mới gọi init
-    document.addEventListener("DOMContentLoaded", () => {
-        loadMenuItems();
-
-        document.querySelectorAll(".menu-category").forEach((category) => {
-            category.addEventListener("click", () => {
-                const selectedCategory = category.getAttribute("data-category");
-                filterItems(selectedCategory);
+    // ================== Event listeners cho nút ==================
+    function addProductEventListeners() {
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const product = productsData.find(p => p.ID == id);
+                if (product) {
+                    document.getElementById('view_id').textContent = product.ID;
+                    document.getElementById('view_category').textContent = product.Name_Category;
+                    document.getElementById('view_name').textContent = product.Name;
+                    document.getElementById('view_description').textContent = product.Description;
+                    document.getElementById('view_price').textContent = formatPrice(product.Price);
+                    document.getElementById('view_status').textContent = product.Status || 'Đang bán';
+                    document.getElementById('viewProductModal').style.display = 'block';
+                }
             });
         });
 
-        document.getElementById("load-more-btn").addEventListener("click", function () {
-            const loading = document.getElementById("loading");
-            this.style.display = "none";
-            loading.classList.remove("hidden");
-
-            setTimeout(() => {
-                loading.classList.add("hidden");
-                loadMenuItems();
-            }, 1000);
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.dataset.name;
+                const id = btn.dataset.id;
+                document.getElementById('delete_product_name').textContent = name;
+                document.getElementById('confirmDeleteBtn').dataset.id = id;
+                document.getElementById('deleteConfirmModal').style.display = 'block';
+            });
         });
+    }
+
+    // ================== Khởi tạo ==================
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+
+        // Modal close events
+        document.querySelectorAll('.close-btn, #cancelBtn, #cancelEditBtn, #closeViewBtn, #cancelDeleteBtn')
+            .forEach(btn => btn.addEventListener('click', () => {
+                btn.closest('.modal').style.display = 'none';
+            }));
     });
 </script>
-</body>
-</html>
 
