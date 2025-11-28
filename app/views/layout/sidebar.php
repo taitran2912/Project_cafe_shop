@@ -17,6 +17,12 @@
 
   // ===== DANH SÁCH MENU =====
   $menuItems = [
+    [
+      "title" => "Dashboard",
+      "icon"  => "fas fa-chair",
+      "link"  => "admin/dashboard",
+      "roles" => [2]
+    ],
     // Quản lý chuỗi
     [
       "title" => "Quản lý thực đơn",
@@ -94,6 +100,7 @@
       "link"  => "admin/table",
       "roles" => [2]
     ],
+    
   ];
   ?>
 
@@ -116,7 +123,7 @@
         );
       ?>
 
-      <a href="/<?= $item['link'] ?>"
+      <a href="caffeshop.hieuthuocyentam.id.vn/<?= $item['link'] ?>"
          class="nav-item <?= $isActive ? 'active' : '' ?>">
         <i class="<?= $item['icon'] ?>"></i>
         <span><?= $item['title'] ?></span>
