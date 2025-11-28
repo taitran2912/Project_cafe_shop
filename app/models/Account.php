@@ -5,8 +5,7 @@ class Account extends Model {
 
     public function getAllAccounts() {
         $query = 'SELECT *
-                FROM ' . $this->table
-                . ' LIMIT 100';
+                FROM Account LIMIT 100';
         $result = $this->db->query($query);
 
         $data = [];

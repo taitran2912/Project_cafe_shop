@@ -65,13 +65,13 @@
     [
       "title" => "Xem thực đơn",
       "icon"  => "fas fa-list",
-      "link"  => "admin/menu",
+      "link"  => "admin/POS",
       "roles" => [0, 3]
     ],
     [
       "title" => "Nhận đơn hàng",
       "icon"  => "fas fa-receipt",
-      "link"  => "admin/orders",
+      "link"  => "admin/m_orders",
       "roles" => [0, 3]
     ],
 

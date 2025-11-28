@@ -68,14 +68,14 @@ class AdminController extends Controller {
         $this->checkAuth();
         
         // Handle form submissions
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-            $this->handleUserAction();
-        }
+        // if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        //     $this->handleUserAction();
+        // }
         
-        // Handle delete via GET
-        if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-            $this->deleteAccount((int)$_GET['id']);
-        }
+        // // Handle delete via GET
+        // if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
+        //     $this->deleteAccount((int)$_GET['id']);
+        // }
         
         // Load accounts
         $accountModel = $this->model('Account');
@@ -83,7 +83,7 @@ class AdminController extends Controller {
         
         $data = [
             'title' => 'Quản lý nhân viên',
-            'action' => 'user',
+            // 'action' => 'user',
             'accounts' => $accounts
         ];
         $this->view('admin/home/index', $data);

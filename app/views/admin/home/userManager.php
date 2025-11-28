@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="<?= BASE_URL ?>public/css/user.css">
-
     <!-- Content Area -->
     <div class="content">
         <!-- Success/Error Messages -->
