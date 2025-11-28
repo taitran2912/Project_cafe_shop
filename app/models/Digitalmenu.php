@@ -31,7 +31,7 @@ class Digitalmenu extends Model {
         return $data;
     }
 
-    public function product($storeID) {
+    public function product() {
         // $stmt = $this->db->prepare("SELECT p.* 
         //                             FROM Products p 
         //                             WHERE p.Status = 'active';");

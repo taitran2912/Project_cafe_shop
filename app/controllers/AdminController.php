@@ -167,4 +167,10 @@ class AdminController extends Controller {
         $tableController->adminIndex();
     }
 
+    public function POS() {
+        require_once __DIR__ . '/POSController.php';
+        $tableController = new POSController();
+        $tableController->adminIndex();
+    }
+
 }

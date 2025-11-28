@@ -50,6 +50,12 @@ $action = $pos !== false ? substr($uriPath, $pos + strlen('/admin/')) : '';
             case 'table':
               include_once 'app/views/admin/home/table.php';
               break;
+            case 'dashboard':
+              include_once 'app/views/admin/home/dashboard.php';
+              break;
+            case 'POS':
+              include_once 'app/views/admin/home/POS.php';
+              break;
             default:
               include_once 'app/views/admin/home/dashboard.php';
               break;

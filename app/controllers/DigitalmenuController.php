@@ -15,8 +15,8 @@ class DigitalmenuController extends Controller {
         $storeAddress = $store[0]['Address'];
 
         // Lấy sản phẩm và category của store
-        $categories = $digitalmenuModel->categories($storeID);
-        $products = $digitalmenuModel->product($storeID);
+        $categories = $digitalmenuModel->categories();
+        $products = $digitalmenuModel->product();
 
         $data = [
             'title' => 'Digital Menu',
