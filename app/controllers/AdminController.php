@@ -45,7 +45,7 @@ class AdminController extends Controller {
      * Route to Product admin (menu management)
      */
     public function menu() {
-        require_once __DIR__ . 'ProductController.php';
+        require_once __DIR__ . '/ProductController.php';
         $productController = new ProductController();
         $productController->adminIndex();
     }
