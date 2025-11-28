@@ -1,11 +1,3 @@
-<?php 
-// View chỉ hiển thị dữ liệu từ Controller
-// $branches được truyền từ BranchController->adminIndex()
-// $successMessage, $errorMessage được truyền từ Controller
-?>
-
-<link rel="stylesheet" href="<?= BASE_URL ?>public/css/branch.css">
-
 <?php if (isset($successMessage) && $successMessage): ?>
 <div class="alert alert-success">
     <i class="fas fa-check-circle"></i>

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/user.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/orders.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/inventory.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/branch.css">
+
     <style>
         .page-btn {
             margin: 3px;
