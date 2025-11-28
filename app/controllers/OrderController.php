@@ -58,26 +58,35 @@ class OrderController extends Controller {
         // Load orders
         $orderModel = $this->model('Order');
         $orders = $orderModel->getPendingOrders();
-        
-        // Load order details for each order
+
+        // Load order details và tính tổng cho mỗi đơn
         foreach ($orders as &$order) {
             $order['details'] = $orderModel->getOrderDetails($order['ID']);
+
+            // Tính tổng tiền sản phẩm
+            $totalProduct = 0;
+            foreach ($order['details'] as $item) {
+                $totalProduct += $item['Quantity'] * $item['Price'];
+            }
+
+            // Cộng thêm phí vận chuyển
+            $order['Total'] = $totalProduct + $order['Shipping_Cost'];
         }
-        unset($order); // Break reference
-        
+        unset($order); // break reference
+
         $pendingCount = count(array_filter($orders, function($order) {
-            return $order['Status'] === 'pending';
+            return strtolower($order['Status']) === 'pending';
         }));
-        
+
         $data = [
             'title' => 'Quản lý đơn hàng',
             'action' => 'orders',
-            'orders' => $orders
-            // 'pendingCount' => $pendingCount,
-            // 'successMessage' => $successMessage,
-            // 'errorMessage' => $errorMessage
+            'orders' => $orders,
+            'pendingCount' => $pendingCount
         ];
+
         $this->view('admin/home/index', $data);
+
     }
     
     private function checkAuth() {

@@ -11,7 +11,8 @@ class Order extends Model {
                     o.Address,
                     a.Name as CustomerName,
                     a.Phone as CustomerPhone,
-                    b.Name as BranchName
+                    b.Name as BranchName, 
+                    o.Shipping_Cost
                   FROM Orders o
                   LEFT JOIN Customer_Profile cp ON o.ID_Customer = cp.ID
                   LEFT JOIN Account a ON cp.ID_account = a.ID
