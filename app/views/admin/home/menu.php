@@ -271,15 +271,7 @@
         </div>
     </div> 
 
-    <!-- Embed product data for JavaScript -->
-    <script>
-        const productsDataFromPHP = <?= json_encode(isset($products) ? $products : []) ?>;
-        const BASE_URL = '<?= BASE_URL ?>';
-        const hasErrorMessage = <?= (isset($errorMessage) && !empty($errorMessage)) ? 'true' : 'false' ?>;
-    </script>
-    
-    <!-- Link to external JavaScript -->
-</body>
+
 </html>
             </div>
             <div class="modal-footer">
