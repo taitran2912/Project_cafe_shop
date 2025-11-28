@@ -3,8 +3,8 @@ class POS extends Model {
     public function inforStore($user) {
         $stmt = $this->db->prepare("SELECT b.ID , b.Name, b.Address 
                                     FROM Branches b JOIN Staff s ON b.ID = s.ID_brand JOIN Account a on s.ID_account = a.ID 
-                                    WHERE a.ID = 1 AND b.Status = 'active';");
-        $stmt->bind_param("i", $storeNumber); // "i" = integer
+                                    WHERE a.ID = ? AND b.Status = 'active';");
+        $stmt->bind_param("i", $user); // "i" = integer
         $stmt->execute();
         $result = $stmt->get_result();
 
