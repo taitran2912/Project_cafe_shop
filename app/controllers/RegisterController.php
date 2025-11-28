@@ -10,7 +10,6 @@ class RegisterController extends Controller {
 
         $data = [
             'title' => 'Đăng ký',
-            
         ];
         $this->view('login/register', $data);
     }
