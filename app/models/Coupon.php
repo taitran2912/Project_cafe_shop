@@ -8,7 +8,7 @@ class Coupon extends Model {
      * Get all coupons from database
      */
     public function getAllCoupons() {
-        $query = 'SELECT * FROM ' . $this->table;
+        $query = 'SELECT * FROM Coupons';
         $result = $this->db->query($query);
 
         $data = [];
