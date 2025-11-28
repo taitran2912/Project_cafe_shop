@@ -321,6 +321,9 @@
     <?php endif; ?>
     ];
 
+    console.log("Menu Items:", menuItems);
+    console.log("Filtered Items:", getFilteredItems());
+
     let currentCategory = "all"
     let displayedItems = 0
     const itemsPerLoad = 9
