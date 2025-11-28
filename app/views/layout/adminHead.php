@@ -11,11 +11,12 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/sidebar.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/menu.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/user.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/orders.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/inventory.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/branch.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/user.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/table.css">
+
 
     <style>
         .page-btn {
