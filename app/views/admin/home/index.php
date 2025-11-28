@@ -4,6 +4,7 @@ $role = $_SESSION['user']['Role'];
 $userID = $_SESSION['user']['ID'];
 $name = $_SESSION['user']['Name'];
   
+$action = $_GET['action'];
 
 // include_once 'app/views/layout/xuly.php';
 ?>
