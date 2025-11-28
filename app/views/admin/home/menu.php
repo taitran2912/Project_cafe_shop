@@ -1,12 +1,12 @@
 
 
-        <!-- Content Header
+        Content Header
         <div class="content-header">
             <button class="btn btn-primary" id="btnAddProduct">
                 <i class="fas fa-plus"></i>
                 Thêm sản phẩm
-            </button> -->
-            <!-- <div class="search-box">
+            </button> 
+            <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." value="<?= isset($searchQuery) ? htmlspecialchars($searchQuery) : '' ?>" autocomplete="off">
                 <?php if (isset($isSearching) && $isSearching): ?>
@@ -14,15 +14,15 @@
                         <i class="fas fa-times"></i>
                     </button>
                 <?php endif; ?>
-            </div> -->
+            </div>
         </div>
 
-        <?php //if (isset($isSearching) && $isSearching && isset($products)): ?>
-            <!-- <div class="search-info">
+        <?php if (isset($isSearching) && $isSearching && isset($products)): ?>
+            <div class="search-info">
                 <i class="fas fa-info-circle"></i>
                 Tìm thấy <strong><?= count($products) ?></strong> sản phẩm với từ khóa "<strong><?= htmlspecialchars($searchQuery) ?></strong>"
-            </div> -->
-        <?php //endif; ?>
+            </div>
+        <?php endif; ?>
 
         <!-- Table Container -->
         <div class="table-container">
