@@ -60,16 +60,17 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // Data Management
-        let tables = <?= json_encode(array_map(function($t){
-            return [
-                'id' => $t['ID'],
-                'number' => $t['No'],
-                'branch' => $t['Name'],
-                'status' => $t['Status'],
-                'location' => $t['Address']
-            ];
-        }, $data['tables']), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+        let tables = [
+        <?php foreach ($data['tables'] as $table): ?>
+            { 
+                id: <?= $table['ID'] ?>, 
+                number: <?= $table['No'] ?>, 
+                branch: '<?= htmlspecialchars($table['Branch_Name'], ENT_QUOTES) ?>', 
+                status: '<?= $table['Status'] ?>',
+                location: '<?= htmlspecialchars($table['Address'], ENT_QUOTES) ?>'
+            },
+        <?php endforeach; ?>
+        ];
 
         let editingTableId = null;
 
