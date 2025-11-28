@@ -149,31 +149,5 @@
 
 <!-- JS mở/đóng modal -->
 <script>
-// 1️⃣ Đóng tất cả modal bằng nút .close-btn
-document.querySelectorAll('.close-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        btn.closest('.modal').style.display = 'none';
-    });
-});
-
-// 2️⃣ Mở modal thêm sản phẩm
-document.getElementById('btnAddProduct').addEventListener('click', () => {
-    document.getElementById('addProductModal').style.display = 'block';
-});
-
-// 3️⃣ Mở modal sửa sản phẩm và điền dữ liệu
-document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const modal = document.getElementById('editProductModal');
-        modal.style.display = 'block';
-
-        document.getElementById('edit_product_id').value = btn.dataset.id;
-        document.getElementById('editProductName').value = btn.dataset.name;
-        document.getElementById('editProductPrice').value = btn.dataset.price;
-        document.getElementById('editProductDescription').value = btn.dataset.description;
-        document.getElementById('editProductCategory').value = btn.dataset.category;
-        document.getElementById('editProductStatus').value = btn.dataset.status;
-    });
-});
 
 </script>
