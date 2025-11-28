@@ -1,7 +1,5 @@
 <?php
-
 class Order extends Model {
-    
     // Get all pending and confirmed orders with customer and branch information
     public function getPendingOrders() {
         $query = "SELECT 
@@ -11,7 +9,6 @@ class Order extends Model {
                     o.Status,
                     o.Time,
                     o.Address,
-                    o.Total,
                     a.Name as CustomerName,
                     a.Phone as CustomerPhone,
                     b.Name as BranchName
@@ -19,7 +16,7 @@ class Order extends Model {
                   LEFT JOIN Customer_Profile cp ON o.ID_Customer = cp.ID
                   LEFT JOIN Account a ON cp.ID_account = a.ID
                   LEFT JOIN Branches b ON o.ID_Branch = b.ID
-                  WHERE o.Status IN ('pending', 'confirmed')
+                  WHERE o.Status IN ('Pending', 'Confirmed')
                   ORDER BY o.Time DESC, o.ID DESC";
         
         $result = $this->db->query($query);
