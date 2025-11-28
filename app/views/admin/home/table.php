@@ -64,11 +64,11 @@
         let tables = [
 <?php foreach ($tables as $table): ?>
             { 
-                id: <?= $table['ID'] ?>, 
-                number: <?= $table['No'] ?>, 
-                branch: '<?= htmlspecialchars($table['Branch_Name'], ENT_QUOTES) ?>', 
-                status: '<?= $table['Status'] ?>' 
-                location: '<?= htmlspecialchars($table['Address'], ENT_QUOTES) ?>'
+                id: <?= $tables['ID'] ?>, 
+                number: <?= $tables['No'] ?>, 
+                branch: '<?= htmlspecialchars($tables['Branch_Name'], ENT_QUOTES) ?>', 
+                status: '<?= $tables['Status'] ?>' 
+                location: '<?= htmlspecialchars($tables['Address'], ENT_QUOTES) ?>'
             },
 <?php endforeach; ?>
         ];

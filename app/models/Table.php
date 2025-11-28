@@ -1,6 +1,5 @@
 <?php
 class Table extends Model {
-    
    public function getAllTables() {
         $query = "SELECT t.ID, t.ID_Brach, t.No, t.Status, b.Name, b.Address 
                     FROM Table_Coffee t 
