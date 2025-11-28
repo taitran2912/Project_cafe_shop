@@ -2,7 +2,7 @@
     <button class="btn-menu-toggle">
         <i class="fas fa-bars"></i>
     </button>
-    <h1 class="page-title">Quản lý Chi nhánh</h1>
+    <h1 class="page-title"><?= $data['title']?></h1>
     <div class="top-bar-actions">
         <button class="btn-notification">
         <i class="fas fa-bell"></i>
