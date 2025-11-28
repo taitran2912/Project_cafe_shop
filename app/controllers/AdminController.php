@@ -14,7 +14,7 @@ class AdminController extends Controller {
         }
 
         $role = $_SESSION['user']['Role'];
-        if (!in_array($role, [1, 2, 3])) {
+        if (!in_array($role, [0, 1, 2, 3])) {
             echo "<script>
                 alert('Bạn không có quyền truy cập trang này!');
                 window.location.href = '" . BASE_URL . "login_admin';
