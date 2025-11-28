@@ -55,26 +55,26 @@ class CouponController extends Controller {
         $allCoupons = $couponModel->getAllCoupons();
         
         // Filter coupons nếu đang search
-        // if ($isSearching) {
-        //     $coupons = array_filter($allCoupons, function($coupon) use ($searchQuery) {
-        //         $searchLower = strtolower($searchQuery);
-        //         return stripos($coupon['Code'], $searchLower) !== false ||
-        //                stripos($coupon['Description'], $searchLower) !== false ||
-        //                stripos($coupon['Discount_value'], $searchLower) !== false;
-        //     });
-        //     $coupons = array_values($coupons);
-        // } else {
-        //     $coupons = $allCoupons;
-        // }
+        if ($isSearching) {
+            $coupons = array_filter($allCoupons, function($coupon) use ($searchQuery) {
+                $searchLower = strtolower($searchQuery);
+                return stripos($coupon['Code'], $searchLower) !== false ||
+                       stripos($coupon['Description'], $searchLower) !== false ||
+                       stripos($coupon['Discount_value'], $searchLower) !== false;
+            });
+            $coupons = array_values($coupons);
+        } else {
+            $coupons = $allCoupons;
+        }
         
         $data = [
             'title' => 'Quản lý khuyến mãi',
             'action' => 'coupon',
-            'coupons' => $coupons,
-            'successMessage' => $successMessage,
-            'errorMessage' => $errorMessage,
-            'searchQuery' => $searchQuery,
-            'isSearching' => $isSearching
+            'coupons' => $coupons
+            // 'successMessage' => $successMessage,
+            // 'errorMessage' => $errorMessage,
+            // 'searchQuery' => $searchQuery,
+            // 'isSearching' => $isSearching
         ];
         $this->view('admin/home/index', $data);
     }
