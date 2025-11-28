@@ -1,138 +1,150 @@
 <?php
 
+/**
+ * AdminController - Main admin routing controller
+ * Routes admin requests to appropriate specialized controllers
+ */
 class AdminController extends Controller {
-    public function index() {
+    
+    /**
+     * Check authentication for all admin actions
+     */
+    private function checkAuth() {
         if (!isset($_SESSION['user']) || empty($_SESSION['user']['ID'])) {
             echo "<script>
                 alert('Vui lòng đăng nhập để truy cập!');
-                
                 window.location.href = '" . BASE_URL . "login_admin';
             </script>";
             exit();
         }
 
         $role = $_SESSION['user']['Role'];
-        $userID = $_SESSION['user']['ID'];
-
-        if (!in_array($role, [2, 1, 3])) {
+        if (!in_array($role, [1, 2, 3])) {
             echo "<script>
                 alert('Bạn không có quyền truy cập trang này!');
                 window.location.href = '" . BASE_URL . "login_admin';
             </script>";
             exit();
         }
+    }
 
-
+    /**
+     * Admin dashboard - default redirects to menu
+     */
+    public function index() {
+        $this->checkAuth();
+        
+        // Redirect to menu by default
+        header('Location: ' . BASE_URL . 'admin/menu');
+        exit;
+    }
+    
+    /**
+     * Route to Product admin (menu management)
+     */
+    public function menu() {
+        require_once __DIR__ . '/ProductController.php';
+        $productController = new ProductController();
+        $productController->adminIndex();
+    }
+    
+    /**
+     * Route to Account admin (user management)
+     */
+    public function user() {
+        $this->checkAuth();
+        
+        // Handle form submissions
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+            $this->handleUserAction();
+        }
+        
+        // Handle delete via GET
+        if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
+            $this->deleteAccount((int)$_GET['id']);
+        }
+        
+        // Load accounts
+        $accountModel = $this->model('Account');
+        $accounts = $accountModel->getAllAccounts();
+        
         $data = [
-            'title' => 'admin',
-            'role' => $role,
-            'userID' => $userID
+            'title' => 'Quản lý nhân viên',
+            'action' => 'user',
+            'accounts' => $accounts
         ];
         $this->view('admin/home/index', $data);
     }
-   public function branch() {
-        $branch = $this->model('Contact');
-        $branches = $branch->getAllBranch();
-
-        $data = [
-            'title' => 'Quản lý chi nhánh',
-            'branches' => $branches
-        ];
-        $this->view('admin/home/index', $data);
-         
-    }   
-    public function inventory() {
-        $inventory = $this->model('Inventory');
-        $inventories = $inventory->getAllInventory();
-
-        $data = [
-            'title' => 'Quản lý kho',
-            'inventories' => $inventories
-        ];
-        $this->view('admin/home/index', $data);
-         
-    }   
-
-    public function store() {
-        $name    = $_POST['name'] ?? '';
-        $address = $_POST['address'] ?? '';
-        $phone   = $_POST['phone'] ?? '';
-        $status  = $_POST['status'] ?? 'active';
-
-        $branchModel = $this->model('Branch');
-        $result = $branchModel->addBranch($name, $address, $phone, $status);
-
-        header('Content-Type: application/json');
-
-        if ($result) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Thêm chi nhánh thành công!'
-            ]);
+    
+    private function handleUserAction() {
+        require_once __DIR__ . '/AccountController.php';
+        $accountController = new AccountController();
+        $action = $_POST['action'];
+        
+        if ($action === 'add_account') {
+            $result = $accountController->store($_POST);
+            if ($result) {
+                header('Location: ' . BASE_URL . 'admin/user?success=add');
+            } else {
+                header('Location: ' . BASE_URL . 'admin/user?error=add');
+            }
+            exit;
+        } elseif ($action === 'edit_account') {
+            $accountId = (int)($_POST['account_id'] ?? 0);
+            $result = $accountController->update($accountId, $_POST);
+            if ($result) {
+                header('Location: ' . BASE_URL . 'admin/user?success=edit');
+            } else {
+                header('Location: ' . BASE_URL . 'admin/user?error=edit');
+            }
+            exit;
+        }
+    }
+    
+    private function deleteAccount($accountId) {
+        require_once __DIR__ . '/AccountController.php';
+        $accountController = new AccountController();
+        if ($accountController->delete($accountId)) {
+            header('Location: ' . BASE_URL . 'admin/user?success=delete');
         } else {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Thêm chi nhánh thất bại! Vui lòng thử lại.'
-            ]);
+            header('Location: ' . BASE_URL . 'admin/user?error=delete');
         }
         exit;
     }
-    public function update() {
-        $id = $_POST['id'];
-        $name = $_POST['name'];
-        $address = $_POST['address'];
-        $phone = $_POST['phone'];
-        $status = $_POST['status'];
-
-        $branchModel = $this->model('Branch');
-
-        $ok = $branchModel->updateBranch($id, $name, $address, $phone, $status);
-
-        echo json_encode([
-            "success" => $ok,
-            "message" => $ok ? "Cập nhật thành công!" : "Cập nhật thất bại!"
-        ]);
-    }
-
-    public function delete() {
-        $id = $_POST['id'];
-
-        $branchModel = $this->model('Branch');
-        $ok = $branchModel->deleteBranch($id);
-
-        echo json_encode([
-            "success" => $ok,
-            "message" => $ok ? "Xóa thành công!" : "Xóa thất bại!"
-        ]);
-    }
-
-
-    public function menu() { // từ function menu render ra view thực đơn ở trang index
-        $productModel = $this->model('Product');
-        $data = [
-            'title' => 'Sản phẩm',
-            'products' => $productModel->getAllProducts(),
-            // 'pagination' => $productModel->paginate()
-
-        ];
-        $this->view('admin/home/index', $data);
-    }
-
-    public function user() {
-        $userModel = $this->model('Account');
-        $data = [
-            'title' => 'Người dùng',
-            'users' => $userModel->getAllAccounts(),
-        ];
-        $this->view('admin/home/index', $data);
-    }
+    
+    /**
+     * Route to Coupon admin
+     */
     public function coupon() {
-        $couponModel = $this->model('Coupon');
-        $data = [
-            'title' => 'Khuyến mãi',
-            'coupons' => $couponModel->getAllCoupons(),
-        ];
-        $this->view('admin/home/index', $data);
+        require_once __DIR__ . '/CouponController.php';
+        $couponController = new CouponController();
+        $couponController->adminIndex();
     }
-
+    
+    /**
+     * Route to Branch admin
+     */
+    public function branch() {
+        require_once __DIR__ . '/BranchController.php';
+        $branchController = new BranchController();
+        $branchController->adminIndex();
+    }
+    
+    /**
+     * Route to Inventory admin
+     */
+    public function inventory() {
+        require_once __DIR__ . '/InventoryController.php';
+        $inventoryController = new InventoryController();
+        $inventoryController->adminIndex();
+    }
+    
+    /**
+     * Route to Order admin
+     */
+    public function orders() {
+        require_once __DIR__ . '/OrderController.php';
+        $orderController = new OrderController();
+        $orderController->adminIndex();
+    }
 }

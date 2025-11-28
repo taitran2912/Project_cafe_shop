@@ -1,63 +1,21 @@
 <?php 
-// Form submissions are handled in index.php BEFORE HTML output
-
-// Initialize messages
-$successMessage = '';
-$errorMessage = '';
-
-// Handle success messages from redirect
-if (isset($_GET['success'])) {
-    switch ($_GET['success']) {
-        case 'add':
-            $successMessage = 'Thêm khuyến mãi thành công!';
-            break;
-        case 'edit':
-            $successMessage = 'Cập nhật khuyến mãi thành công!';
-            break;
-        case 'delete':
-            $successMessage = 'Xóa khuyến mãi thành công!';
-            break;
-    }
-}
-
-// Handle search
-$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
-$isSearching = !empty($searchQuery);
-
-// Get coupons
-if (!isset($coupons)) {
-    $couponModel = new Coupon();
-    $allcoupons = $couponModel->getAllCoupons();
-} else {
-    $allcoupons = $coupons;
-}
-
-// Filter coupons if searching
-if ($isSearching) {
-    $coupons = array_filter($allcoupons, function($coupon) use ($searchQuery) {
-        $searchLower = strtolower($searchQuery);
-        return stripos($coupon['Code'], $searchLower) !== false ||
-               stripos($coupon['Description'], $searchLower) !== false ||
-               stripos($coupon['Discount_value'], $searchLower) !== false;
-    });
-    $coupons = array_values($coupons);
-} else {
-    $coupons = $allcoupons;
-}
-
+// View chỉ hiển thị dữ liệu từ Controller
+// $coupons, $successMessage, $errorMessage, $searchQuery, $isSearching được truyền từ CouponController->adminIndex()
 ?>
+
+<link rel="stylesheet" href="<?= BASE_URL ?>public/css/coupon.css">
 
     <!-- Content Area -->
     <div class="content">
         <!-- Success/Error Messages -->
-        <?php if (!empty($successMessage)): ?>
+        <?php if (isset($successMessage) && !empty($successMessage)): ?>
             <div class="alert alert-success">
                 <i class="fas fa-check-circle"></i>
                 <?php echo htmlspecialchars($successMessage); ?>
             </div>
         <?php endif; ?>
         
-        <?php if (!empty($errorMessage)): ?>
+        <?php if (isset($errorMessage) && !empty($errorMessage)): ?>
             <div class="alert alert-error">
                 <i class="fas fa-exclamation-circle"></i>
                 <?php echo htmlspecialchars($errorMessage); ?>
@@ -97,8 +55,8 @@ if ($isSearching) {
                         <th>Mã KM</th>
                         <th>Mô tả</th>
                         <th>Giá trị</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày kết thúc</th>
+                        <th>Giờ bắt đầu</th>
+                        <th>Giờ kết thúc</th>
                         <th>Số lượng</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
@@ -116,7 +74,7 @@ if ($isSearching) {
     <!-- Modal Thêm Khuyến Mãi -->
     <div id="addcouponModal" class="modal">
         <div class="modal-content">
-            <form id="addcouponForm" method="POST" action="">
+            <form id="addcouponForm" method="POST" action="<?= BASE_URL ?>admin/coupon">
                 <div class="modal-header">
                     <h2><i class="fas fa-ticket-alt"></i> Thêm Khuyến Mãi Mới</h2>
                     <button type="button" class="close-btn" id="closeModal">&times;</button>
@@ -146,16 +104,16 @@ if ($isSearching) {
 
                     <div class="form-group">
                         <label for="couponStartDate">
-                            <i class="fas fa-calendar-alt"></i> Ngày bắt đầu <span class="required">*</span>
+                            <i class="fas fa-clock"></i> Giờ bắt đầu <span class="required">*</span>
                         </label>
-                        <input type="date" id="couponStartDate" name="start_date" required>
+                        <input type="time" id="couponStartDate" name="start_date" required>
                     </div>
 
                     <div class="form-group">
                         <label for="couponEndDate">
-                            <i class="fas fa-calendar-check"></i> Ngày kết thúc <span class="required">*</span>
+                            <i class="fas fa-clock"></i> Giờ kết thúc <span class="required">*</span>
                         </label>
-                        <input type="date" id="couponEndDate" name="end_date" required>
+                        <input type="time" id="couponEndDate" name="end_date" required>
                     </div>
 
                     <div class="form-group">
@@ -243,7 +201,7 @@ if ($isSearching) {
     <!-- Modal Sửa Khuyến Mãi -->
     <div id="editcouponModal" class="modal">
         <div class="modal-content">
-            <form id="editcouponForm" method="POST" action="">
+            <form id="editcouponForm" method="POST" action="<?= BASE_URL ?>admin/coupon">
                 <div class="modal-header">
                     <h2><i class="fas fa-edit"></i> Sửa Khuyến Mãi</h2>
                     <button type="button" class="close-btn" id="closeEditModal">&times;</button>
@@ -274,16 +232,16 @@ if ($isSearching) {
 
                     <div class="form-group">
                         <label for="editcouponStartDate">
-                            <i class="fas fa-calendar-alt"></i> Ngày bắt đầu <span class="required">*</span>
+                            <i class="fas fa-clock"></i> Giờ bắt đầu <span class="required">*</span>
                         </label>
-                        <input type="date" id="editcouponStartDate" name="start_date" required>
+                        <input type="time" id="editcouponStartDate" name="start_date" required>
                     </div>
 
                     <div class="form-group">
                         <label for="editcouponEndDate">
-                            <i class="fas fa-calendar-check"></i> Ngày kết thúc <span class="required">*</span>
+                            <i class="fas fa-clock"></i> Giờ kết thúc <span class="required">*</span>
                         </label>
-                        <input type="date" id="editcouponEndDate" name="end_date" required>
+                        <input type="time" id="editcouponEndDate" name="end_date" required>
                     </div>
 
                     <div class="form-group">
@@ -343,7 +301,15 @@ if ($isSearching) {
         </div>
     </div>
 
-    <style>
+    <script>
+        // Truyền data từ PHP sang JavaScript
+        const couponsData = <?php echo json_encode($coupons); ?>;
+        const BASE_URL = '<?= BASE_URL ?>';
+    </script>
+    <script src="<?= BASE_URL ?>public/js/admin/coupon.js"></script>
+</body>
+</html>
+    <script disabled>
         * {
             margin: 0;
             padding: 0;
@@ -1057,33 +1023,33 @@ if ($isSearching) {
         body.modal-open {
             overflow: hidden;
         }
-    </style>
-
+    <!-- JavaScript đã được tách ra file coupon.js -->
     <script>
-        // coupon data from PHP
+        // Truyền data từ PHP sang JavaScript
         const couponsData = <?php echo json_encode($coupons); ?>;
+        const BASE_URL = '<?= BASE_URL ?>';
+    </script>
+    <script src="<?= BASE_URL ?>public/js/admin/coupon.js"></script>
+</body>
+</html>
+
+    <script disabled>
+        // coupon data from PHP
+        const couponsData = [];
         
         // Pagination settings
         let currentPage = 1;
         const itemsPerPage = 5;
         let totalPages = Math.ceil(couponsData.length / itemsPerPage);
 
-        // Format date to dd/mm/yyyy or display time if it's time format
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            // If it's a time format (HH:MM:SS), just return it
-            if (dateString.match(/^\d{2}:\d{2}:\d{2}$/)) {
-                return dateString;
+        // Format time for display (HH:MM:SS -> HH:MM)
+        function formatTime(timeString) {
+            if (!timeString) return '';
+            // If it's HH:MM:SS, remove seconds
+            if (timeString.match(/^\d{2}:\d{2}:\d{2}$/)) {
+                return timeString.substring(0, 5); // Get HH:MM
             }
-            // Otherwise try to parse as date
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) {
-                return dateString; // Return original if invalid
-            }
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+            return timeString;
         }
 
         // Display coupons for current page
@@ -1117,8 +1083,8 @@ if ($isSearching) {
                     <td>${escapeHtml(coupon.Code)}</td>
                     <td>${escapeHtml(coupon.Description)}</td>
                     <td>${escapeHtml(coupon.Discount_value)}</td>
-                    <td>${formatDate(coupon.StartDate)}</td>
-                    <td>${formatDate(coupon.EndDate)}</td>
+                    <td>${formatTime(coupon.Start)}</td>
+                    <td>${formatTime(coupon.End)}</td>
                     <td>${coupon.Quantity}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
@@ -1128,8 +1094,8 @@ if ($isSearching) {
                                 data-code="${escapeHtml(coupon.Code)}"
                                 data-description="${escapeHtml(coupon.Description)}"
                                 data-value="${escapeHtml(coupon.Discount_value)}"
-                                data-start="${coupon.StartDate}"
-                                data-end="${coupon.EndDate}"
+                                data-start="${coupon.Start}"
+                                data-end="${coupon.End}"
                                 data-quantity="${coupon.Quantity}"
                                 data-status="${coupon.Status}">
                                 <i class="fas fa-eye"></i>
@@ -1139,8 +1105,8 @@ if ($isSearching) {
                                 data-code="${escapeHtml(coupon.Code)}"
                                 data-description="${escapeHtml(coupon.Description)}"
                                 data-value="${escapeHtml(coupon.Discount_value)}"
-                                data-start="${coupon.StartDate}"
-                                data-end="${coupon.EndDate}"
+                                data-start="${coupon.Start}"
+                                data-end="${coupon.End}"
                                 data-quantity="${coupon.Quantity}"
                                 data-status="${coupon.Status}">
                                 <i class="fas fa-edit"></i>
@@ -1237,8 +1203,8 @@ if ($isSearching) {
                     document.getElementById('view_description').textContent = this.dataset.description;
                     document.getElementById('view_value').textContent = this.dataset.value;
                     document.getElementById('view_quantity').textContent = this.dataset.quantity;
-                    document.getElementById('view_start_date').textContent = formatDate(this.dataset.start);
-                    document.getElementById('view_end_date').textContent = formatDate(this.dataset.end);
+                    document.getElementById('view_start_date').textContent = formatTime(this.dataset.start);
+                    document.getElementById('view_end_date').textContent = formatTime(this.dataset.end);
                     
                     const statusSpan = document.getElementById('view_status');
                     let statusClass = 'status-active';
@@ -1263,8 +1229,8 @@ if ($isSearching) {
                     document.getElementById('editcouponCode').value = this.dataset.code;
                     document.getElementById('editcouponDescription').value = this.dataset.description;
                     document.getElementById('editcouponValue').value = this.dataset.value;
-                    document.getElementById('editcouponStartDate').value = this.dataset.start;
-                    document.getElementById('editcouponEndDate').value = this.dataset.end;
+                    document.getElementById('editcouponStartDate').value = formatTime(this.dataset.start);
+                    document.getElementById('editcouponEndDate').value = formatTime(this.dataset.end);
                     document.getElementById('editcouponQuantity').value = this.dataset.quantity;
                     document.getElementById('editcouponStatus').value = this.dataset.status;
 
@@ -1341,10 +1307,7 @@ if ($isSearching) {
         // Confirm delete
         document.getElementById('confirmDeleteBtn').onclick = function() {
             if (deletecouponId) {
-                const currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.set('action', 'delete');
-                currentUrl.searchParams.set('id', deletecouponId);
-                window.location.href = currentUrl.toString();
+                window.location.href = '<?= BASE_URL ?>admin/coupon?action=delete&id=' + deletecouponId;
             }
         };
 
@@ -1466,9 +1429,5 @@ if ($isSearching) {
             }
         });
 
-        // Initialize on page load
-        displaycoupons(currentPage);
-        displayPagination();
+        // CODE ĐÃ CHUYỂN SANG coupon.js
     </script>
-</body>
-</html>
