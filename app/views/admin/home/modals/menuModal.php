@@ -167,7 +167,6 @@ document.querySelectorAll('.edit-btn').forEach(btn => {
         const modal = document.getElementById('editProductModal');
         modal.style.display = 'block';
 
-        // Lấy dữ liệu từ data-attributes
         document.getElementById('edit_product_id').value = btn.dataset.id;
         document.getElementById('editProductName').value = btn.dataset.name;
         document.getElementById('editProductPrice').value = btn.dataset.price;

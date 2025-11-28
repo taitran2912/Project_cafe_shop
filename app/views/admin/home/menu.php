@@ -74,13 +74,30 @@
                 <td>${formatPrice(item.Price)}</td>
                 <td>${item.Status || 'Đang bán'}</td>
                 <td>
-                    <button class="btn btn-info view-btn" data-id="${item.ID}">Xem</button>
-                    <button class="btn btn-warning edit-btn" data-id="${item.ID}">Sửa</button>
+                    <button class="btn btn-info view-btn" 
+                            data-id="${item.ID}"
+                            data-name="${item.Name}"
+                            data-category="${item.CategoryID}"
+                            data-price="${item.Price}"
+                            data-status="${item.Status || 'active'}"
+                            data-description="${item.Description}">
+                        Xem
+                    </button>
+                    <button class="btn btn-warning edit-btn" 
+                            data-id="${item.ID}"
+                            data-name="${item.Name}"
+                            data-category="${item.CategoryID}"
+                            data-price="${item.Price}"
+                            data-status="${item.Status || 'active'}"
+                            data-description="${item.Description}">
+                        Sửa
+                    </button>
                     <button class="btn btn-danger delete-btn" data-id="${item.ID}" data-name="${item.Name}">Xóa</button>
                 </td>
             </tr>
         `;
     }
+
 
     function loadProducts() {
         const tbody = document.getElementById('productBody');
