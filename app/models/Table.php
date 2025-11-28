@@ -2,7 +2,9 @@
 class Table extends Model {
     
    public function getAllTables() {
-        $query = "SELECT * FROM Tables";
+        $query = "SELECT t.ID, t.ID_Brach, t.No, t.Status, b.Name, b.Address 
+                    FROM Table_Coffee t 
+                    JOIN Branches b ON t.ID_Brach = b.ID ";
         $result = $this->db->query($query);
         
         $data = [];

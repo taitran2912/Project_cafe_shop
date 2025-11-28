@@ -68,6 +68,7 @@
                 number: <?= $table['No'] ?>, 
                 branch: '<?= htmlspecialchars($table['Branch_Name'], ENT_QUOTES) ?>', 
                 status: '<?= $table['Status'] ?>' 
+                location: '<?= htmlspecialchars($table['Address'], ENT_QUOTES) ?>'
             },
 <?php endforeach; ?>
         ];
@@ -83,6 +84,7 @@
                 const tableCard = document.createElement('div');
                 tableCard.className = 'table-card';
 
+
                 tableCard.innerHTML = `
                     <div class="table-number">Bàn ${table.number}</div>
                     <span class="table-status ${statusClass}">${statusText}</span>
@@ -90,6 +92,10 @@
                         <div class="info-row">
                             <span class="info-label">Chi nhánh:</span>
                             <span class="info-value">${table.branch}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Vị trí:</span>
+                            <span class="info-value">${table.location}</span>
                         </div>
                     </div>
                     <div class="table-actions">
