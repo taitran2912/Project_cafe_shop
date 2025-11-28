@@ -68,7 +68,7 @@ function createProductRow(item) {
                 <button class="btn btn-info view-btn" 
                         data-id="${item.ID}"
                         data-name="${item.Name}"
-                        data-category="${item.Name_Category}"
+                        data-category="${item.CategoryID}"
                         data-price="${item.Price}"
                         data-status="${item.Status || 'active'}"
                         data-description="${item.Description}">
