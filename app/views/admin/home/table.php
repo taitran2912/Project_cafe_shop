@@ -82,10 +82,8 @@
             tablesToRender.forEach(table => {
             const tableCard = document.createElement('div');
             tableCard.className = 'table-card';
-
-            // Khai báo statusClass và statusText dựa trên table.status
-            const statusClass = table.status === 'occupied' ? 'occupied' : '';
-            const statusText = table.status === 'occupied' ? 'Đang có khách' : 'Trống';
+            let statusClass = table.status === 'active' ? 'status-active' : 'status-inactive';
+            let statusText = table.status === 'active' ? 'Hoạt động' : 'Không hoạt động';
 
             tableCard.innerHTML = `
                 <div class="table-number">Bàn ${table.number}</div>
