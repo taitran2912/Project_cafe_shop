@@ -68,18 +68,12 @@
       "link"  => "admin/POS",
       "roles" => [0, 3]
     ],
-    [
-      "title" => "Nhận đơn hàng",
-      "icon"  => "fas fa-receipt",
-      "link"  => "admin/m_orders",
-      "roles" => [0, 3]
-    ],
 
     // Quản lý cửa hàng
     [
       "title" => "Đơn hàng",
       "icon"  => "fas fa-shopping-cart",
-      "link"  => "admin/orders",
+      "link"  => "admin/m_orders",
       "roles" => [0, 2]
     ],
     [
