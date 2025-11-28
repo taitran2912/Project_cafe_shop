@@ -1,11 +1,11 @@
 
 
-        <!-- Content Header -->
+        <!-- Content Header
         <div class="content-header">
             <button class="btn btn-primary" id="btnAddProduct">
                 <i class="fas fa-plus"></i>
                 Thêm sản phẩm
-            </button>
+            </button> -->
             <!-- <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." value="<?= isset($searchQuery) ? htmlspecialchars($searchQuery) : '' ?>" autocomplete="off">
@@ -169,7 +169,7 @@
     </div>
 
     <!-- Modal Sửa Sản Phẩm -->
-    <div id="editProductModal" class="modal">
+    <!-- <div id="editProductModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2><i class="fas fa-edit"></i> Sửa Sản Phẩm</h2>
@@ -243,9 +243,9 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> -->
 
-    <!-- Modal Xác Nhận Xóa -->
+    <!-- Modal Xác Nhận Xóa
     <div id="deleteConfirmModal" class="modal">
         <div class="modal-content modal-small">
             <div class="modal-header modal-header-danger">
@@ -269,17 +269,16 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Embed product data for JavaScript -->
     <script>
-        const productsDataFromPHP = <?= json_encode(isset($products) ? $products : []) ?>;
-        const BASE_URL = '<?= BASE_URL ?>';
-        const hasErrorMessage = <?= (isset($errorMessage) && !empty($errorMessage)) ? 'true' : 'false' ?>;
+        // const productsDataFromPHP = <?= json_encode(isset($products) ? $products : []) ?>;
+        // const BASE_URL = '<?= BASE_URL ?>';
+        // const hasErrorMessage = <?= (isset($errorMessage) && !empty($errorMessage)) ? 'true' : 'false' ?>;
     </script>
     
     <!-- Link to external JavaScript -->
-    <script src="<?= BASE_URL ?>public/js/admin/menu.js"></script>
 </body>
 </html>
             </div>
