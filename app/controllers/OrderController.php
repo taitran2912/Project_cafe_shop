@@ -13,47 +13,47 @@ class OrderController extends Controller {
         $this->checkAuth();
         
         // Handle AJAX request for pending count
-        if (isset($_GET['action']) && $_GET['action'] === 'get_pending_count') {
-            $this->getPendingCount();
-        }
+        // if (isset($_GET['action']) && $_GET['action'] === 'get_pending_count') {
+        //     $this->getPendingCount();
+        // }
         
-        // Handle confirm order
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'confirm_order') {
-            $this->confirm();
-        }
+        // // Handle confirm order
+        // if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'confirm_order') {
+        //     $this->confirm();
+        // }
         
-        // Handle AJAX update item status
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_item_status') {
-            $this->updateItemStatus();
-        }
+        // // Handle AJAX update item status
+        // if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_item_status') {
+        //     $this->updateItemStatus();
+        // }
         
         // Initialize messages
-        $successMessage = '';
-        $errorMessage = '';
+        // $successMessage = '';
+        // $errorMessage = '';
 
-        // Handle success messages from redirect
-        if (isset($_GET['success'])) {
-            switch ($_GET['success']) {
-                case 'confirm':
-                    $successMessage = 'Xác nhận đơn hàng thành công!';
-                    break;
-                case 'update_item':
-                    $successMessage = 'Cập nhật trạng thái món thành công!';
-                    break;
-            }
-        }
+        // // Handle success messages from redirect
+        // if (isset($_GET['success'])) {
+        //     switch ($_GET['success']) {
+        //         case 'confirm':
+        //             $successMessage = 'Xác nhận đơn hàng thành công!';
+        //             break;
+        //         case 'update_item':
+        //             $successMessage = 'Cập nhật trạng thái món thành công!';
+        //             break;
+        //     }
+        // }
 
-        // Handle error messages
-        if (isset($_GET['error'])) {
-            switch ($_GET['error']) {
-                case 'confirm':
-                    $errorMessage = 'Xác nhận đơn hàng thất bại!';
-                    break;
-                case 'update_item':
-                    $errorMessage = 'Cập nhật trạng thái món thất bại!';
-                    break;
-            }
-        }
+        // // Handle error messages
+        // if (isset($_GET['error'])) {
+        //     switch ($_GET['error']) {
+        //         case 'confirm':
+        //             $errorMessage = 'Xác nhận đơn hàng thất bại!';
+        //             break;
+        //         case 'update_item':
+        //             $errorMessage = 'Cập nhật trạng thái món thất bại!';
+        //             break;
+        //     }
+        // }
         
         // Load orders
         $orderModel = $this->model('Order');
@@ -72,10 +72,10 @@ class OrderController extends Controller {
         $data = [
             'title' => 'Quản lý đơn hàng',
             'action' => 'orders',
-            'orders' => $orders,
-            'pendingCount' => $pendingCount,
-            'successMessage' => $successMessage,
-            'errorMessage' => $errorMessage
+            'orders' => $orders
+            // 'pendingCount' => $pendingCount,
+            // 'successMessage' => $successMessage,
+            // 'errorMessage' => $errorMessage
         ];
         $this->view('admin/home/index', $data);
     }
