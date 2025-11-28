@@ -21,7 +21,7 @@
       "title" => "Dashboard",
       "icon"  => "fas fa-chair",
       "link"  => "admin/dashboard",
-      "roles" => [0, 1, 2, 3]
+      "roles" => [0, 1, 2, 3  ]
     ],
     // Quản lý chuỗi
     [
@@ -123,7 +123,7 @@
         );
       ?>
 
-      <a href="caffeshop.hieuthuocyentam.id.vn/<?= $item['link'] ?>"
+      <a href="https://caffeshop.hieuthuocyentam.id.vn/<?= $item['link'] ?>"
          class="nav-item <?= $isActive ? 'active' : '' ?>">
         <i class="<?= $item['icon'] ?>"></i>
         <span><?= $item['title'] ?></span>
