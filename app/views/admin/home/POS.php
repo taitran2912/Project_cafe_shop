@@ -69,10 +69,7 @@
         <!-- Right Sidebar: Cart -->
         <div class="col-lg-3 d-none d-lg-block">
             <div class="cart-sidebar position-sticky" style="top: 20px;">
-                <div class="search-box mb-3">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="form-control" placeholder="Bạn đang cần tìm món gì?">
-                </div>
+                
 
                 <?php if(isset($data['tableNumber'])): ?>
                     <div class="d-flex justify-content-between align-items-center mb-3">
