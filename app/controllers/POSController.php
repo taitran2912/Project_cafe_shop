@@ -49,6 +49,7 @@ class POSController extends Controller {
             'tableNumber' => $tableNumber,
             'storeID' => $storeID,
             'storeName' => $storeName,
+            'userID' => $user, 
             'storeAddress' => $storeAddress,
             'categories' => $categories,
             'products' => $products
