@@ -50,15 +50,13 @@ class AdminController extends Controller {
         // $productController->adminIndex();
 
         $productModel = $this->model('Menu');
-
         $categories = $productModel->getAllCategory();
         $products = $productModel->getAll();
 
         $data = [
             'title' => 'Thực đơn',
             'categories' => $categories,
-            'products' => $products,
-            'js' => 'menu'
+            'products' => $products
         ];
         $this->view('admin/home/index', $data);
     }
