@@ -34,9 +34,9 @@ class POSController extends Controller {
         //     die("Table not found or inactive.");
         // }
 
-        $storeID = $store[0]['ID'];
-        $storeName = $store[0]['Name'];
-        $storeAddress = $store[0]['Address'];
+        $storeID = $store['ID'];
+        $storeName = $store['Name'];
+        $storeAddress = $store['Address'];
 
         // $table = $POSModel->tableByStore($storeID);
 

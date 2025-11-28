@@ -1,7 +1,7 @@
 <?php
 class POS extends Model {
     public function inforStore($user) {
-        $stmt = $this->db->prepare("SELECT b.ID , b.Name, b.Address 
+        $stmt = $this->db->prepare("SELECT b.ID ID, b.Name Name, b.Address Address
                                     FROM Branches b JOIN Staff s ON b.ID = s.ID_brand JOIN Account a on s.ID_account = a.ID 
                                     WHERE a.ID = ? AND b.Status = 'active';");
         $stmt->bind_param("i", $user); // "i" = integer
