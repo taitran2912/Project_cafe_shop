@@ -107,7 +107,7 @@ class ProductController extends Controller {
         $this->checkAuth();
 
         // --- Handle Actions ---
-        $this->handleAdminRequests();
+        // $this->handleAdminRequests();
 
         // --- Messages ---
         $successMessage = $this->getSuccessMessage();
@@ -120,7 +120,7 @@ class ProductController extends Controller {
             'errorMessage'    => $errorMessage,
         ];
 
-        $this->view('admin/products/index', $data);
+        $this->view('admin/home/index', $data);
     }
 
     private function handleAdminRequests(){
