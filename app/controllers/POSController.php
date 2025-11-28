@@ -30,9 +30,9 @@ class POSController extends Controller {
         // $store = $POSModel->inforStore($user);
 
 
-        if (empty($store)) {
-            die("Table not found or inactive.");
-        }
+        // if (empty($store)) {
+        //     die("Table not found or inactive.");
+        // }
 
         // $storeID = $store[0]['ID'];
         // $storeName = $store[0]['Name'];
