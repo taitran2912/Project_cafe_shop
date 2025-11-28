@@ -78,7 +78,7 @@ class OrderController extends Controller {
         }));
 
         $data = [
-            'title' => 'Quản lý đơn hàng',
+            'title' => 'Nhận Đơn Hàng',
             'action' => 'orders',
             'orders' => $orders,
             'pendingCount' => $pendingCount

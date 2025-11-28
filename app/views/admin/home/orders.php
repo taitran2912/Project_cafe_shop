@@ -1,13 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhận Đơn Hàng - Cafe Manager</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/orders.css">
-</head>
-<body>
+
     <div class="content-area">
         <!-- Alert Messages -->
         <?php if (isset($successMessage) && $successMessage): ?>
@@ -24,18 +16,6 @@
         </div>
         <?php endif; ?>
 
-        <div class="header">
-            <h1>
-                <i class="fas fa-shopping-cart"></i>
-                Nhận Đơn Hàng
-            </h1>
-            <button class="notification-btn" title="Thông báo đơn hàng mới">
-                <i class="fas fa-bell"></i>
-                <?php if (isset($pendingCount) && $pendingCount > 0): ?>
-                <span class="notification-badge"><?= $pendingCount ?></span>
-                <?php endif; ?>
-            </button>
-        </div>
 
         <!-- Orders Container -->
         <div class="orders-container" id="ordersContainer">
@@ -153,5 +133,3 @@
     </div>
 
     <script src="<?= BASE_URL ?>public/js/admin/orders.js"></script>
-</body>
-</html>
