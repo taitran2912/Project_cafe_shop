@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/branch.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/user.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/table.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/digitalmenu.css">
 
 
     <style>
