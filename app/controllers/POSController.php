@@ -26,7 +26,7 @@ class POSController extends Controller {
     public function adminIndex() {
         $this->checkAuth();
         $POSModel = $this->model('POS');
-
+$user = isset($_SESSION['user']['ID']) ? $_SESSION['user']['ID'] : null;
         $store = $POSModel->inforStore($user);
 
 
