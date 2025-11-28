@@ -1,6 +1,6 @@
 <?php
 session_start();
-$user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+$user = isset($_SESSION['user']['ID']) ? $_SESSION['user']['ID'] : null;
 
 class POSController extends Controller {
 
