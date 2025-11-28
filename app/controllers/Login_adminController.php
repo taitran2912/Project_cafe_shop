@@ -23,7 +23,7 @@ class Login_adminController extends Controller {
                     'Role' => $user['Role']
                 ];  
                 // Chuyển hướng về trang admin dashboard
-                header("Location: " . BASE_URL . "admin/menu");
+                header("Location: " . BASE_URL . "admin/dashboard");
                 exit();
             } else {
                 echo "<script>alert('Email hoặc mật khẩu không đúng.');</script>";
