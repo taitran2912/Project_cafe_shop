@@ -15,16 +15,6 @@ $action = $pos !== false ? substr($uriPath, $pos + strlen('/admin/')) : '';
 
 $action = trim($action, '/');
 
-// Nếu không có action → mặc định là menu
-if ($action === '') {
-    $action = 'menu';
-}
-  
-  // Set default action to menu if empty
-  if (empty($action)) {
-    $action = 'menu';
-  }
-
   // Load models based on action - BEFORE any HTML output
   if ($action === 'menu') {
     require_once 'app/models/Product.php';

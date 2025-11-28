@@ -1,5 +1,4 @@
 <?php
-
 class AdminController extends Controller {
     public function index() {
         if (!isset($_SESSION['user']) || empty($_SESSION['user']['ID'])) {
