@@ -65,7 +65,7 @@
             { 
                 id: <?= $table['ID'] ?>, 
                 number: <?= $table['No'] ?>, 
-                branch: '<?= htmlspecialchars($table['Branch_Name'], ENT_QUOTES) ?>', 
+                branch: '<?= htmlspecialchars($table['Name'], ENT_QUOTES) ?>', 
                 status: '<?= $table['Status'] ?>',
                 location: '<?= htmlspecialchars($table['Address'], ENT_QUOTES) ?>'
             },
