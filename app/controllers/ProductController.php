@@ -109,15 +109,15 @@ class ProductController extends Controller {
         // --- Handle Actions ---
         // $this->handleAdminRequests();
 
-        // --- Messages ---
-        $successMessage = $this->getSuccessMessage();
-        $errorMessage   = $this->getErrorMessage();
+        // // --- Messages ---
+        // $successMessage = $this->getSuccessMessage();
+        // $errorMessage   = $this->getErrorMessage();
 
         // --- Render View ---
         $data = [
-            'title'           => 'Quản lý sản phẩm',
-            'successMessage'  => $successMessage,
-            'errorMessage'    => $errorMessage,
+            'title'           => 'Quản lý sản phẩm'
+            // 'successMessage'  => $successMessage,
+            // 'errorMessage'    => $errorMessage,
         ];
 
         $this->view('admin/home/index', $data);
