@@ -139,10 +139,10 @@
 
     <script>
 // Hiển thị modal nhập số điện thoại khi tải trang
-        document.addEventListener('DOMContentLoaded', function () {
-            var phoneModal = new bootstrap.Modal(document.getElementById('customerPhoneModal'));
-            phoneModal.show();
-        });
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     var phoneModal = new bootstrap.Modal(document.getElementById('customerPhoneModal'));
+        //     phoneModal.show();
+        // });
 
 // Xử lý xác nhận số điện thoại
         function confirmCustomerPhone() {
