@@ -21,7 +21,7 @@
       "title" => "Dashboard",
       "icon"  => "fas fa-chair",
       "link"  => "admin/dashboard",
-      "roles" => [2]
+      "roles" => [0, 1, 2, 3]
     ],
     // Quản lý chuỗi
     [
