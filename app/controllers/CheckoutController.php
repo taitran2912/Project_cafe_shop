@@ -38,6 +38,8 @@ class CheckoutController extends Controller {
 
             $qrCodeUrl = $checkoutModel->generateSepayQR($sepayConfig, $finalTotal, $orderCode);
 
+            $checkoutModel->updateOrderTotal($createOrder, $finalTotal);
+
 
             // Truyền dữ liệu sang view hiển thị tóm tắt
             $data = [

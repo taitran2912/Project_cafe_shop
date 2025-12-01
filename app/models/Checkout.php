@@ -115,4 +115,19 @@ class Checkout extends Model {
         $stmt->close();
     }
 
+    public function updateOrderTotal($orderID, $total) {
+        $query = "
+            UPDATE Orders SET Total = ? WHERE ID = ?
+        ";
+        $stmt = $this->db->prepare($query);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->db->error);
+        }
+        $stmt->bind_param("di", $total, $orderID);
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
+        $stmt->close();
+    }
+
 }
