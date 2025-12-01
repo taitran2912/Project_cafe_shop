@@ -118,7 +118,7 @@
                         </div>
                     </div>
 
-                    <a href="payment" class="btn btn-outline-secondary w-100">
+                    <a href="https://caffeshop.hieuthuocyentam.id.vn/payment" class="btn btn-outline-secondary w-100">
                         Quay lại thanh toán
                     </a>
 
