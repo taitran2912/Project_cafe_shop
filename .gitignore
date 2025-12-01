@@ -1,1 +1,3 @@
 config/config.php
+.htaccess
+storage/sepay_webhook.log
