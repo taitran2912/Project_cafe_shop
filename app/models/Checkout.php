@@ -115,7 +115,7 @@ class Checkout extends Model {
         $stmt->close();
     }
 
-    public function updateOrderTotal($orderID, $total) {
+    public function updateOrderTotal($createOrder, $finalTotal) {
         $query = "
             UPDATE Orders SET Total = ? WHERE ID = ?
         ";
@@ -123,7 +123,7 @@ class Checkout extends Model {
         if (!$stmt) {
             die("Prepare failed: " . $this->db->error);
         }
-        $stmt->bind_param("di", $total, $orderID);
+        $stmt->bind_param("di", $finalTotal, $createOrder);
         if (!$stmt->execute()) {
             die("Execute failed: " . $stmt->error);
         }
