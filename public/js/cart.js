@@ -35,7 +35,7 @@ function updateCartDisplay(data) {
           <div class="cart-item-info">
             <h3>${item.Name}</h3>
             <p>${item.Description || ""}</p>
-            <div class="cart-item-price">${item.Price.toLocaleString()}đ</div>
+            <div class="cart-item-price">${item.Price.toLocaleString("vi-VN")}đ</div>
           </div>
         </div>
         

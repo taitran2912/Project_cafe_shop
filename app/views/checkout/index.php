@@ -76,7 +76,7 @@
                     <ul class="list-group mb-3">
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Tạm tính</span>
-                            <strong id="subtotal"><?= number_format($subtotal) ?> ₫</strong>
+                            <strong id="subtotal"><?= number_format($subtotal) ?> - <?= $data['finalTotal']?> ₫</strong>
                         </li>
 
                         <li class="list-group-item d-flex justify-content-between">

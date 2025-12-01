@@ -49,6 +49,7 @@ class CheckoutController extends Controller {
                 'bank' => $sepayConfig,
                 'OrderCode' => $orderCode,
                 'orderID' => $createOrder,
+                'finalTotal' => $finalTotal,
                 'userID' => $userID,
                 'QR' => $qrCodeUrl,
                 'cart' => $cart

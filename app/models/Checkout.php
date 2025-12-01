@@ -12,14 +12,14 @@ class Checkout extends Model {
         return $address;
     }
 
-    public function createOrder($userID, $address, $storeId, $shippingFee) {
+    public function createOrder($userID, $address, $storeId, $shippingFee, $total, $note) {
         $query = "
-            INSERT INTO Orders(ID_Customer, ID_Branch, Address, Status, Time, Shipping_Cost, Payment_status)
-            VALUES (?, ?, ?, 'Pending', NOW(), ?, 'Unpaid')
+            INSERT INTO Orders(ID_Customer, ID_Branch, Address, Status, Time, Shipping_Cost, Payment_status, Note, Total)
+            VALUES (?, ?, ?, 'Pending', NOW(), ?, 'Unpaid', ?, ?)
         ";
 
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("iisd", $userID, $storeId, $address, $shippingFee);
+        $stmt->bind_param("issdsd", $userID, $storeId, $address, $shippingFee, $note, $total);
         $stmt->execute();
 
         $orderId = $this->db->insert_id;
