@@ -14,9 +14,9 @@ class CheckoutController extends Controller {
             $orderCode = "ORD" . time() . rand(1000, 9999);
 
             $sepayConfig = [
-                'account_number' => '91902203843',
+                'account_number' => '0384902203',
                 'account_name' => 'TranTanTai',
-                'bank_code' => 'TPBank',
+                'bank_code' => 'MBBank',
                 'template' => 'compact',
             ];
 
