@@ -177,7 +177,7 @@
                         clearInterval(checkInterval);
 
                         // Chuyển sang trang cảm ơn
-                        window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
+                        window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou";
                     }
                     // console.log(response);
                 },
