@@ -37,9 +37,6 @@ class PaymentController extends Controller {
         // }
 
         // gọi view
-        $this->view("thankyou/index", [
-            "order" => $order
-        ]
-);
+        $this->view("thankyou/index");
     }
 }
