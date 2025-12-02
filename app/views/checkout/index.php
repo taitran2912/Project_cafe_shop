@@ -167,25 +167,19 @@
         // Kiểm tra trạng thái đơn hàng mỗi 5 giây
         function checkOrderStatus(orderID) {
             $.ajax({
-                // url: 'checkStatus', // Route trong MVC (OrderController -> checkStatus)
-                // type: 'POST',
-                // data: { orderID: orderID },
-                // success: function(response) {
-                //     // Response mong muốn: { status: "Paid" } hoặc { status: "Pending" }
-                //     // if (response.status === "Paid") {
-                //     //     // Dừng kiểm tra
-                //     //     clearInterval(checkInterval);
-
-                //     //     // Chuyển sang trang cảm ơn
-                //     //     window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
-                //     // }
-                //     conslole.log(response);
-                url: 'clear',        // URL endpoint xử lý xóa đơn hàng
-                type: 'POST',                  // dùng POST để an toàn hơn
-                data: { orderID: orderID },    // gửi dữ liệu orderID
+                url: 'checkStatus',
+                type: 'POST',
+                data: { orderID: orderID },
                 success: function(response) {
-                // Sau khi xóa xong, chuyển về trang giỏ hàng
-                window.location.href = '../cart';
+                    // Response mong muốn: { status: "Paid" } hoặc { status: "Pending" }
+                    // if (response.status === "Paid") {
+                    //     // Dừng kiểm tra
+                    //     clearInterval(checkInterval);
+
+                    //     // Chuyển sang trang cảm ơn
+                    //     window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
+                    // }
+                    conslole.log(response);
                 },
                 error: function(xhr) {
                     console.error("Lỗi khi kiểm tra trạng thái đơn:", xhr.responseText);

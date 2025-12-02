@@ -101,6 +101,16 @@ class CheckoutController extends Controller {
 
         // echo json_encode(['status' => $status]);
         // exit;
-         $this->view('checkout/index');
+        $orderID = isset($_POST['orderID']) ? (int)$_POST['orderID'] : 0;
+
+        if ($orderID > 0) {
+            $checkoutModel = $this->model('Checkout');
+            $checkoutModel->deleteOrderById($orderID);
+            $checkoutModel->deleteOrder($orderID);
+
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
+        }
     }
 }
