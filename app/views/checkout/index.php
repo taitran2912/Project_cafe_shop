@@ -146,7 +146,7 @@
         }
 
         // Ví dụ dùng với countdown:
-        let countdown = 600; // 10 phút
+        let countdown = 60; // 10 phút
         const timerElement = document.getElementById('countdownTimer');
 
         const timerInterval = setInterval(() => {
