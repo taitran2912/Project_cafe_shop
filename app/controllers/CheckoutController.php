@@ -83,15 +83,17 @@ class CheckoutController extends Controller {
 
     public function checkStatus(){
 
-        $orderID = isset($_POST['orderID']) ? (int)$_POST['orderID'] : 0;
-        if ($orderID > 0) {
-            $checkoutModel = $this->model('Checkout');
-            $status = $checkoutModel->getOrderStatus($orderID);
+        echo json_encode(['status' => 'Paid']);
+        exit;
+        // $orderID = isset($_POST['orderID']) ? (int)$_POST['orderID'] : 0;
+        // if ($orderID > 0) {
+        //     $checkoutModel = $this->model('Checkout');
+        //     $status = $checkoutModel->getOrderStatus($orderID);
 
-            echo json_encode(['status' => $status]);
-            exit;
-        }
+        //     echo json_encode(['status' => $status]);
+        //     exit;
+        // }
 
-        echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
+        // echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
     }
 }
