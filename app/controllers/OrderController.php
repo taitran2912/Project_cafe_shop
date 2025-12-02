@@ -148,5 +148,20 @@ class OrderController extends Controller {
         echo json_encode(['count' => $count]);
         exit;
     }
+
+    public function checkStatus(){
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['error' => 'Invalid request']);
+            return;
+        }
+
+        $orderID = $_POST['orderID'];
+
+        $orderModel = $this->model("OrderModel");
+        $status = $orderModel->getOrderStatus($orderID);
+
+        echo json_encode(['status' => $status]);
+    }
+
 }
 ?>

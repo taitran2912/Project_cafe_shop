@@ -164,6 +164,34 @@
         countdown--;
         }, 1000);
 
+        // Kiểm tra trạng thái đơn hàng mỗi 5 giây
+        function checkOrderStatus(orderID) {
+            $.ajax({
+                url: 'https://caffeshop.hieuthuocyentam.id.vn/order/checkStatus', // Route trong MVC (OrderController -> checkStatus)
+                type: 'POST',
+                data: { orderID: orderID },
+                success: function(response) {
+                    // Response mong muốn: { status: "Paid" } hoặc { status: "Pending" }
+                    if (response.status === "Paid") {
+                        // Dừng kiểm tra
+                        clearInterval(checkInterval);
+
+                        // Chuyển sang trang cảm ơn
+                        window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
+                    }
+                },
+                error: function(xhr) {
+                    console.error("Lỗi khi kiểm tra trạng thái đơn:", xhr.responseText);
+                }
+            });
+        }
+
+        // Gọi lại mỗi 5 giây
+        const checkInterval = setInterval(() => {
+            checkOrderStatus(<?= $data['orderID'] ?>);
+        }, 5000);
+
+
     </script>
 
 </div>
