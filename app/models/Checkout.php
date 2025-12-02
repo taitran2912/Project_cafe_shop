@@ -133,13 +133,24 @@ class Checkout extends Model {
     public function getOrderStatus($orderID){
         $sql = "SELECT Payment_status FROM Orders WHERE ID = ?";
         $stmt = $this->db->prepare($sql);
+
+        if (!$stmt) {
+            return "DB_Error";
+        }
+
         $stmt->bind_param("i", $orderID);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            return "Execute_Error";
+        }
+
         $result = $stmt->get_result();
 
-        if ($result->num_rows === 0) return "NotFound";
+        if ($result->num_rows === 0) {
+            return "NotFound";
+        }
 
         $row = $result->fetch_assoc();
-        return $row['Payment_status'];
+        return $row['Payment_status'];  // dạng Pending / Unpaid / Paid / Completed
     }
 }

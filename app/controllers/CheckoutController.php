@@ -82,35 +82,16 @@ class CheckoutController extends Controller {
     }
 
     public function checkStatus(){
-        // header('Content-Type: application/json');
 
-        // if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        //     echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
-        //     exit;
-        // }
-
-        // if (!isset($_POST['orderID'])) {
-        //     echo json_encode(['status' => 'error', 'message' => 'Missing orderID']);
-        //     exit;
-        // }
-
-        // $orderID = intval($_POST['orderID']);
-
-        // $checkoutModel = $this->model('Checkout');
-        // $status = $checkoutModel->getOrderStatus($orderID);
-
-        // echo json_encode(['status' => $status]);
-        // exit;
         $orderID = isset($_POST['orderID']) ? (int)$_POST['orderID'] : 0;
-
         if ($orderID > 0) {
             $checkoutModel = $this->model('Checkout');
-            $checkoutModel->deleteOrderById($orderID);
-            $checkoutModel->deleteOrder($orderID);
+            $status = $checkoutModel->getOrderStatus($orderID);
 
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
+            echo json_encode(['status' => $status]);
+            exit;
         }
+
+        echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
     }
 }
