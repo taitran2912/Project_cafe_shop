@@ -170,22 +170,20 @@
                 url: 'checkStatus',
                 type: 'POST',
                 data: { orderID: orderID },
+                dataType: "json",       // ⭐ THÊM DÒNG NÀY
                 success: function(response) {
-                    // Response mong muốn: { status: "Paid" }
-                    console.log(response.status);
-                    if (response.status === "Paid") {
-                        // Dừng kiểm tra
-                        clearInterval(checkInterval);
+                    console.log("Raw:", response);           
+                    console.log("Status:", response.status); // giờ sẽ có
 
-                        // Chuyển sang trang cảm ơn
+                    if (response.status === "Paid") {
+                        clearInterval(checkInterval);
                         window.location.href = "/payment/thankyou/" + orderID;
                     }
-                    // console.log(response);
                 },
                 error: function(xhr) {
                     console.error("Lỗi khi kiểm tra trạng thái đơn:", xhr.responseText);
                 }
-            });
+                    });
         }
 
         // Gọi lại mỗi 5 giây
