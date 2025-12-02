@@ -179,7 +179,7 @@
                     //     // Chuyển sang trang cảm ơn
                     //     window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
                     // }
-                    conslole.log(response);
+                    console.log(response);
                 },
                 error: function(xhr) {
                     console.error("Lỗi khi kiểm tra trạng thái đơn:", xhr.responseText);
