@@ -171,15 +171,15 @@
                 type: 'POST',
                 data: { orderID: orderID },
                 success: function(response) {
-                    // Response mong muốn: { status: "Paid" } hoặc { status: "Pending" }
-                    // if (response.status === "Paid") {
-                    //     // Dừng kiểm tra
-                    //     clearInterval(checkInterval);
+                    // Response mong muốn: { status: "Paid" }
+                    if (response.status === "Paid") {
+                        // Dừng kiểm tra
+                        clearInterval(checkInterval);
 
-                    //     // Chuyển sang trang cảm ơn
-                    //     window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
-                    // }
-                    console.log(response);
+                        // Chuyển sang trang cảm ơn
+                        window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
+                    }
+                    // console.log(response);
                 },
                 error: function(xhr) {
                     console.error("Lỗi khi kiểm tra trạng thái đơn:", xhr.responseText);
