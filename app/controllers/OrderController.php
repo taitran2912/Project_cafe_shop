@@ -148,28 +148,5 @@ class OrderController extends Controller {
         echo json_encode(['count' => $count]);
         exit;
     }
-
-    public function checkStatus(){
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
-            exit;
-        }
-
-        if (!isset($_POST['orderID'])) {
-            echo json_encode(['status' => 'error', 'message' => 'Missing orderID']);
-            exit;
-        }
-
-        $orderID = intval($_POST['orderID']);
-
-        $orderModel = $this->model("Order");
-        $status = $orderModel->getOrderStatus($orderID);
-
-        echo json_encode(['status' => $status]);
-        exit;
-    }
-
 }
 ?>

@@ -167,7 +167,7 @@
         // Kiểm tra trạng thái đơn hàng mỗi 5 giây
         function checkOrderStatus(orderID) {
             $.ajax({
-                url: 'https://caffeshop.hieuthuocyentam.id.vn/order/checkStatus', // Route trong MVC (OrderController -> checkStatus)
+                url: 'checkStatus', // Route trong MVC (OrderController -> checkStatus)
                 type: 'POST',
                 data: { orderID: orderID },
                 success: function(response) {

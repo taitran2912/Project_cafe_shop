@@ -151,18 +151,5 @@ class Order extends Model {
 
         return $data;
     }
-
-    public function getOrderStatus($orderID){
-        $sql = "SELECT Payment_status FROM Orders WHERE ID = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $orderID);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 0) return "NotFound";
-
-        $row = $result->fetch_assoc();
-        return $row['Payment_status'];
-    }
 }
 ?>
