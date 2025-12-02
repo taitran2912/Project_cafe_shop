@@ -172,6 +172,7 @@
                 data: { orderID: orderID },
                 success: function(response) {
                     // Response mong muốn: { status: "Paid" }
+                    console.log(response);
                     if (response.status === "Paid") {
                         // Dừng kiểm tra
                         clearInterval(checkInterval);
