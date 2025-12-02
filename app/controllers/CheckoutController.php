@@ -82,24 +82,25 @@ class CheckoutController extends Controller {
     }
 
     public function checkStatus(){
-        header('Content-Type: application/json');
+        // header('Content-Type: application/json');
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
-            exit;
-        }
+        // if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        //     echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+        //     exit;
+        // }
 
-        if (!isset($_POST['orderID'])) {
-            echo json_encode(['status' => 'error', 'message' => 'Missing orderID']);
-            exit;
-        }
+        // if (!isset($_POST['orderID'])) {
+        //     echo json_encode(['status' => 'error', 'message' => 'Missing orderID']);
+        //     exit;
+        // }
 
-        $orderID = intval($_POST['orderID']);
+        // $orderID = intval($_POST['orderID']);
 
-        $checkoutModel = $this->model('Checkout');
-        $status = $checkoutModel->getOrderStatus($orderID);
+        // $checkoutModel = $this->model('Checkout');
+        // $status = $checkoutModel->getOrderStatus($orderID);
 
-        echo json_encode(['status' => $status]);
-        exit;
+        // echo json_encode(['status' => $status]);
+        // exit;
+         $this->view('checkout/index');
     }
 }
