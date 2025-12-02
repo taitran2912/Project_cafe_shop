@@ -157,7 +157,7 @@ class OrderController extends Controller {
 
         $orderID = $_POST['orderID'];
 
-        $orderModel = $this->model("OrderModel");
+        $orderModel = $this->model("Order");
         $status = $orderModel->getOrderStatus($orderID);
 
         echo json_encode(['status' => $status]);
