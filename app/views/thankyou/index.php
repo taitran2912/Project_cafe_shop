@@ -12,7 +12,7 @@
             </div>
 
             <!-- Title -->
-            <h1 class="thank-you-title">Cảm ơn <span>bạn</span>!</h1>
+            <h1 class="thank-you-title">Cảm ơn bạn!</h1>
             <p class="thank-you-subtitle">
                 Đơn hàng của bạn đã được xác nhận thành công.<br>
                 Chúng tôi sẽ giao hàng sớm nhất có thể.
@@ -22,7 +22,7 @@
             <div class="order-details" id="orderDetails">
                 <div class="order-item">
                     <span class="order-label">Mã đơn hàng:</span>
-                    <span class="order-value confirmation-number" id="orderNumber"><?= $data['orderCode'] ?></span>
+                    <p class="order-value confirmation-number" id="orderNumber"><?= $data['orderCode'] ?></p>
                 </div>
                 <div class="order-item">
                     <span class="order-label">Thời gian đặt hàng:</span>
