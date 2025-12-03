@@ -232,31 +232,39 @@ function cancelOrder(orderId) {
 
 // Tab switching
 document.addEventListener("DOMContentLoaded", () => {
-  const tabs = document.querySelectorAll(".profile-tab")
-  const tabContents = document.querySelectorAll(".tab-content")
+  const tabs = document.querySelectorAll(".profile-tab");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  function hideAllTabs() {
+    tabContents.forEach(content => content.classList.add("hidden"));
+    tabs.forEach(tab => {
+      tab.classList.remove("active", "bg-primary", "text-white");
+      tab.classList.add("text-gray-700", "hover:bg-gray-100");
+    });
+  }
 
   tabs.forEach(tab => {
-    tab.addEventListener("click", function () {
-      const targetTab = this.dataset.tab
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+      hideAllTabs();
+      tab.classList.add("active", "bg-primary", "text-white");
+      tab.classList.remove("text-gray-700", "hover:bg-gray-100");
+      document.getElementById(`${target}-tab`).classList.remove("hidden");
 
-      tabs.forEach(t => {
-        t.classList.remove("active", "bg-primary", "text-white")
-        t.classList.add("text-gray-700", "hover:bg-gray-100")
-      })
+      if (target === "orders") loadOrders();
+    });
+  });
 
-      this.classList.add("active", "bg-primary", "text-white")
-      this.classList.remove("text-gray-700", "hover:bg-gray-100")
+  // Initialize: show first tab
+  hideAllTabs();
+  const firstTab = document.querySelector(".profile-tab");
+  firstTab.classList.add("active", "bg-primary", "text-white");
+  document.getElementById(`${firstTab.dataset.tab}-tab`).classList.remove("hidden");
 
-      tabContents.forEach(content => content.style.display = "none")
-      document.getElementById(`${targetTab}-tab`).style.display = "block"
+  // Load orders if active
+  if (firstTab.dataset.tab === "orders") loadOrders();
+});
 
-      if (targetTab === "orders") loadOrders()
-    })
-  })
-
-  // Load orders on page load if orders tab is active
-  loadOrders()
-})
 
 // Make functions global
 window.viewOrderDetails = viewOrderDetails
