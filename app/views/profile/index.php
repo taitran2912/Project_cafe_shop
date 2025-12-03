@@ -52,29 +52,29 @@
                     <form class="space-y-6" method="POST" action="https://caffeshop.hieuthuocyentam.id.vn/profile/updateInfor">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
-                                <label class="form-label">Họ tên</label>
-                                <input type="text" class="form-input" value="<?= $data['Name'] ?>">
+                                <label class="form-label" for="name">Họ tên</label>
+                                <input type="text" id="name" name="name" class="form-input" value="<?= htmlspecialchars($data['Name']) ?>" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-input" value="<?= $data['Mail'] ?>">
+                                <label class="form-label" for="email">Email</label>
+                                <input type="email" id="email" name="email" class="form-input" value="<?= htmlspecialchars($data['Mail']) ?>" required>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
-                                <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-input" value="<?= $data['Phone'] ?>">
+                                <label class="form-label" for="phone">Số điện thoại</label>
+                                <input type="tel" id="phone" name="phone" class="form-input" value="<?= htmlspecialchars($data['Phone']) ?>" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Điểm thưởng</label>
-                                <p class="form-input" value="<?= $data['Point'] ?>">
+                                <p class="form-input cursor-not-allowed bg-gray-100"><?= htmlspecialchars($data['Point']) ?></p>
                             </div>
                         </div>
                         
                         <button type="submit" class="btn-primary">Cập nhật thông tin</button>
                     </form>
-                </div>
+
 
                     <!-- Orders Tab  -->
                 <div id="orders-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
