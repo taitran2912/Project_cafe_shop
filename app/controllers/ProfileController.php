@@ -9,6 +9,7 @@ class ProfileController extends Controller {
 
         // Lấy dữ liệu từ DB
         $profile = $profileModel->getProfile($userId); 
+        $order = $profileModel->getOrders($userId);
 
 
         $data = [
@@ -16,7 +17,8 @@ class ProfileController extends Controller {
             'ID'   => $userId,
             'Name' => $profile['Name'],
             'Mail' => $profile['Email'],
-            'Phone' => $profile['Phone']
+            'Phone' => $profile['Phone'],
+            'Order' => $order
         ];
         $this->view('profile/index', $data);
     }
