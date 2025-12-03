@@ -98,32 +98,22 @@
         </div>
     </div>
 </section>
-
-
 <script>
-   
+
 const profileData = {
   orders: [
     {
       id: 101,
-      date: "2025-12-03T10:15:00",
+      date: "2025-12-03",
       status: "pending",
+      ship: 3000,
       items: [
         { name: "Cà phê sữa", quantity: 2, price: 25000 },
         { name: "Bánh mì", quantity: 1, price: 15000 }
       ],
       total: 65000
-    },
-    {
-      id: 102,
-      date: "2025-12-01T14:30:00",
-      status: "completed",
-      items: [
-        { name: "Trà sữa", quantity: 1, price: 30000 },
-        { name: "Bánh ngọt", quantity: 2, price: 20000 }
-      ],
-      total: 70000
     }
+
   ]
 }
 
@@ -145,20 +135,20 @@ function formatDate(dateString) {
 
 function getStatusClass(status) {
   switch (status) {
-    case "pending": return "status-pending"
-    case "processing": return "status-processing"
-    case "completed": return "status-completed"
-    case "cancelled": return "status-cancelled"
+    case "Pending": return "status-pending"
+    case "Processing": return "status-processing"
+    case "Completed": return "status-completed"
+    case "Cancelled": return "status-cancelled"
     default: return "status-pending"
   }
 }
 
 function getStatusText(status) {
   switch (status) {
-    case "pending": return "Chờ xử lý"
-    case "processing": return "Đang xử lý"
-    case "completed": return "Hoàn thành"
-    case "cancelled": return "Đã hủy"
+    case "Pending": return "Chờ xử lý"
+    case "Processing": return "Đang xử lý"
+    case "Completed": return "Hoàn thành"
+    case "Cancelled": return "Đã hủy"
     default: return "Chờ xử lý"
   }
 }
@@ -178,7 +168,7 @@ function loadOrders() {
         </div>
         <h3 class="text-xl font-bold text-gray-600 mb-4">Chưa có đơn hàng nào</h3>
         <p class="text-gray-500 mb-8">Bạn chưa có đơn hàng nào. Hãy đặt hàng ngay!</p>
-        <a href="menu.html" class="btn-primary">Đặt hàng ngay</a>
+        <a href="menu" class="btn-primary">Đặt hàng ngay</a>
       </div>
     `
     return
@@ -201,13 +191,15 @@ function loadOrders() {
             <span>${formatPrice(item.price * item.quantity)}</span>
           </div>
         `).join("")}
+        <span class="font-bold"> Tiền ship: ${formatPrice(order.ship)}</span>
       </div>
 
       <div class="border-t pt-4 flex justify-between items-center">
         <span class="font-bold">Tổng cộng: ${formatPrice(order.total)}</span>
         <div class="space-x-2">
           <button onclick="viewOrderDetails(${order.id})" class="btn-secondary text-sm px-4 py-2">Chi tiết</button>
-          ${order.status === "pending" ? `<button onclick="cancelOrder(${order.id})" class="text-red-500 hover:text-red-700 text-sm">Hủy đơn</button>` : ""}
+          ${order.status === "Pending" ? `
+          <button onclick="cancelOrder(${order.id})" class="text-red-500 hover:text-red-700 text-sm">Hủy đơn</button>` : ""}
         </div>
       </div>
     </div>
