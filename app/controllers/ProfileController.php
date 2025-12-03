@@ -1,16 +1,22 @@
 <?php
+session_start();
 class ProfileController extends Controller {
     public function index() {
         // Gọi model
-        $productModel = $this->model('Profile');
+        $profileModel = $this->model('Profile');
+
+        $userId = $_SESSION['user']['ID'];
 
         // Lấy dữ liệu từ DB
-        // $products = $productModel->get_Best_Selling_Products();
+        $profile = $profileModel->getProfile($userId); 
 
 
         $data = [
             'title' => 'Hồ sơ',
-            // 'products' => $products
+            'Name' => $profile['Name'],
+            'Mail' => $profile['Mail'],
+            'Phone' => $profile['Phone'],
+            'Address' => $profile['Address']
         ];
         $this->view('profile/index', $data);
     }

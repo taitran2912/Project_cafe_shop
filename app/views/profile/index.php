@@ -25,8 +25,8 @@
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl font-bold">Nguyễn Văn A</h3>
-                        <p class="text-gray-600">nguyenvana@email.com</p>
+                        <h3 class="font-display text-xl font-bold"><?= $data['Name'] ?></h3>
+                        <p class="text-gray-600"><?= $data['Mail'] ?></p>
                     </div>
                     
                     <nav class="space-y-2">
@@ -37,7 +37,7 @@
                             Đơn hàng của tôi
                         </button>
                         <button class="profile-tab w-full text-left px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100" data-tab="favorites">
-                            Sản phẩm yêu thích
+                            Địa chỉ nhận hàng
                         </button>
                     </nav>
                 </div>
@@ -49,32 +49,23 @@
                 <div id="info-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg">
                     <h2 class="font-display text-2xl font-bold mb-6">Thông tin cá nhân</h2>
                     
-                    <form class="space-y-6">
+                    <form class="space-y-6" method="POST" action="https://caffeshop.hieuthuocyentam.id.vn/profile/updateInfor">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
                                 <label class="form-label">Họ tên</label>
-                                <input type="text" class="form-input" value="Nguyễn Văn A">
+                                <input type="text" class="form-input" value="<?= $data['Name'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-input" value="nguyenvana@email.com">
+                                <input type="email" class="form-input" value="<?= $data['Mail'] ?>">
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
                                 <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-input" value="0123456789">
+                                <input type="tel" class="form-input" value="<?= $data['Phone'] ?>">
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Ngày sinh</label>
-                                <input type="date" class="form-input" value="1990-01-01">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Địa chỉ</label>
-                            <textarea class="form-input form-textarea">123 Đường ABC, Quận 1, TP.HCM</textarea>
                         </div>
                         
                         <button type="submit" class="btn-primary">Cập nhật thông tin</button>
@@ -108,6 +99,8 @@
     </div>
 </section>
 
+
+<script src="https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js"></script>
     <!-- Footer  -->
 <?php
     include 'app/views/layout/footer.php'; 
