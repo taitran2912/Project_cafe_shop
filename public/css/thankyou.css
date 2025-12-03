@@ -123,3 +123,20 @@
         flex-direction: column;
     }
 }
+.menu-category.active {
+    background-color: var(--primary); /* nâu */
+    color: white;
+}
+
+.menu-category {
+    background-color: white;
+    color: var(--primary); /* chữ nâu */
+    border: 1px solid var(--primary);
+    transition: all 0.3s ease;
+}
+
+.menu-category:hover {
+    background-color: var(--primary-light); /* nâu nhạt */
+    color: var(--foreground); /* chữ tối dễ nhìn */
+}
+
