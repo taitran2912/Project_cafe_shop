@@ -1,24 +1,5 @@
 <?php include 'app/views/layout/header.php'; ?>
 
-<style>
-    .thank-you-title {
-        color: #8b4513;
-        font-weight: bold;
-    }
-    .order-value {
-        color: #8b4513;
-        font-weight: 600;
-    }
-    .confirmation-number {
-        font-size: 20px;
-        color: #8b4513;
-        font-weight: bold;
-    }
-    .delivery-info strong {
-        color: #8b4513;
-    }
-</style>
-
 <body>
     <div class="thank-you-container">
         <div class="thank-you-card">
