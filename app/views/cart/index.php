@@ -21,7 +21,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="public/js/cart.js"></script>
+<script src="https://caffeshop.hieuthuocyentam.id.vn/public/js/cart.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     loadCart();
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadCart() {
   $.ajax({
-    url: 'cart/getCart/<?= $userID;?>',
+    url: 'getCart/<?= $userID;?>',
     type: 'GET',
     dataType: 'json',
     success: function(data) {

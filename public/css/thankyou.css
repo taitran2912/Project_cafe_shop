@@ -1,0 +1,245 @@
+
+:root {
+    --primary-bg: #E8DCC8;
+    --primary-text: #1a1a1a;
+    --accent-brown: #8B6F47;
+    --accent-blue: #2563EB;
+    --light-bg: #F5F1E8;
+    --white: #FFFFFF;
+    --success-color: #10B981;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--light-bg) 100%);
+    color: var(--primary-text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+}
+
+.thank-you-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.thank-you-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 60px 40px;
+    max-width: 650px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    animation: popIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.success-icon svg {
+    width: 50px;
+    height: 50px;
+    color: var(--white);
+}
+
+.thank-you-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--primary-text);
+}
+
+.thank-you-title span {
+    color: var(--accent-blue);
+}
+
+.thank-you-subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.order-details {
+    background: var(--light-bg);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.order-item:last-child {
+    border-bottom: none;
+    padding-top: 15px;
+    padding-bottom: 0;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.order-label {
+    color: #666;
+}
+
+.order-value {
+    font-weight: 600;
+    color: var(--primary-text);
+}
+
+.order-item:last-child .order-value {
+    color: var(--accent-brown);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.btn-primary-cafe {
+    background: var(--accent-brown);
+    color: var(--white);
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary-cafe:hover {
+    background: #6d5839;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(139, 111, 71, 0.2);
+    color: var(--white);
+}
+
+.btn-secondary-cafe {
+    background: var(--light-bg);
+    color: var(--accent-brown);
+    border: 2px solid var(--accent-brown);
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary-cafe:hover {
+    background: var(--accent-brown);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.delivery-info {
+    background: rgba(139, 111, 71, 0.05);
+    border-left: 4px solid var(--accent-brown);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.delivery-info h5 {
+    font-weight: 600;
+    color: var(--primary-text);
+    margin-bottom: 10px;
+}
+
+.delivery-info p {
+    color: #666;
+    font-size: 15px;
+    margin: 0;
+}
+
+.confirmation-number {
+    font-family: 'Plus Jakarta Sans', monospace;
+    color: var(--accent-blue);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .thank-you-card {
+        padding: 40px 25px;
+    }
+
+    .thank-you-title {
+        font-size: 32px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn-primary-cafe,
+    .btn-secondary-cafe {
+        width: 100%;
+    }
+}
+
+/* Animation for order items */
+.order-details {
+    animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

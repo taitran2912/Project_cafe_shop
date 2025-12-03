@@ -31,7 +31,7 @@ function updateCartDisplay(data) {
     html += `
       <div class="cart-item">
         <div class="cart-item-left">
-          <img src="public/image/${item.Image}" alt="${item.Image}">
+          <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${item.Image}" alt="${item.Image}">
           <div class="cart-item-info">
             <h3>${item.Name}</h3>
             <p>${item.Description || ""}</p>
@@ -72,7 +72,7 @@ function updateCartDisplay(data) {
 
 function updateQuantity(productId, quantity) {
   if (quantity <= 0) return removeFromCart(productId);
-  $.post("cart/update", { customer_id: 1, product_id: productId, quantity })
+  $.post("update", { customer_id: 1, product_id: productId, quantity })
     .done(() => {
       loadCart(); // gọi lại hàm loadCart() thay vì reload trang
     })
@@ -80,7 +80,7 @@ function updateQuantity(productId, quantity) {
 }
 
 function removeFromCart(productId) {
-  $.post("cart/delete", { customer_id: 1, product_id: productId })
+  $.post("delete", { customer_id: 1, product_id: productId })
     .done(() => {
       loadCart(); // gọi lại loadCart() để cập nhật giao diện
     })
@@ -90,7 +90,7 @@ function removeFromCart(productId) {
 /* --- Hàm loadCart vẫn giữ nguyên --- */
 function loadCart() {
   $.ajax({
-    url: "cart/getCart",
+    url: "getCart",
     type: "GET",
     dataType: "json",
     success: function (data) {

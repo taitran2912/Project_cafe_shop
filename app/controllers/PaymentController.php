@@ -26,19 +26,14 @@ class PaymentController extends Controller {
 
     public function thankyou($orderID)
     {
-        // load model OrderModel
-        // $orderModel = $this->model("OrderModel");
-
-        // lấy thông tin đơn hàng
-        // $order = $orderModel->getOrderById($orderID);
-
-        // if (!$order) {
-        //     die("Không tìm thấy đơn hàng!");
-        // }
-
+        $thankyouModel = $this->model('Thankyou');
+        $order = $thankyouModel->getOrderById($orderID);
         $data = [
             'title' => 'Cảm ơn bạn đã đặt hàng!',
             'orderID' => $orderID,
+            'orderCode' => $order['Note'],
+            'Total' => $order['Total']
+
             // 'order' => $order
         ];  
 
