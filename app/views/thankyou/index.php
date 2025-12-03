@@ -1,4 +1,6 @@
- 
+<?php
+    include 'app/views/layout/header.php'; 
+?>
 <body>
     <div class="thank-you-container">
         <div class="thank-you-card">
@@ -54,5 +56,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        <!-- Footer  -->
+<?php
+    include 'app/views/layout/footer.php'; 
+?>
