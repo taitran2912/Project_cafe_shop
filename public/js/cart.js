@@ -72,7 +72,7 @@ function updateCartDisplay(data) {
 
 function updateQuantity(productId, quantity) {
   if (quantity <= 0) return removeFromCart(productId);
-  $.post("update", { customer_id: 1, product_id: productId, quantity })
+  $.post("cart/update", { customer_id: 1, product_id: productId, quantity })
     .done(() => {
       loadCart(); // gọi lại hàm loadCart() thay vì reload trang
     })
@@ -80,7 +80,7 @@ function updateQuantity(productId, quantity) {
 }
 
 function removeFromCart(productId) {
-  $.post("delete", { customer_id: 1, product_id: productId })
+  $.post("cart/delete", { customer_id: 1, product_id: productId })
     .done(() => {
       loadCart(); // gọi lại loadCart() để cập nhật giao diện
     })
@@ -90,7 +90,7 @@ function removeFromCart(productId) {
 /* --- Hàm loadCart vẫn giữ nguyên --- */
 function loadCart() {
   $.ajax({
-    url: "getCart",
+    url: "cart/getCart",
     type: "GET",
     dataType: "json",
     success: function (data) {

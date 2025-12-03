@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadCart() {
   $.ajax({
-    url: 'getCart/<?= $userID;?>',
+    url: 'cart/getCart/<?= $userID;?>',
     type: 'GET',
     dataType: 'json',
     success: function(data) {
