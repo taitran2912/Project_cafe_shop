@@ -23,7 +23,7 @@
                     </button>
 <?php if (!empty($data['categories'])): ?>
   <?php foreach ($data['categories'] as $categories): ?>
-                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
+                    <button class="menu-category px-6 py-3 rounded-full bg-white font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
                         <?= htmlspecialchars($categories['Name']) ?>
                     </button>
   <?php endforeach; ?>
@@ -154,12 +154,12 @@ function filterItems(category) {
 
   // Update category buttons
   document.querySelectorAll(".menu-category").forEach((btn) => {
-    btn.classList.remove("active", "bg-primary", "text-white")
+    btn.classList.remove("active", "bg-brown")
     btn.classList.add("bg-white", "text-primary")
   })
 
   const activeBtn = document.querySelector(`[data-category="${category}"]`)
-  activeBtn.classList.add("active", "bg-primary", "text-white")
+  activeBtn.classList.add("active", "bg-primary")
   activeBtn.classList.remove("bg-white", "text-primary")
 
   // Load filtered items
