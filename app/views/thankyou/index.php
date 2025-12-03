@@ -61,7 +61,7 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <a href="https://caffeshop.hieuthuocyentam.id.vn/menu" class="btn-primary-cafe">
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/menu" class="btn-primary">
                     Tiếp tục mua sắm
                 </a>
             </div>
