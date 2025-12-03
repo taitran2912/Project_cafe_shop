@@ -177,7 +177,7 @@
 
                     if (response.status === "Paid") {
                         clearInterval(checkInterval);
-                        window.location.href = "/payment/thankyou/" + orderID;
+                        window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment/thankyou/" + orderID;
                     }
                 },
                 error: function(xhr) {

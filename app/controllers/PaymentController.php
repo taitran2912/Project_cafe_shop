@@ -36,7 +36,13 @@ class PaymentController extends Controller {
         //     die("Không tìm thấy đơn hàng!");
         // }
 
+        $data = [
+            'title' => 'Cảm ơn bạn đã đặt hàng!',
+            'orderID' => $orderID,
+            // 'order' => $order
+        ];  
+
         // gọi view
-        $this->view("thankyou/index");
+        $this->view("thankyou/index", $data);
     }
 }
