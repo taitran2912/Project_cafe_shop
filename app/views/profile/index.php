@@ -191,7 +191,10 @@ function loadOrders() {
             <span>${formatPrice(item.price * item.quantity)}</span>
           </div>
         `).join("")}
-        <span class="font-bold"> Tiền ship: ${formatPrice(order.ship)}</span>
+        <div class="flex justify-between items-center">
+            <span>Tiền ship</span>
+            <span>${formatPrice(order.ship)}</span>
+            </div>
       </div>
 
       <div class="border-t pt-4 flex justify-between items-center">
