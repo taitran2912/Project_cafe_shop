@@ -68,7 +68,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Điểm thưởng</label>
-                                <p class="form-input" value="<?= $data['Point'] ?>">
+                                 <p class="form-input cursor-not-allowed bg-gray-100"><?= htmlspecialchars($data['Point']) ?></p>
                             </div>
                         </div>
                         
