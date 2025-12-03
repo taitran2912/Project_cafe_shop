@@ -52,29 +52,29 @@
                     <form class="space-y-6" method="POST" action="https://caffeshop.hieuthuocyentam.id.vn/profile/updateInfor">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
-                                <label class="form-label" for="name">Họ tên</label>
-                                <input type="text" id="name" name="name" class="form-input" value="<?= htmlspecialchars($data['Name']) ?>" required>
+                                <label class="form-label">Họ tên</label>
+                                <input type="text" class="form-input" value="<?= $data['Name'] ?>">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-input" value="<?= htmlspecialchars($data['Mail']) ?>" required>
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" value="<?= $data['Mail'] ?>">
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
-                                <label class="form-label" for="phone">Số điện thoại</label>
-                                <input type="tel" id="phone" name="phone" class="form-input" value="<?= htmlspecialchars($data['Phone']) ?>" required>
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-input" value="<?= $data['Phone'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Điểm thưởng</label>
-                                <p class="form-input cursor-not-allowed bg-gray-100"><?= htmlspecialchars($data['Point']) ?></p>
+                                <p class="form-input" value="<?= $data['Point'] ?>">
                             </div>
                         </div>
                         
                         <button type="submit" class="btn-primary">Cập nhật thông tin</button>
                     </form>
-
+                </div>
 
                     <!-- Orders Tab  -->
                 <div id="orders-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
@@ -232,39 +232,31 @@ function cancelOrder(orderId) {
 
 // Tab switching
 document.addEventListener("DOMContentLoaded", () => {
-  const tabs = document.querySelectorAll(".profile-tab");
-  const tabContents = document.querySelectorAll(".tab-content");
-
-  function hideAllTabs() {
-    tabContents.forEach(content => content.classList.add("hidden"));
-    tabs.forEach(tab => {
-      tab.classList.remove("active", "bg-primary", "text-white");
-      tab.classList.add("text-gray-700", "hover:bg-gray-100");
-    });
-  }
+  const tabs = document.querySelectorAll(".profile-tab")
+  const tabContents = document.querySelectorAll(".tab-content")
 
   tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      const target = tab.dataset.tab;
-      hideAllTabs();
-      tab.classList.add("active", "bg-primary", "text-white");
-      tab.classList.remove("text-gray-700", "hover:bg-gray-100");
-      document.getElementById(`${target}-tab`).classList.remove("hidden");
+    tab.addEventListener("click", function () {
+      const targetTab = this.dataset.tab
 
-      if (target === "orders") loadOrders();
-    });
-  });
+      tabs.forEach(t => {
+        t.classList.remove("active", "bg-primary", "text-white")
+        t.classList.add("text-gray-700", "hover:bg-gray-100")
+      })
 
-  // Initialize: show first tab
-  hideAllTabs();
-  const firstTab = document.querySelector(".profile-tab");
-  firstTab.classList.add("active", "bg-primary", "text-white");
-  document.getElementById(`${firstTab.dataset.tab}-tab`).classList.remove("hidden");
+      this.classList.add("active", "bg-primary", "text-white")
+      this.classList.remove("text-gray-700", "hover:bg-gray-100")
 
-  // Load orders if active
-  if (firstTab.dataset.tab === "orders") loadOrders();
-});
+      tabContents.forEach(content => content.style.display = "none")
+      document.getElementById(`${targetTab}-tab`).style.display = "block"
 
+      if (targetTab === "orders") loadOrders()
+    })
+  })
+
+  // Load orders on page load if orders tab is active
+  loadOrders()
+})
 
 // Make functions global
 window.viewOrderDetails = viewOrderDetails
