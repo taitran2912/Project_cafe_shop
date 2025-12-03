@@ -36,8 +36,7 @@ class PaymentController extends Controller {
             'css' => 'thankyou.css',
             'Date' => $order['Date'],
             'Total' => $order['Total'],
-            'Shipping_Cost' => $order['Shipping_Cost'],
-            'Note' => $order['Note']
+            'Shipping_Cost' => $order['Shipping_Cost']
             // 'order' => $order
         ];  
 

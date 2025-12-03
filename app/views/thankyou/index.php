@@ -20,7 +20,7 @@
             <div class="order-details" id="orderDetails">
                 <div class="order-item">
                     <span class="order-label">Mã đơn hàng:</span>
-                    <span class="order-value confirmation-number" id="orderNumber"><?= $data['Note'] ?></span>
+                    <span class="order-value confirmation-number" id="orderNumber"><?= $data['orderCode'] ?></span>
                 </div>
                 <div class="order-item">
                     <span class="order-label">Thời gian đặt hàng:</span>
