@@ -66,6 +66,10 @@
                                 <label class="form-label">Số điện thoại</label>
                                 <input type="tel" class="form-input" value="<?= $data['Phone'] ?>">
                             </div>
+                            <div class="form-group">
+                                <label class="form-label">Điểm thưởng</label>
+                                <p class="form-input" value="<?= $data['Point'] ?>">
+                            </div>
                         </div>
                         
                         <button type="submit" class="btn-primary">Cập nhật thông tin</button>
