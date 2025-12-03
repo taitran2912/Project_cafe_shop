@@ -154,12 +154,12 @@ function filterItems(category) {
 
   // Update category buttons
   document.querySelectorAll(".menu-category").forEach((btn) => {
-    btn.classList.remove("active", "bg-brown")
+    btn.classList.remove("active", "bg-primary", "text-white")
     btn.classList.add("bg-white", "text-primary")
   })
 
   const activeBtn = document.querySelector(`[data-category="${category}"]`)
-  activeBtn.classList.add("active", "bg-primary")
+  activeBtn.classList.add("active", "bg-primary", "text-white")
   activeBtn.classList.remove("bg-white", "text-primary")
 
   // Load filtered items

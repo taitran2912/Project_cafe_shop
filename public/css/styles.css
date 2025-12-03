@@ -216,3 +216,13 @@ body {
     font-size: 14px;
   }
 }
+/* Override Bootstrap text-primary */
+.text-primary {
+    color: #8b4513 !important; /* nâu sẫm */
+}
+
+/* Nếu muốn hover category button chữ be */
+.menu-category:hover {
+    color: #f5e6d3 !important; /* be nhạt */
+}
+
