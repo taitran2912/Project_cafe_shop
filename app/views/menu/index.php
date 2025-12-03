@@ -23,7 +23,7 @@
                     </button>
 <?php if (!empty($data['categories'])): ?>
   <?php foreach ($data['categories'] as $categories): ?>
-                    <button class="menu-category px-6 py-3 rounded-full bg-white font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
                         <?= htmlspecialchars($categories['Name']) ?>
                     </button>
   <?php endforeach; ?>
