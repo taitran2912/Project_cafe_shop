@@ -32,8 +32,11 @@ class PaymentController extends Controller {
             'title' => 'Cảm ơn bạn đã đặt hàng!',
             'orderID' => $orderID,
             'orderCode' => $order['Note'],
-            'Quantity' => $order['Quantity']
-
+            'Quantity' => $order['Quantity'],
+            'css' => 'thankyou.css',
+            'Date' => $order['Date'],
+            'Total' => $order['Total'],
+            'Shipping_Cost' => $order['Shipping_Cost']
             // 'order' => $order
         ];  
 

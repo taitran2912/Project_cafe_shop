@@ -20,15 +20,15 @@
             <div class="order-details" id="orderDetails">
                 <div class="order-item">
                     <span class="order-label">Mã đơn hàng:</span>
-                    <span class="order-value confirmation-number" id="orderNumber"></span>
+                    <span class="order-value confirmation-number" id="orderNumber"><?= $data['Note'] ?></span>
                 </div>
                 <div class="order-item">
                     <span class="order-label">Thời gian đặt hàng:</span>
-                    <span class="order-value" id="orderTime">03/12/2025, 14:30</span>
+                    <span class="order-value" id="orderTime"><?= $data['Date'] ?></span>
                 </div>
                 <div class="order-item">
                     <span class="order-label">Số lượng sản phẩm:</span>
-                    <span class="order-value" id="productCount">3 sản phẩm</span>
+                    <span class="order-value" id="productCount"><?= $data['Quantity'] ?></span>
                 </div>
                 <div class="order-item">
                     <span class="order-label">Tổng tiền:</span>
