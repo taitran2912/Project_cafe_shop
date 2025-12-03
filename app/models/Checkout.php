@@ -14,7 +14,7 @@ class Checkout extends Model {
 
     public function createOrder($userID, $address, $storeId, $shippingFee, $total, $note) {
         $query = "
-            INSERT INTO Orders(ID_Customer, ID_Branch, Address, Status, Time, Shipping_Cost, Payment_status, Note, Total)
+            INSERT INTO Orders(ID_Customer, ID_Branch, Address, Status, Date, Shipping_Cost, Payment_status, Note, Total)
             VALUES (?, ?, ?, 'Pending', NOW(), ?, 'Unpaid', ?, ?)
         ";
 
