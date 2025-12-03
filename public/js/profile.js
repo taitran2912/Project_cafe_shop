@@ -123,7 +123,42 @@ function cancelOrder(orderId) {
 }
 
 // Tab switching functionality
+document.addEventListener("DOMContentLoaded", () => {
+  const tabs = document.querySelectorAll(".profile-tab")
+  const tabContents = document.querySelectorAll(".tab-content")
 
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", function () {
+      const targetTab = this.dataset.tab
+
+      // Remove active class from all tabs
+      tabs.forEach((t) => {
+        t.classList.remove("active", "bg-primary", "text-white")
+        t.classList.add("text-gray-700", "hover:bg-gray-100")
+      })
+
+      // Add active class to clicked tab
+      this.classList.add("active", "bg-primary", "text-white")
+      this.classList.remove("text-gray-700", "hover:bg-gray-100")
+
+      // Hide all tab contents
+      tabContents.forEach((content) => {
+        content.style.display = "none"
+      })
+
+      // Show target tab content
+      document.getElementById(`${targetTab}-tab`).style.display = "block"
+
+      // Load orders if orders tab is selected
+      if (targetTab === "orders") {
+        loadOrders()
+      }
+    })
+  })
+
+  // Load orders on page load if orders tab is active
+  loadOrders()
+})
 
 // Make functions available globally
 window.viewOrderDetails = viewOrderDetails
