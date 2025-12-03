@@ -8,11 +8,12 @@ class ProfileController extends Controller {
         $userId = $_SESSION['user']['ID'];
 
         // Lấy dữ liệu từ DB
-        $profile = $profileModel->getProfile($userId); 
+        // $profile = $profileModel->getProfile($userId); 
 
 
         $data = [
             'title' => 'Hồ sơ',
+            'ID'   => $userId,
             'Name' => $profile['Name'],
             'Mail' => $profile['Mail'],
             'Phone' => $profile['Phone'],

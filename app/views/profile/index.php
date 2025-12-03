@@ -5,7 +5,7 @@
     <!-- Page Header  -->
 <section class="page-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="font-display text-5xl font-bold mb-4">Tài khoản</h1>
+        <h1 class="font-display text-5xl font-bold mb-4">Tài khoản <?= $data['ID'] ?></h1>
         <p class="text-xl opacity-90 max-w-2xl mx-auto">
             Quản lý thông tin cá nhân và đơn hàng của bạn
         </p>
