@@ -18,12 +18,12 @@
              <!-- Menu Categories  -->
             <div class="flex justify-center mb-12">
                 <div class="flex flex-wrap gap-4">
-                    <button class="active px-6 py-3 rounded-full bg-primary text-white font-medium" data-category="all">
+                    <button class="menu-category active px-6 py-3 rounded-full bg-primary text-white font-medium" data-category="all">
                         Tất cả
                     </button>
 <?php if (!empty($data['categories'])): ?>
   <?php foreach ($data['categories'] as $categories): ?>
-                    <button class="px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
+                    <button class="menu-category px-6 py-3 rounded-full bg-white text-primary font-medium hover:bg-primary hover:text-white transition-colors" data-category="<?= htmlspecialchars($categories['Name']) ?>">
                         <?= htmlspecialchars($categories['Name']) ?>
                     </button>
   <?php endforeach; ?>
