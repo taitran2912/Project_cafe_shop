@@ -174,7 +174,48 @@
             RIGHT: CART SIDEBAR
         =========================================== -->
         <div class="col-lg-3 d-none d-lg-block">
-            <?php include 'cart_sidebar.php'; ?>
+             <div class="col-lg-3 d-none d-lg-block">
+            <div class="cart-sidebar position-sticky" style="top: 20px;">
+                <div class="search-box mb-3">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control" placeholder="Bạn đang cần tìm món gì?">
+                </div>
+
+                <?php if(isset($data['tableNumber'])): ?>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="m-0 fw-bold">Bàn số <?= $data['tableNumber'] ?></h6>
+                    </div>
+                <?php endif; ?>
+
+                <?php if(isset($data['storeName'])): ?>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="m-0 fw-bold">Bạn đang mua mang về!</h6>
+                    </div>
+                <?php endif; ?>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="m-0 fw-bold">Giỏ hàng của bạn</h6>
+                    <span class="badge bg-secondary" id="cart-count">0</span>
+                </div>
+
+                <div id="cart-empty-state" class="cart-empty text-center">
+                    <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+                    <p class="small">Không có món ăn trong giỏ hàng</p>
+                </div>
+
+                <div id="cart-items-container" class="cart-items" style="display: none;"></div>
+
+                <div class="cart-total" id="cart-footer" style="display: none;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tổng cộng:</span>
+                        <span class="fw-bold text-primary" id="cart-total-price">0đ</span>
+                    </div>
+                    <button class="btn-checkout btn btn-primary w-100" onclick="goToPayment()">
+                        Thanh toán ngay
+                    </button>
+                </div>
+            </div>
+        </div>
         </div>
 
     </div>
