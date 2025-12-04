@@ -16,6 +16,7 @@ function addToCart(name, price) {
         cart.push({
             name: name,
             price: price,
+            image: image,
             quantity: 1
         });
     }
