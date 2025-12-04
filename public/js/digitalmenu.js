@@ -101,3 +101,76 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const modalEl = document.getElementById("customerPhoneModal");
+    const modal = new bootstrap.Modal(modalEl);
+
+    modal.show();
+
+    // Khi modal đóng, nếu chưa nhập SĐT thì gọi fetchFavorite
+    modalEl.addEventListener('hidden.bs.modal', () => {
+        if (!window.customerPhone) {
+            fetchFavorite();
+        }
+    });
+});
+// ====================================================
+// Lấy số điện thoại
+// ====================================================
+function confirmCustomerPhone() {
+    let phone = document.getElementById('customerPhone').value.trim();
+    window.customerPhone = phone;
+
+    bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal')).hide();
+
+    if (phone) {
+        fetchFavoriteProducts(phone);
+    }
+}
+// ====================================================
+// API: lấy món yêu thích theo SĐT
+// ====================================================
+function fetchFavoriteProducts(phone) {
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/favorite?phone=${phone}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.length > 0) displayFavoriteSuggestions(data);
+        });
+}
+
+// API: lấy món phổ biến
+function fetchFavorite() {
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/popular`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.length > 0) displayFavoriteSuggestions(data);
+        });
+}
+// ====================================================
+// Render danh sách món yêu thích
+// ====================================================
+function displayFavoriteSuggestions(products) {
+    const container = document.getElementById('favorite-container');
+
+    products.forEach(p => {
+        container.innerHTML += `
+            <div class="col">
+                <div class="product-card h-100">
+                    <div class="product-img-wrapper">
+                        <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${p.Image}" class="product-img">
+                    </div>
+
+                    <div class="product-body">
+                        <div class="product-title">${p.Name}</div>
+                        <div class="product-price">${Number(p.Price).toLocaleString('vi-VN')}₫</div>
+
+                        <button class="btn-add" onclick="addToCart('${p.Name}', ${p.Price})">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
