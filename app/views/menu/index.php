@@ -86,7 +86,7 @@ function createMenuItemHTML(item) {
             <div class="flex justify-between items-center">
                 <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
 <?php if (isset($userID)): ?>
-                <button class="btn-brown text-white px-4 py-2 add-to-cart" 
+                <button class="btn btn-brown text-white px-4 py-2 add-to-cart" 
                         data-id="${item.id}"
                         data-name="${item.name}" 
                         data-price="${item.price}"
