@@ -62,7 +62,7 @@
                                 <div class="col">
                                     <div class="product-card h-100">
                                         <div class="product-img-wrapper">
-                                            <img src="../../public/image/<?= $product['Image'] ?>" class="product-img" alt="<?= $product['Name'] ?>">
+                                            <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/<?= $product['Image'] ?>" class="product-img" alt="<?= $product['Name'] ?>">
                                         </div>
                                         <div class="product-body">
                                             <div class="product-title"><?= $product['Name'] ?></div>
@@ -185,7 +185,7 @@
 
 // Lấy món yêu thích từ server dựa trên số điện thoại
         function fetchFavoriteProducts(phone) {
-            fetch(`../../digitalmenu/favorite?phone=${phone}`)
+            fetch(`https://caffeshop.hieuthuocyentam.id.vn//digitalmenu/favorite?phone=${phone}`)
             .then(response => response.json())
             .then(data => {
                 console.log('Favorite data:', data); // kiểm tra data
@@ -210,7 +210,7 @@
                 col.innerHTML = `
                     <div class="product-card h-100">
                         <div class="product-img-wrapper">
-                            <img src="../../public/image/${product.Image}" class="product-img" alt="${product.Name}">
+                            <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${product.Image}" class="product-img" alt="${product.Name}">
                         </div>
                         <div class="product-body">
                             <div class="product-title">${product.Name}</div>
@@ -237,9 +237,9 @@
         function goToPayment() {
             // Nếu có tableNumber
             <?php if(isset($data['tableNumber'])): ?>
-                window.location.href = "../../payment_store/table/<?= $data['tableNumber'] ?>";
+                window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment_store/table/<?= $data['tableNumber'] ?>";
             <?php elseif(isset($data['storeName'])): ?>
-                window.location.href = "../../payment_store/store/<?= $data['storeID'] ?>";
+                window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/payment_store/store/<?= $data['storeID'] ?>";
             <?php endif; ?>
         }
     </script>

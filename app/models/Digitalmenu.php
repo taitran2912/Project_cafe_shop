@@ -77,7 +77,7 @@ class Digitalmenu extends Model {
                     AND p.Status = 'active' 
                     GROUP BY p.ID 
                     ORDER BY total_ordered 
-                    DESC LIMIT 5"; // Top 5 món yêu thích
+                    DESC LIMIT 6"; // Top 5 món yêu thích
 
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("s", $phone);
