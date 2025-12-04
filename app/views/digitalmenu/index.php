@@ -259,9 +259,20 @@
 // ====================================================
 // Hiển modal khi load trang
 // ====================================================
-document.addEventListener('DOMContentLoaded', () => {
-    new bootstrap.Modal('#customerPhoneModal').show();
+document.addEventListener("DOMContentLoaded", () => {
+    const modalEl = document.getElementById("customerPhoneModal");
+    const modal = new bootstrap.Modal(modalEl);
+
+    modal.show();
+
+    // Khi modal đóng, nếu chưa nhập SĐT thì gọi fetchFavorite
+    modalEl.addEventListener('hidden.bs.modal', () => {
+        if (!window.customerPhone) {
+            fetchFavorite();
+        }
+    });
 });
+
 
 // ====================================================
 // Lấy số điện thoại
@@ -274,10 +285,9 @@ function confirmCustomerPhone() {
 
     if (phone) {
         fetchFavoriteProducts(phone);
-    } else {
-        fetchFavorite();
     }
 }
+
 
 // ====================================================
 // API: lấy món yêu thích theo SĐT
