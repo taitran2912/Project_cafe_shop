@@ -158,7 +158,6 @@ function loadAddresses() {
             <div class="flex justify-between items-start">
                 <div>
                     <p class="font-bold text-lg">${a.name}</p>
-                    <p class="text-gray-600">${a.phone}</p>
                     <p class="mt-2 text-gray-700">${a.address}</p>
                     ${a.isDefault ? `<span class="inline-block px-3 py-1 mt-2 bg-primary text-white rounded-full text-xs">Mặc định</span>` : ""}
                 </div>
