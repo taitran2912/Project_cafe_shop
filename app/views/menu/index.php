@@ -38,7 +38,7 @@
 
         <!-- Load More Button  -->
         <div class="text-center mt-12">
-            <button id="load-more-btn" class="btn-brown" style="display: none; background-color: rgb(139, 69, 19);">
+            <button id="load-more-btn" class="btn" style="display: none; background-color: rgb(139, 69, 19);">
                 Xem thêm sản phẩm
             </button>
             <div id="loading" class="hidden">
