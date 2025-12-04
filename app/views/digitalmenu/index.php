@@ -7,11 +7,14 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="../../public/css/digitalmenu.css">
 </head>
 
@@ -24,15 +27,20 @@
     <div class="container-fluid px-md-5">
         <div class="d-flex align-items-center shop-info-card">
             <div class="me-3">
-                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&h=200" alt="Logo">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&h=200"
+                     alt="Logo">
             </div>
+
             <div>
                 <div class="text-secondary small mb-1">Cà phê - Trà - Bánh ngọt</div>
+
                 <div class="small text-muted mb-1">
-                    <i class="fas fa-map-marker-alt me-1"></i> <?= $data['storeName'] ?> - <?= $data['storeAddress'] ?>
+                    <i class="fas fa-map-marker-alt me-1"></i>
+                    <?= $data['storeName'] ?> - <?= $data['storeAddress'] ?>
                 </div>
+
                 <div class="small text-muted">
-                    <span><i class="far fa-clock me-1"></i> 07:00 - 22:30</span>
+                    <i class="far fa-clock me-1"></i> 07:00 - 22:30
                 </div>
             </div>
         </div>
@@ -40,56 +48,59 @@
 </header>
 
 <!-- ==========================================================
-    MAIN CONTENT
+    MAIN
 =========================================================== -->
 <div class="container-fluid px-md-5 mb-5">
-
     <div class="row">
 
-        <!-- ==========================================
-            LEFT: CATEGORY SIDEBAR
-        =========================================== -->
+        <!-- ==========================================================
+            CATEGORY SIDEBAR
+        =========================================================== -->
         <div class="col-md-2 d-none d-md-block">
             <div class="category-sidebar position-sticky" style="top: 20px;">
                 <div class="categories">
-
                     <a href="#favorite-section" class="category-link active">Món yêu thích</a>
                     <a href="#recommended-section" class="category-link">Gợi ý cho bạn</a>
                     <a href="#new-items-section" class="category-link">Món mới</a>
 
                     <?php foreach ($data['categories'] as $cat): ?>
                         <a href="#section-<?= $cat['ID'] ?>" class="category-link">
-                            <?= $cat['Name'] ?>
+                            <?= htmlspecialchars($cat['Name']) ?>
                         </a>
                     <?php endforeach; ?>
-
                 </div>
             </div>
         </div>
-        <!-- ==========================================
-            CENTER: MENU CONTENT
-        =========================================== -->
+
+        <!-- ==========================================================
+            MENU CONTENT
+        =========================================================== -->
         <div class="col-md-10 col-lg-7 menu-content">
 
-            <!-- ⭐ 1. MÓN YÊU THÍCH -->
+            <!-- Món yêu thích -->
             <div id="favorite-section" class="menu-section mb-5">
                 <h3 class="menu-section-title">Món bạn yêu thích</h3>
                 <div id="favorite-container" class="row g-3 row-cols-2 row-cols-md-3"></div>
             </div>
 
-            <!-- ⭐ 2. MÓN GỢI Ý -->
+            <!-- Gợi ý -->
             <div id="recommended-section" class="menu-section mb-5">
                 <h3 class="menu-section-title">Gợi ý cho bạn</h3>
+
                 <div class="row g-3 row-cols-2 row-cols-md-3">
                     <?php foreach ($data['recommended'] as $p): ?>
                         <div class="col">
                             <div class="product-card h-100">
                                 <div class="product-img-wrapper">
-                                    <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/<?= $p['Image'] ?>" class="product-img">
+                                    <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/<?= $p['Image'] ?>"
+                                         class="product-img"
+                                         alt="<?= htmlspecialchars($p['Name']) ?>">
                                 </div>
+
                                 <div class="product-body">
                                     <div class="product-title"><?= $p['Name'] ?></div>
-                                    <div class="product-price"><?= number_format($p['Price'],0,',','.') ?>₫</div>
+                                    <div class="product-price"><?= number_format($p['Price'], 0, ',', '.') ?>₫</div>
+
                                     <button class="btn-add" onclick="addToCart('<?= $p['Name'] ?>', <?= $p['Price'] ?>)">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -100,19 +111,24 @@
                 </div>
             </div>
 
-            <!-- ⭐ 3. MÓN MỚI -->
+            <!-- Món mới -->
             <div id="new-items-section" class="menu-section mb-5">
                 <h3 class="menu-section-title">Món mới ra mắt</h3>
+
                 <div class="row g-3 row-cols-2 row-cols-md-3">
                     <?php foreach ($data['newItems'] as $p): ?>
                         <div class="col">
                             <div class="product-card h-100">
                                 <div class="product-img-wrapper">
-                                    <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/<?= $p['Image'] ?>" class="product-img">
+                                    <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/<?= $p['Image'] ?>"
+                                         class="product-img"
+                                         alt="<?= htmlspecialchars($p['Name']) ?>">
                                 </div>
+
                                 <div class="product-body">
                                     <div class="product-title"><?= $p['Name'] ?></div>
-                                    <div class="product-price"><?= number_format($p['Price'],0,',','.') ?>₫</div>
+                                    <div class="product-price"><?= number_format($p['Price'], 0, ',', '.') ?>₫</div>
+
                                     <button class="btn-add" onclick="addToCart('<?= $p['Name'] ?>', <?= $p['Price'] ?>)">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -123,21 +139,21 @@
                 </div>
             </div>
 
-
-            <!-- ⭐ 4. MENU THEO DANH MỤC -->
+            <!-- Theo danh mục -->
             <?php foreach ($data['categories'] as $cat): ?>
                 <div id="section-<?= $cat['ID'] ?>" class="menu-section mb-5">
                     <h3 class="menu-section-title"><?= $cat['Name'] ?></h3>
 
                     <div class="row g-3 row-cols-2 row-cols-md-3">
-
                         <?php foreach ($data['products'] as $product): ?>
                             <?php if ($product['ID_category'] == $cat['ID']): ?>
                                 <div class="col">
                                     <div class="product-card h-100">
+
                                         <div class="product-img-wrapper">
                                             <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/<?= $product['Image'] ?>"
-                                                class="product-img" alt="<?= $product['Name'] ?>">
+                                                 class="product-img"
+                                                 alt="<?= htmlspecialchars($product['Name']) ?>">
                                         </div>
 
                                         <div class="product-body">
@@ -146,7 +162,7 @@
 
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="product-price">
-                                                    <?= number_format($product['Price'],0,',','.') ?>₫
+                                                    <?= number_format($product['Price'], 0, ',', '.') ?>₫
                                                 </div>
 
                                                 <button class="btn-add"
@@ -160,23 +176,24 @@
                                 </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
                     </div>
                 </div>
             <?php endforeach; ?>
 
         </div>
-        <!-- ==========================================
-            RIGHT: CART SIDEBAR
-        =========================================== -->
+
+        <!-- ==========================================================
+            CART SIDEBAR
+        =========================================================== -->
         <div class="col-lg-3 d-none d-lg-block">
             <div class="cart-sidebar position-sticky" style="top: 20px;">
+
                 <div class="search-box mb-3">
                     <i class="fas fa-search"></i>
                     <input type="text" class="form-control" placeholder="Bạn đang cần tìm món gì?">
                 </div>
 
-                <?php if(isset($data['tableNumber'])): ?>
+                <?php if (isset($data['tableNumber'])): ?>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="m-0 fw-bold">Bàn số <?= $data['tableNumber'] ?></h6>
                     </div>
@@ -203,87 +220,88 @@
                         Thanh toán ngay
                     </button>
                 </div>
+
             </div>
         </div>
 
     </div>
 </div>
+
 <!-- ==========================================================
-    PHONE INPUT MODAL
+    MODAL NHẬP SĐT
 =========================================================== -->
 <div class="modal fade" id="customerPhoneModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title">Nhập số điện thoại</h5>
-      </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Nhập số điện thoại</h5>
+            </div>
 
-      <div class="modal-body">
-        <input type="text" id="customerPhone" class="form-control" placeholder="Nhập số điện thoại...">
-      </div>
+            <div class="modal-body">
+                <input type="text" id="customerPhone" class="form-control" placeholder="Nhập số điện thoại...">
+            </div>
 
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <button class="btn btn-primary" onclick="confirmCustomerPhone()">Xác nhận</button>
-      </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary" onclick="confirmCustomerPhone()">Xác nhận</button>
+            </div>
 
+        </div>
     </div>
-  </div>
 </div>
-
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../public/js/digitalmenu.js"></script>
 
 <script>
-// =========================
-// 1. Mở modal nhập số điện thoại
-// =========================
+// ====================================================
+// Hiển modal khi load trang
+// ====================================================
 document.addEventListener('DOMContentLoaded', () => {
     new bootstrap.Modal('#customerPhoneModal').show();
 });
 
-// =========================
-// 2. Lấy số điện thoại
-// =========================
+// ====================================================
+// Lấy số điện thoại
+// ====================================================
 function confirmCustomerPhone() {
     let phone = document.getElementById('customerPhone').value.trim();
     window.customerPhone = phone;
+
     bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal')).hide();
-    if (!phone) {
-        fetchFavoritePopular()
-    }else{
+
+    if (phone) {
         fetchFavoriteProducts(phone);
+    } else {
+        fetchFavorite();
     }
-    // fetchNewItems();
-    // fetchRecommendedItems();
 }
 
-// =========================
-// 3. Gọi API lấy món yêu thích
-// =========================
+// ====================================================
+// API: lấy món yêu thích theo SĐT
+// ====================================================
 function fetchFavoriteProducts(phone) {
     fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/favorite?phone=${phone}`)
-    .then(r => r.json())
-    .then(data => {
-        if (data.length > 0) displayFavoriteSuggestions(data);
-    });
+        .then(r => r.json())
+        .then(data => {
+            if (data.length > 0) displayFavoriteSuggestions(data);
+        });
 }
 
+// API: lấy món phổ biến
 function fetchFavorite() {
     fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/FavoritePopular`)
-    .then(r => r.json())
-    .then(data => {
-        if (data.length > 0) displayFavoriteSuggestions(data);
-    });
+        .then(r => r.json())
+        .then(data => {
+            if (data.length > 0) displayFavoriteSuggestions(data);
+        });
 }
 
-
-// =========================
-// 4. Hiển thị món yêu thích
-// =========================
+// ====================================================
+// Render danh sách món yêu thích
+// ====================================================
 function displayFavoriteSuggestions(products) {
     const container = document.getElementById('favorite-container');
 
@@ -294,9 +312,11 @@ function displayFavoriteSuggestions(products) {
                     <div class="product-img-wrapper">
                         <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${p.Image}" class="product-img">
                     </div>
+
                     <div class="product-body">
                         <div class="product-title">${p.Name}</div>
                         <div class="product-price">${Number(p.Price).toLocaleString('vi-VN')}₫</div>
+
                         <button class="btn-add" onclick="addToCart('${p.Name}', ${p.Price})">
                             <i class="fas fa-plus"></i>
                         </button>
