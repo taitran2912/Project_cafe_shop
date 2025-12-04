@@ -4,25 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $data['title'] ?></title>
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="../../public/css/digitalmenu.css">
 </head>
-
 <body>
-
-<!-- ==========================================================
-    HEADER
-=========================================================== -->
 <header class="shop-header">
     <div class="container-fluid px-md-5">
         <div class="d-flex align-items-center shop-info-card">
@@ -47,15 +34,9 @@
     </div>
 </header>
 
-<!-- ==========================================================
-    MAIN
-=========================================================== -->
 <div class="container-fluid px-md-5 mb-5">
     <div class="row">
 
-        <!-- ==========================================================
-            CATEGORY SIDEBAR
-        =========================================================== -->
         <div class="col-md-2 d-none d-md-block">
             <div class="category-sidebar position-sticky" style="top: 20px;">
                 <div class="categories">
@@ -71,18 +52,12 @@
                 </div>
             </div>
         </div>
-
-        <!-- ==========================================================
-            MENU CONTENT
-        =========================================================== -->
         <div class="col-md-10 col-lg-7 menu-content">
-
             <!-- Món yêu thích -->
             <div id="favorite-section" class="menu-section mb-5">
                 <h3 class="menu-section-title">Món bạn yêu thích</h3>
                 <div id="favorite-container" class="row g-3 row-cols-2 row-cols-md-3"></div>
             </div>
-
             <!-- Gợi ý -->
             <div id="recommended-section" class="menu-section mb-5">
                 <h3 class="menu-section-title">Gợi ý cho bạn</h3>
@@ -96,7 +71,6 @@
                                          class="product-img"
                                          alt="<?= htmlspecialchars($p['Name']) ?>">
                                 </div>
-
                                 <div class="product-body">
                                     <div class="product-title"><?= $p['Name'] ?></div>
                                     <div class="product-price"><?= number_format($p['Price'], 0, ',', '.') ?>₫</div>
@@ -110,7 +84,6 @@
                     <?php endforeach; ?>
                 </div>
             </div>
-
             <!-- Món mới -->
             <div id="new-items-section" class="menu-section mb-5">
                 <h3 class="menu-section-title">Món mới ra mắt</h3>
@@ -124,11 +97,9 @@
                                          class="product-img"
                                          alt="<?= htmlspecialchars($p['Name']) ?>">
                                 </div>
-
                                 <div class="product-body">
                                     <div class="product-title"><?= $p['Name'] ?></div>
                                     <div class="product-price"><?= number_format($p['Price'], 0, ',', '.') ?>₫</div>
-
                                     <button class="btn-add" onclick="addToCart('<?= $p['Name'] ?>', <?= $p['Price'] ?>)">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -138,7 +109,6 @@
                     <?php endforeach; ?>
                 </div>
             </div>
-
             <!-- Theo danh mục -->
             <?php foreach ($data['categories'] as $cat): ?>
                 <div id="section-<?= $cat['ID'] ?>" class="menu-section mb-5">
@@ -179,12 +149,8 @@
                     </div>
                 </div>
             <?php endforeach; ?>
-
         </div>
 
-        <!-- ==========================================================
-            CART SIDEBAR
-        =========================================================== -->
         <div class="col-lg-3 d-none d-lg-block">
             <div class="cart-sidebar position-sticky" style="top: 20px;">
 
@@ -227,9 +193,6 @@
     </div>
 </div>
 
-<!-- ==========================================================
-    MODAL NHẬP SĐT
-=========================================================== -->
 <div class="modal fade" id="customerPhoneModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -256,9 +219,7 @@
 <script src="../../public/js/digitalmenu.js"></script>
 
 <script>
-// ====================================================
-// Hiển modal khi load trang
-// ====================================================
+
 document.addEventListener("DOMContentLoaded", () => {
     const modalEl = document.getElementById("customerPhoneModal");
     const modal = new bootstrap.Modal(modalEl);
@@ -272,9 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-// ====================================================
-// Lấy số điện thoại
-// ====================================================
+
 function confirmCustomerPhone() {
     let phone = document.getElementById('customerPhone').value.trim();
     window.customerPhone = phone;
@@ -285,9 +244,7 @@ function confirmCustomerPhone() {
         fetchFavoriteProducts(phone);
     }
 }
-// ====================================================
-// API: lấy món yêu thích theo SĐT
-// ====================================================
+
 function fetchFavoriteProducts(phone) {
     fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/favorite?phone=${phone}`)
         .then(r => r.json())
@@ -296,7 +253,6 @@ function fetchFavoriteProducts(phone) {
         });
 }
 
-// API: lấy món phổ biến
 function fetchFavorite() {
     fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/popular`)
         .then(r => r.json())
@@ -304,12 +260,9 @@ function fetchFavorite() {
             if (data.length > 0) displayFavoriteSuggestions(data);
         });
 }
-// ====================================================
-// Render danh sách món yêu thích
-// ====================================================
+
 function displayFavoriteSuggestions(products) {
     const container = document.getElementById('favorite-container');
-
     products.forEach(p => {
         container.innerHTML += `
             <div class="col">
@@ -331,7 +284,27 @@ function displayFavoriteSuggestions(products) {
         `;
     });
 }
-</script>
 
+function goToPayment() {
+    if (cart.length === 0) {
+        alert("Giỏ hàng của bạn đang trống!");
+        return;
+    }
+
+    // Chuẩn bị dữ liệu gửi sang trang thanh toán
+    const orderData = {
+        phone: window.customerPhone ?? null,
+        items: cart,
+        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    };
+
+    // Lưu order vào localStorage
+    localStorage.setItem("pendingOrder", JSON.stringify(orderData));
+
+    // Chuyển sang trang thanh toán
+    window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/checkout/${orderData.phone}"; 
+}
+
+</script>
 </body>
 </html>
