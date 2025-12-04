@@ -79,7 +79,7 @@
 
             <!-- ⭐ 2. MÓN GỢI Ý -->
             <div id="recommended-section" class="menu-section mb-5">
-                <h3 class="menu-section-title">Món </h3>
+                <h3 class="menu-section-title">Gợi ý cho bạn</h3>
                 <div class="row g-3 row-cols-2 row-cols-md-3">
                     <?php foreach ($data['recommended'] as $p): ?>
                         <div class="col">
