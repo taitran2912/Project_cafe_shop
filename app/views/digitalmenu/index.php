@@ -259,25 +259,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================
 function confirmCustomerPhone() {
     let phone = document.getElementById('customerPhone').value.trim();
-
-    // Đóng modal
-    let modal = bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal'));
-    modal.hide();
-
-    // Có nhập số điện thoại → load đúng theo khách
-    if (phone !== "") {
-        window.customerPhone = phone;
-
-        fetchFavoriteProducts(phone);     // Món yêu thích của khách
-    } 
-    // Không nhập số điện thoại → load chung
-    else {
-        fetchFavoriteProducts(null);     // Món yêu thích khác (ngẫu nhiên/phổ biến)
-
+    if (!phone) {
+        alert("Vui lòng nhập số điện thoại!");
+        return;
     }
-    fetchNewItems();            // Món mới cho khách
-    fetchRecommendedItems();
+
+    window.customerPhone = phone;
+
+    bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal')).hide();
+
+    fetchFavoriteProducts(phone);
+    // fetchNewItems();
+    // fetchRecommendedItems();
 }
+
 // =========================
 // 3. Gọi API lấy món yêu thích
 // =========================
@@ -288,22 +283,7 @@ function fetchFavoriteProducts(phone) {
         if (data.length > 0) displayFavoriteSuggestions(data);
     });
 }
-// Món mới
-function fetchNewItems() {
-    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/new`)
-    .then(r => r.json())
-    .then(data => {
-        if (data.length > 0) displayNewSuggestions(data);
-    });
-}
-//
-function fetchRecommendedItems() {
-    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/recommend`)
-    .then(r => r.json())
-    .then(data => {
-        if (data.length > 0) displayRecommendSuggestions(data);
-    });
-}
+
 
 // =========================
 // 4. Hiển thị món yêu thích
