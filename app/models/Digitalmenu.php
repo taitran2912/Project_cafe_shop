@@ -134,7 +134,7 @@ class Digitalmenu extends Model {
                     OVER (PARTITION BY p.ID_category ORDER BY SUM(od.Quantity) DESC) AS rn 
                     FROM Order_detail od JOIN Product p ON od.ID_product = p.ID WHERE p.ID_category 
                     IN (SELECT ID_category FROM TopCategories) GROUP BY p.ID, p.Name, p.Price, p.ID_category ) 
-                    SELECT * FROM ProductSales Limit 6;
+                    SELECT * FROM ProductSales Limit 3;
                 "; // Top 6 món được đề xuất
 
         $result = $this->db->query($query);
