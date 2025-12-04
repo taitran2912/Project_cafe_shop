@@ -157,7 +157,7 @@ function getStatusClass(status) {
 function getStatusText(status) {
   switch (status) {
     case "Pending": return "Chờ xử lý"
-    case "Processing": return "Đang xử lý"
+    case "Confirmed": return "Nhận đơn"
     case "Completed": return "Hoàn thành"
     case "Cancelled": return "Đã hủy"
     default: return "Chờ xử lý"
