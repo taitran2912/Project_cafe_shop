@@ -347,7 +347,7 @@ function goToPayment() {
     // Lưu giỏ hàng
     localStorage.setItem("pendingOrder", JSON.stringify(orderData));
 
-    const phoneParam = orderData.phone ? orderData.phone : 0;
+    const phoneParam = orderData.phone ? orderData.phone : guest;
 
     // Điều hướng sang trang thanh toán (KHÔNG lỗi biến)
     window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/${orderData.phone}`;
