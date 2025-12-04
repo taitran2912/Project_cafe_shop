@@ -110,7 +110,7 @@ const profileData = {
         {
             id: <?= $o['ID'] ?>,
             date: "<?= $o['Date'] ?>",
-            status: "<?= $o['Status'] ?>",
+            status: "<?= $data['Status'] ?>",
 
             ship: <?= $o['Shipping_Cost'] ?>,
             total: <?= $o['Total'] ?>,
