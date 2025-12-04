@@ -88,7 +88,7 @@ class DigitalmenuController extends Controller {
     public function popular() {
         header('Content-Type: application/json');
 
-        $popular = $this->model('Digitalmenu')->getFavoritePopular();
+        $popular = $this->model('Digitalmenu')->getPopularFavorites();
         echo json_encode($popular);
     }
 }
