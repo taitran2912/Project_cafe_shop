@@ -1,130 +1,89 @@
 <?php
 class DigitalmenuController extends Controller {
-
-    /* ======================================
-        HIỂN THỊ MENU THEO SỐ BÀN
-    ====================================== */
     public function table($tableNumber) {
-        $dm = $this->model('Digitalmenu');
+        $digitalmenuModel = $this->model('Digitalmenu');
 
-        $store = $dm->tableByStore($tableNumber);
+        // Lấy thông tin store theo table
+        $store = $digitalmenuModel->tableByStore($tableNumber);
 
         if (empty($store)) {
             die("Table not found or inactive.");
         }
 
+        $storeID = $store[0]['ID'];
+        $storeName = $store[0]['Name'];
+        $storeAddress = $store[0]['Address'];
+
+        // Lấy sản phẩm và category của store
+        $categories = $digitalmenuModel->categories();
+        $products = $digitalmenuModel->product();
+
         $data = [
             'title' => 'Digital Menu',
             'tableNumber' => $tableNumber,
-            'storeID' => $store[0]['ID'],
-            'storeName' => $store[0]['Name'],
-            'storeAddress' => $store[0]['Address'],
-            'categories' => $dm->categories(),
-            'products' => $dm->product()
+            'storeID' => $storeID,
+            'storeName' => $storeName,
+            'storeAddress' => $storeAddress,
+            'categories' => $categories,
+            'products' => $products
         ];
 
         $this->view('digitalmenu/index', $data);
     }
 
-    /* ======================================
-        HIỂN THỊ MENU THEO ID CHI NHÁNH
-    ====================================== */
     public function store($storeNumber) {
-        $dm = $this->model('Digitalmenu');
+        $digitalmenuModel = $this->model('Digitalmenu');
 
-        $store = $dm->store($storeNumber);
+        $store = $digitalmenuModel->store($storeNumber);
 
         if (empty($store)) {
             die("Store not found or inactive.");
         }
 
+        $storeID = $store[0]['ID'];
+        $storeName = $store[0]['Name'];
+        $storeAddress = $store[0]['Address'];
+
+        $categories = $digitalmenuModel->categories($storeID);
+        $products = $digitalmenuModel->product($storeID);
+
         $data = [
             'title' => 'Digital Menu',
-            'storeID' => $store[0]['ID'],
-            'storeName' => $store[0]['Name'],
-            'storeAddress' => $store[0]['Address'],
-            'categories' => $dm->categories(),
-            'products' => $dm->product()
+            'storeID' => $storeID,
+            'storeName' => $storeName,
+            'storeAddress' => $storeAddress,
+            'categories' => $categories,
+            'products' => $products
         ];
 
         $this->view('digitalmenu/index', $data);
     }
-
-    /* ======================================
-        API: MÓN YÊU THÍCH / PHỔ BIẾN / TƯƠNG TỰ
-    ====================================== */
+    
+    // Lấy món yêu thích dựa trên số điện thoại hoặc yêu thích phổ biến
     public function favorite() {
         header('Content-Type: application/json');
 
         $phone = $_GET['phone'] ?? '';
-        $dm = $this->model('Digitalmenu');
 
-        // 1. Lấy món yêu thích theo số điện thoại
+        $digitalmenu = $this->model('Digitalmenu');
+
+        // Nếu có số điện thoại → lấy theo khách
         if (!empty($phone)) {
-            $favorites = $dm->getFavoriteByPhone($phone);
+            $favorites = $digitalmenu->getFavoriteByPhone($phone);
 
-            // Nếu không có lịch sử của khách → lấy món phổ biến
+            // Nếu khách chưa từng gọi món → fallback sang phổ biến
             if (empty($favorites)) {
-                $favorites = $dm->getPopularFavorites();
+                $favorites = $digitalmenu->getFavoritePopular();
             }
 
-        } else {
-            // Không nhập số điện thoại → lấy món phổ biến
-            $favorites = $dm->getPopularFavorites();
+            echo json_encode($favorites);
+            return;
         }
 
-        // 2. Danh sách ID hiện tại để tránh trùng
-        $existingIds = array_column($favorites, 'ID');
-
-        // 3. Bổ sung món (phổ biến + tương tự) tới đủ số lượng
-        $favorites = $this->addMoreItems($favorites, $existingIds, $dm, 6);
-
-        echo json_encode($favorites);
+        // Không nhập số điện thoại → lấy top món phổ biến
+        $popular = $digitalmenu->getFavoritePopular();
+        echo json_encode($popular);
     }
 
-    /* ======================================
-        BỔ SUNG MÓN ĐỂ ĐỦ SỐ LƯỢNG (KHÔNG TRÙNG)
-    ====================================== */
-    private function addMoreItems($items, $existingIds, $dm, $limit) {
 
-        // Nếu đã đủ
-        if (count($items) >= $limit) {
-            return array_slice($items, 0, $limit);
-        }
-
-        /* === 1. Bổ sung món phổ biến === */
-        $popular = $dm->getPopularFavorites();
-
-        foreach ($popular as $p) {
-            if (!in_array($p['ID'], $existingIds)) {
-                $items[] = $p;
-                $existingIds[] = $p['ID'];
-            }
-            if (count($items) >= $limit) break;
-        }
-
-        /* === 2. Nếu vẫn thiếu → lấy món tương tự theo category === */
-        if (count($items) < $limit && !empty($items)) {
-
-            $cat = $dm->getCategoryByProductId($items[0]['ID']);
-
-            if (!empty($cat)) {
-                $similar = $dm->getSimilarProductsByCategory(
-                    $cat['ID_category'],
-                    $existingIds,
-                    $limit - count($items)
-                );
-
-                foreach ($similar as $s) {
-                    if (!in_array($s['ID'], $existingIds)) {
-                        $items[] = $s;
-                        $existingIds[] = $s['ID'];
-                    }
-                    if (count($items) >= $limit) break;
-                }
-            }
-        }
-
-        return array_slice($items, 0, $limit);
-    }
 }
