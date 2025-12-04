@@ -44,6 +44,9 @@ class DigitalmenuController extends Controller {
             die("Store not found or inactive.");
         }
 
+        $recommended = $digitalmenuModel->getRecommended();
+        $new = $digitalmenuModel->getNewProducts();
+
         $storeInfo = $store[0];
         $storeID   = $storeInfo['ID'];
 
@@ -51,6 +54,8 @@ class DigitalmenuController extends Controller {
         $data = [
             'title'        => 'Digital Menu',
             'storeID'      => $storeID,
+            'recommended'  => $recommended,
+            'newItems'     => $new,  
             'storeName'    => $storeInfo['Name'],
             'storeAddress' => $storeInfo['Address'],
             'categories'   => $digitalmenuModel->categories($storeID),
