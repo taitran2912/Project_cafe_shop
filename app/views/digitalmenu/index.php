@@ -174,7 +174,6 @@
             RIGHT: CART SIDEBAR
         =========================================== -->
         <div class="col-lg-3 d-none d-lg-block">
-             <div class="col-lg-3 d-none d-lg-block">
             <div class="cart-sidebar position-sticky" style="top: 20px;">
                 <div class="search-box mb-3">
                     <i class="fas fa-search"></i>
@@ -215,7 +214,6 @@
                     </button>
                 </div>
             </div>
-        </div>
         </div>
 
     </div>
