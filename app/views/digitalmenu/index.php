@@ -291,18 +291,19 @@ function goToPayment() {
         return;
     }
 
-    // Chuẩn bị dữ liệu gửi sang trang thanh toán
     const orderData = {
         phone: window.customerPhone ?? null,
         items: cart,
         total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     };
 
-    // Lưu order vào localStorage
+    // Lưu giỏ hàng
     localStorage.setItem("pendingOrder", JSON.stringify(orderData));
 
-    // Chuyển sang trang thanh toán
-    window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/checkout/${orderData.phone}"; 
+    const phoneParam = orderData.phone ? orderData.phone : "guest";
+
+    // Điều hướng sang trang thanh toán (KHÔNG lỗi biến)
+    window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/${orderData.phone}`;
 }
 
 </script>
