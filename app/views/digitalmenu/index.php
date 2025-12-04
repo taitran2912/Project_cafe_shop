@@ -355,11 +355,11 @@ function goToPayment() {
 
     // Nếu có số điện thoại → checkout theo khách
     if (orderData.phone) {
-        window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/${orderData.phone}`;
+        window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/guest/${orderData.phone}`;
     }
     // Không có số → checkout khách vãng lai
     else {
-        window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/guest`;
+        window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/guest/guest`;
     }
 }
 
