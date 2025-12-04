@@ -114,7 +114,7 @@ const profileData = {
             ship: <?= $o['Shipping_Cost'] ?>,
             total: <?= $o['Total'] ?>,
             items: [
-                <?php foreach ($o['Items'] as $it): ?>
+                <?php foreach ($o['Details'] as $it): ?>
                 {
                     name: "<?= htmlspecialchars($it['Name']) ?>",
                     quantity: <?= $it['Quantity'] ?>,
