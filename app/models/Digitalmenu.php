@@ -32,21 +32,6 @@ class Digitalmenu extends Model {
     }
 
     public function product() {
-        // $stmt = $this->db->prepare("SELECT p.* 
-        //                             FROM Products p 
-        //                             WHERE p.Status = 'active';");
-        // // $stmt->bind_param("i", $storeID);
-        // // $stmt->execute();
-        // $result = $stmt->get_result();
-
-        // $data = [];
-        // while ($row = $result->fetch_assoc()) {
-        //     $data[] = $row;
-        // }
-
-        // $stmt->close();
-        // return $data;
-
         $query = "SELECT * FROM Product;";
         $result = $this->db->query($query);
         $data = [];
