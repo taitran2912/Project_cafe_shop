@@ -41,6 +41,7 @@ class ProfileController extends Controller {
             'Mail' => $profile['Email'],
             'Phone' => $profile['Phone'],
             'Point' => $profile['Points'],
+            'Status' => $profile['Status'],
             'Order' => $orders
         ];
         $this->view('profile/index', $data);

@@ -109,7 +109,7 @@ const profileData = {
         <?php foreach ($data['Order'] as $o): ?>
         {
             id: <?= $o['ID'] ?>,
-            date: "<?= $o['Time'] ?>",
+            date: "<?= $o['Date'] ?>",
             status: "<?= strtolower($o['Status']) ?>",
             ship: <?= $o['Shipping_Cost'] ?>,
             total: <?= $o['Total'] ?>,
@@ -210,7 +210,6 @@ function loadOrders() {
       <div class="border-t pt-4 flex justify-between items-center">
         <span class="font-bold">Tổng cộng: ${formatPrice(order.total)}</span>
         <div class="space-x-2">
-          <button onclick="viewOrderDetails(${order.id})" class="btn-secondary text-sm px-4 py-2">Chi tiết</button>
           ${order.status === "Pending" ? `
           <button onclick="cancelOrder(${order.id})" class="text-red-500 hover:text-red-700 text-sm">Hủy đơn</button>` : ""}
         </div>
