@@ -268,10 +268,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Khi modal đóng, nếu chưa nhập SĐT thì gọi fetchFavorite
     modalEl.addEventListener('hidden.bs.modal', () => {
-        if (!window.customerPhone) {
-            fetchFavorite();
-        }
-    });
+    const phone = document.getElementById('customerPhone').value.trim();
+
+    // Nếu KHÔNG nhập số điện thoại → load món phổ biến
+    if (phone === "") {
+        window.customerPhone = null;
+        fetchFavorite();
+    }
+});
+
 });
 // ====================================================
 // Lấy số điện thoại
