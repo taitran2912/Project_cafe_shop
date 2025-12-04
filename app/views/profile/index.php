@@ -147,7 +147,7 @@ function formatDate(dateString) {
 function getStatusClass(status) {
   switch (status) {
     case "Pending": return "status-pending"
-    case "Processing": return "status-processing"
+    case "Confirmed": return "status-processing"
     case "Completed": return "status-completed"
     case "Cancelled": return "status-cancelled"
     default: return "status-pending"
