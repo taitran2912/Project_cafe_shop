@@ -90,7 +90,7 @@ function createMenuItemHTML(item) {
                         data-id="${item.id}"
                         data-name="${item.name}" 
                         data-price="${item.price}"
-                        data-image="${item.image}">
+                        data-image="${item.image}"
                         style="background-color: rgb(139, 69, 19);">
                     Thêm vào giỏ
                 </button>
