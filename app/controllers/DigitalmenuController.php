@@ -74,25 +74,20 @@ class DigitalmenuController extends Controller {
         $phone = $_GET['phone'] ?? '';
         $digitalmenu = $this->model('Digitalmenu');
 
-        // Người dùng đã nhập SĐT → lấy món từng gọi
+        // Mặc định lấy món phổ biến
+        $favorites = $digitalmenu->getFavoritePopular();
+
+        // Nếu có SĐT → thử lấy món đã gọi
         if (!empty($phone)) {
-            $favorites = $digitalmenu->getFavoriteByPhone($phone);
+            $userFav = $digitalmenu->getFavoriteByPhone($phone);
 
-            // Nếu khách chưa từng gọi → fallback sang món phổ biến
-            if (empty($favorites)) {
-                $favorites = $digitalmenu->getFavoritePopular();
+            // Kiểm tra hợp lệ: phải là array & không rỗng
+            if (is_array($userFav) && !empty($userFav)) {
+                $favorites = $userFav;
             }
-
-            if($favorites ==''){
-                    $favorites = $digitalmenu->getFavoritePopular();
-                }
-
-            echo json_encode($favorites);
-            return;
         }
 
-        // Không nhập SĐT → trả về danh sách phổ biến
-        echo json_encode($digitalmenu->getFavoritePopular());
+        echo json_encode($favorites);
     }
 
     /** =============================
