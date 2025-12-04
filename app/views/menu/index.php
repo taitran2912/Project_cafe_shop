@@ -39,7 +39,7 @@
         <!-- Load More Button  -->
         <div class="text-center mt-12">
             <button id="load-more-btn" class="btn" style="display: none; background-color: rgb(210, 180, 140);">
-                Xem thêm sản phẩm
+                Xem thêm
             </button>
             <div id="loading" class="hidden">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brown"></div>
