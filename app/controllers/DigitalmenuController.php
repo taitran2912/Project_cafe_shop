@@ -59,19 +59,65 @@ class DigitalmenuController extends Controller {
         $this->view('digitalmenu/index', $data);
     }
     
-// Lấy món yêu thích dựa trên số điện thoại
+   // Lấy món yêu thích dựa trên số điện thoại hoặc yêu thích phổ biến
     public function favorite() {
+        header('Content-Type: application/json');
+
         $phone = $_GET['phone'] ?? '';
-
-        if(empty($phone)) {
-            echo json_encode([]);
-            return;
+        $dm = $this->model('Digitalmenu');
+        // 1) Lấy danh sách ban đầu
+        if (!empty($phone)) {
+            $favorites = $dm->getFavoriteByPhone($phone);
+            // Nếu khách chưa có lịch sử → lấy món phổ biến
+            if (empty($favorites)) {
+                $favorites = $dm->getFavoritePopular();
+            }
+        } else {
+            $favorites = $dm->getFavoritePopular();
         }
-
-        $digitalmenuModel = $this->model('Digitalmenu');
-        $favorites = $digitalmenuModel->getFavoriteByPhone($phone);
-
+        // Danh sách ID để chống trùng
+        $existingIds = array_column($favorites, 'ID');
+        // 2) BỔ SUNG MÓN để đủ 6 → Không trùng sản phẩm
+        $favorites = $this->fillRecommendedItems($favorites, $existingIds, $dm, 6);
         echo json_encode($favorites);
     }
+
+    private function fillRecommendedItems($favorites, $existingIds, $dm, $limit = 6) {
+        // Nếu đủ số lượng → return ngay
+        if (count($favorites) >= $limit) {
+            return array_slice($favorites, 0, $limit);
+        }
+        // 1) Bổ sung món phổ biến
+        $popular = $dm->getFavoritePopular();
+        foreach ($popular as $p) {
+            if (!in_array($p['ID'], $existingIds)) {
+                $favorites[] = $p;
+                $existingIds[] = $p['ID'];
+            }
+            if (count($favorites) >= $limit) break;
+        }
+        // 2) Nếu vẫn thiếu → lấy món cùng danh mục với món đầu tiên
+        if (count($favorites) < $limit && !empty($favorites)) {
+            $category = $dm->getCategoryByProductId($favorites[0]['ID']);
+            if ($category) {
+                $similar = $dm->getSimilarProductsByCategory(
+                    $category['ID_category'],
+                    $existingIds,
+                    $limit - count($favorites)
+                );
+                foreach ($similar as $s) {
+                    if (!in_array($s['ID'], $existingIds)) {
+                        $favorites[] = $s;
+                        $existingIds[] = $s['ID'];
+                    }
+                    if (count($favorites) >= $limit) break;
+                }
+            }
+        }
+        // Trả về đúng số lượng yêu cầu
+        return array_slice($favorites, 0, $limit);
+    }
+
+
 
 }

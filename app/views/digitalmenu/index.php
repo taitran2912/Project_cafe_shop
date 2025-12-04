@@ -66,8 +66,6 @@
                 </div>
             </div>
         </div>
-
-
         <!-- ==========================================
             CENTER: MENU CONTENT
         =========================================== -->
@@ -81,7 +79,7 @@
 
             <!-- ⭐ 2. MÓN GỢI Ý -->
             <div id="recommended-section" class="menu-section mb-5">
-                <h3 class="menu-section-title">Món gợi ý hôm nay</h3>
+                <h3 class="menu-section-title">Món </h3>
                 <div class="row g-3 row-cols-2 row-cols-md-3">
                     <?php foreach ($data['recommended'] as $p): ?>
                         <div class="col">
@@ -168,8 +166,6 @@
             <?php endforeach; ?>
 
         </div>
-
-
         <!-- ==========================================
             RIGHT: CART SIDEBAR
         =========================================== -->
@@ -263,18 +259,25 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================
 function confirmCustomerPhone() {
     let phone = document.getElementById('customerPhone').value.trim();
-    if (!phone) {
-        alert("Vui lòng nhập số điện thoại!");
-        return;
+
+    // Đóng modal
+    let modal = bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal'));
+    modal.hide();
+
+    // Có nhập số điện thoại → load đúng theo khách
+    if (phone !== "") {
+        window.customerPhone = phone;
+
+        fetchFavoriteProducts(phone);     // Món yêu thích của khách
+    } 
+    // Không nhập số điện thoại → load chung
+    else {
+        fetchFavoriteProducts(null);     // Món yêu thích khác (ngẫu nhiên/phổ biến)
+
     }
-
-    window.customerPhone = phone;
-
-    bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal')).hide();
-
-    fetchFavoriteProducts(phone);
+    fetchNewItems();            // Món mới cho khách
+    fetchRecommendedItems();
 }
-
 // =========================
 // 3. Gọi API lấy món yêu thích
 // =========================
@@ -283,6 +286,22 @@ function fetchFavoriteProducts(phone) {
     .then(r => r.json())
     .then(data => {
         if (data.length > 0) displayFavoriteSuggestions(data);
+    });
+}
+// Món mới
+function fetchNewItems() {
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/new`)
+    .then(r => r.json())
+    .then(data => {
+        if (data.length > 0) displayNewSuggestions(data);
+    });
+}
+//
+function fetchRecommendedItems() {
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/recommend`)
+    .then(r => r.json())
+    .then(data => {
+        if (data.length > 0) displayRecommendSuggestions(data);
     });
 }
 
