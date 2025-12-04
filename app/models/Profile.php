@@ -36,4 +36,17 @@ class Profile extends Model {
         }
         return $details;
     }
+
+    public function getAddresses($userId) {
+        $stmt = $this->db->prepare("SELECT * FROM Address WHERE ID_Customer = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $addresses = [];
+        while ($row = $result->fetch_assoc()) {
+            $addresses[] = $row;
+        }
+        return $addresses;
+    }   
 }

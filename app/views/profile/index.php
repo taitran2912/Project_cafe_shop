@@ -86,7 +86,7 @@
 
                     <!-- Favorites Tab  -->
                 <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
-                    <h2 class="font-display text-2xl font-bold mb-6">Sản phẩm yêu thích</h2>
+                    <h2 class="font-display text-2xl font-bold mb-6">Địa chỉ nhận hàng</h2>
                     <div class="text-center py-12">
                         <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
                             <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,7 +103,6 @@
     </div>
 </section>
 <script>
-
 const profileData = {
     orders: [
         <?php foreach ($data['Order'] as $o): ?>
@@ -125,9 +124,18 @@ const profileData = {
             ]
         },
         <?php endforeach; ?>
+    ],
+    addresses: [
+        <?php foreach ($data['Addresses'] as $a): ?>
+        {
+            id: <?= $a['ID'] ?>,
+            name: "<?= htmlspecialchars($a['Name']) ?>",
+            address: "<?= htmlspecialchars($a['Full_Address']) ?>",
+            isDefault: <?= $a['Is_Default'] ?>
+        },
+        <?php endforeach; ?>
     ]
 };
-
 </script>
 <script src='https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js'></script>
     <!-- Footer  -->
