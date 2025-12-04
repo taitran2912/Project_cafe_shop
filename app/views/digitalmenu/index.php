@@ -182,12 +182,6 @@
                     </div>
                 <?php endif; ?>
 
-                <?php if(isset($data['storeName'])): ?>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="m-0 fw-bold">Bạn đang mua mang về!</h6>
-                    </div>
-                <?php endif; ?>
-
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="m-0 fw-bold">Giỏ hàng của bạn</h6>
                     <span class="badge bg-secondary" id="cart-count">0</span>
@@ -214,9 +208,6 @@
 
     </div>
 </div>
-
-
-
 <!-- ==========================================================
     PHONE INPUT MODAL
 =========================================================== -->
@@ -259,10 +250,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================
 function confirmCustomerPhone() {
     let phone = document.getElementById('customerPhone').value.trim();
-    if (!phone) {
-        alert("Vui lòng nhập số điện thoại!");
-        return;
-    }
+    // if (!phone) {
+    //     alert("Vui lòng nhập số điện thoại!");
+    //     return;
+    // }
 
     window.customerPhone = phone;
 
