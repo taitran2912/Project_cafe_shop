@@ -5,7 +5,7 @@
     <!-- Page Header  -->
 <section class="page-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="font-display text-5xl font-bold mb-4">Tài khoản <?= $data['ID'] ?></h1>
+        <h1 class="font-display text-5xl font-bold mb-4">Tài khoản</h1>
         <p class="text-xl opacity-90 max-w-2xl mx-auto">
             Quản lý thông tin cá nhân và đơn hàng của bạn
         </p>
@@ -105,21 +105,27 @@
 <script>
 
 const profileData = {
-  orders: [
-    {
-      id: 101,
-      date: "2025-12-03",
-      status: "pending",
-      ship: 3000,
-      items: [
-        { name: "Cà phê sữa", quantity: 2, price: 25000 },
-        { name: "Bánh mì", quantity: 1, price: 15000 }
-      ],
-      total: 65000
-    }
-
-  ]
-}
+    orders: [
+        <?php foreach ($data['Order'] as $o): ?>
+        {
+            id: <?= $o['ID'] ?>,
+            date: "<?= $o['Time'] ?>",
+            status: "<?= strtolower($o['Status']) ?>",
+            ship: <?= $o['Shipping_Cost'] ?>,
+            total: <?= $o['Total'] ?>,
+            items: [
+                <?php foreach ($o['Items'] as $it): ?>
+                {
+                    name: "<?= htmlspecialchars($it['Name']) ?>",
+                    quantity: <?= $it['Quantity'] ?>,
+                    price: <?= $it['Price'] ?>
+                },
+                <?php endforeach; ?>
+            ]
+        },
+        <?php endforeach; ?>
+    ]
+};
 
 // Utility functions
 function formatPrice(price) {
