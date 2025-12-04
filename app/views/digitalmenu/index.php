@@ -16,6 +16,8 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../public/css/digitalmenu.css">
+    <script src="https://caffeshop.hieuthuocyentam.id.vn/public/js/digitalmenu.js"></script>
+
 </head>
 
 <body>
@@ -253,7 +255,6 @@
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://caffeshop.hieuthuocyentam.id.vn/public/js/digitalmenu.js"></script>
 
 <script>
 // ====================================================
