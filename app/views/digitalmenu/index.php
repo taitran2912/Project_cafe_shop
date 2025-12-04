@@ -331,6 +331,28 @@ function displayFavoriteSuggestions(products) {
         `;
     });
 }
+
+function goToPayment() {
+    if (cart.length === 0) {
+        alert("Giỏ hàng của bạn đang trống!");
+        return;
+    }
+
+    const orderData = {
+        phone: window.customerPhone ?? null,
+        items: cart,
+        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    };
+
+    // Lưu giỏ hàng
+    localStorage.setItem("pendingOrder", JSON.stringify(orderData));
+
+    const phoneParam = orderData.phone ? orderData.phone : 0;
+
+    // Điều hướng sang trang thanh toán (KHÔNG lỗi biến)
+    window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/${orderData.phone}`;
+}
+
 </script>
 
 </body>
