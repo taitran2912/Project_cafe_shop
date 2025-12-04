@@ -129,8 +129,8 @@ const profileData = {
         <?php foreach ($data['Addresses'] as $a): ?>
         {
             id: <?= $a['ID'] ?>,
-            address: "<?= htmlspecialchars($a['Full_Address']) ?>",
-            isDefault: <?= $a['Is_Default'] ?>
+            address: "<?= htmlspecialchars($a['Address']) ?>",
+            isDefault: <?= $a['AddressDefault'] ?>
         },
         <?php endforeach; ?>
     ]
