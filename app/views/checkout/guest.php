@@ -10,7 +10,7 @@
     <div class="container">
         <!-- Back Link -->
         <div class="back-link">
-            <a href="#">← Quay lại cửa hàng</a>
+            <a href="">← Quay lại cửa hàng</a>
         </div>
 
         <!-- Steps -->
@@ -101,29 +101,103 @@
                 </div>
             </div>
         </div>
-
-        <!-- Delivery Info -->
-        <div class="delivery-info">
-            <h2 class="section-title">Thông tin giao hàng</h2>
-
-            <div class="info-row">
-                <div class="form-group">
-                    <label>Họ và tên</label>
-                    <input type="text" placeholder="Nhập tên của bạn" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label>Số điện thoại</label>
-                    <input type="tel" placeholder="0xxx xxx xxx" class="form-input">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Địa chỉ giao hàng</label>
-                <input type="text" placeholder="Nhập địa chỉ" class="form-input full-width">
-            </div>
-        </div>
     </div>
+    <script>
+        <script>
+// =====================================================
+// LẤY DỮ LIỆU GIỎ HÀNG
+// =====================================================
+document.addEventListener("DOMContentLoaded", () => {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
 
-    <script src="script.js"></script>
+    if (!order || !order.items || order.items.length === 0) {
+        document.getElementById("order-items").innerHTML =
+            "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
+
+        document.querySelector(".btn-checkout").style.display = "none";
+        return;
+    }
+
+    renderOrderItems(order.items);
+    updateSummary(order.items);
+});
+
+// =====================================================
+// HIỂN THỊ DANH SÁCH MÓN
+// =====================================================
+function renderOrderItems(items) {
+    const container = document.getElementById("order-items");
+    container.innerHTML = "";
+
+    items.forEach(item => {
+        container.innerHTML += `
+            <div class="order-item">
+                <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${item.image ?? 'default.jpg'}"
+                     alt="${item.name}" class="item-image">
+
+                <div class="item-info">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-qty">Số lượng: ${item.quantity}</div>
+                </div>
+
+                <div class="item-price">${Number(item.price * item.quantity).toLocaleString('vi-VN')}đ</div>
+            </div>
+        `;
+    });
+}
+
+// =====================================================
+// TÍNH TIỀN
+// =====================================================
+function updateSummary(items) {
+    let subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    let tax = Math.round(subtotal * 0.05);
+    let total = subtotal + tax;
+
+    document.getElementById("subtotal").innerText = subtotal.toLocaleString("vi-VN") + "đ";
+    document.getElementById("tax").innerText = tax.toLocaleString("vi-VN") + "đ";
+    document.getElementById("total").innerText = total.toLocaleString("vi-VN") + "đ";
+}
+
+// =====================================================
+// XÁC NHẬN ĐƠN HÀNG
+// =====================================================
+function confirmOrder() {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+    if (!order) {
+        alert("Không tìm thấy đơn hàng!");
+        return;
+    }
+
+    // Gửi về API lưu đơn hàng — bạn tự thay URL
+    fetch("https://caffeshop.hieuthuocyentam.id.vn/api/order/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.success) {
+            // Xóa giỏ hàng khi thành công
+            localStorage.removeItem("pendingOrder");
+
+            alert("Đặt hàng thành công!");
+
+            // Điều hướng sang trang cảm ơn
+            window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou";
+        } else {
+            alert("Không thể đặt hàng, vui lòng thử lại!");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Lỗi kết nối server!");
+    });
+}
+</script>
+
+    </script>
+
 </body>
 </html>
