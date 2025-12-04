@@ -1,77 +1,75 @@
 <?php
 class DigitalmenuController extends Controller {
+
+    /** =============================
+     *  HIỆN MENU THEO MÃ BÀN
+     *  ============================= */
     public function table($tableNumber) {
         $digitalmenuModel = $this->model('Digitalmenu');
 
-        // Lấy thông tin store theo table
+        // Lấy store từ mã bàn
         $store = $digitalmenuModel->tableByStore($tableNumber);
-
         if (empty($store)) {
             die("Table not found or inactive.");
         }
 
-        $storeID = $store[0]['ID'];
-        $storeName = $store[0]['Name'];
-        $storeAddress = $store[0]['Address'];
+        $storeInfo = $store[0];
 
-        // Lấy sản phẩm và category của store
-        $categories = $digitalmenuModel->categories();
-        $products = $digitalmenuModel->product();
-
+        // Lấy categories + products của toàn hệ thống (nếu không truyền ID)
         $data = [
-            'title' => 'Digital Menu',
-            'tableNumber' => $tableNumber,
-            'storeID' => $storeID,
-            'storeName' => $storeName,
-            'storeAddress' => $storeAddress,
-            'categories' => $categories,
-            'products' => $products
+            'title'        => 'Digital Menu',
+            'tableNumber'  => $tableNumber,
+            'storeID'      => $storeInfo['ID'],
+            'storeName'    => $storeInfo['Name'],
+            'storeAddress' => $storeInfo['Address'],
+            'categories'   => $digitalmenuModel->categories(),
+            'products'     => $digitalmenuModel->product()
         ];
 
         $this->view('digitalmenu/index', $data);
     }
 
+    /** =============================
+     *  HIỆN MENU THEO CHI NHÁNH (STORE)
+     *  ============================= */
     public function store($storeNumber) {
         $digitalmenuModel = $this->model('Digitalmenu');
 
         $store = $digitalmenuModel->store($storeNumber);
-
         if (empty($store)) {
             die("Store not found or inactive.");
         }
 
-        $storeID = $store[0]['ID'];
-        $storeName = $store[0]['Name'];
-        $storeAddress = $store[0]['Address'];
+        $storeInfo = $store[0];
+        $storeID   = $storeInfo['ID'];
 
-        $categories = $digitalmenuModel->categories($storeID);
-        $products = $digitalmenuModel->product($storeID);
-
+        // Lấy categories + products theo store
         $data = [
-            'title' => 'Digital Menu',
-            'storeID' => $storeID,
-            'storeName' => $storeName,
-            'storeAddress' => $storeAddress,
-            'categories' => $categories,
-            'products' => $products
+            'title'        => 'Digital Menu',
+            'storeID'      => $storeID,
+            'storeName'    => $storeInfo['Name'],
+            'storeAddress' => $storeInfo['Address'],
+            'categories'   => $digitalmenuModel->categories($storeID),
+            'products'     => $digitalmenuModel->product($storeID)
         ];
 
         $this->view('digitalmenu/index', $data);
     }
-    
-    // Lấy món yêu thích dựa trên số điện thoại hoặc yêu thích phổ biến
+
+    /** =============================
+     *  MÓN YÊU THÍCH (THEO PHONE)
+     *  ============================= */
     public function favorite() {
         header('Content-Type: application/json');
 
         $phone = $_GET['phone'] ?? '';
-
         $digitalmenu = $this->model('Digitalmenu');
 
-        // Nếu có số điện thoại → lấy theo khách
+        // Người dùng đã nhập SĐT → lấy món từng gọi
         if (!empty($phone)) {
             $favorites = $digitalmenu->getFavoriteByPhone($phone);
 
-            // Nếu khách chưa từng gọi món → fallback sang phổ biến
+            // Nếu khách chưa từng gọi → fallback sang món phổ biến
             if (empty($favorites)) {
                 $favorites = $digitalmenu->getFavoritePopular();
             }
@@ -80,19 +78,17 @@ class DigitalmenuController extends Controller {
             return;
         }
 
-        // Không nhập số điện thoại → lấy top món phổ biến
-        $popular = $digitalmenu->getFavoritePopular();
-        echo json_encode($popular);
+        // Không nhập SĐT → trả về danh sách phổ biến
+        echo json_encode($digitalmenu->getFavoritePopular());
     }
 
-    public function FavoritePopular(){
+    /** =============================
+     *  MÓN PHỔ BIẾN
+     *  ============================= */
+    public function popular() {
         header('Content-Type: application/json');
 
-        $digitalmenu = $this->model('Digitalmenu');
-
-        $popular = $digitalmenu->getFavoritePopular();
+        $popular = $this->model('Digitalmenu')->getFavoritePopular();
         echo json_encode($popular);
     }
-
-
 }

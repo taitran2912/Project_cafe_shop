@@ -302,7 +302,7 @@ function fetchFavoriteProducts(phone) {
 
 // API: lấy món phổ biến
 function fetchFavorite() {
-    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/FavoritePopular`)
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/popular`)
         .then(r => r.json())
         .then(data => {
             if (data.length > 0) displayFavoriteSuggestions(data);
