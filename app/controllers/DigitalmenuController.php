@@ -83,9 +83,9 @@ class DigitalmenuController extends Controller {
                 $favorites = $digitalmenu->getFavoritePopular();
             }
 
-        if($favorites == null){
-                $favorites = $digitalmenu->getFavoritePopular();
-            }
+            if($favorites === null){
+                    $favorites = $digitalmenu->getFavoritePopular();
+                }
 
             echo json_encode($favorites);
             return;
