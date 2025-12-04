@@ -43,7 +43,7 @@ class ProfileController extends Controller {
             'Phone' => $profile['Phone'],
             'Point' => $profile['Points'],
             'Status' => $profile['Status'],
-            'Addresses' => $addresses,
+            'Address' => $addresses,
             'Order' => $orders
         ];
         $this->view('profile/index', $data);
