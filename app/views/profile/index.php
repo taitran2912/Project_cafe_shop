@@ -126,7 +126,7 @@ const profileData = {
         <?php endforeach; ?>
     ],
     addresses: [
-        <?php foreach ($data['Addresses'] as $a): ?>
+        <?php foreach ($data['Address'] as $a): ?>
         {
             id: <?= $a['ID'] ?>,
             address: "<?= htmlspecialchars($a['Address']) ?>",
