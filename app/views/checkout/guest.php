@@ -41,36 +41,8 @@
                     <span>Đơn hàng của bạn</span>
                 </div>
 
-                <div class="items-list">
-                    <!-- Item 1 -->
-                    <div class="order-item">
-                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b3f7?w=80&h=80&fit=crop" alt="Cà phê đen đắng" class="item-image">
-                        <div class="item-info">
-                            <div class="item-name">Cà phê đen đắng</div>
-                            <div class="item-qty">Số lượng: 2</div>
-                        </div>
-                        <div class="item-price">50.000đ</div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="order-item">
-                        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=80&h=80&fit=crop" alt="Cà phê sữa đá" class="item-image">
-                        <div class="item-info">
-                            <div class="item-name">Cà phê sữa đá</div>
-                            <div class="item-qty">Số lượng: 1</div>
-                        </div>
-                        <div class="item-price">28.000đ</div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="order-item">
-                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=80&h=80&fit=crop" alt="Bạc xỉu" class="item-image">
-                        <div class="item-info">
-                            <div class="item-name">Bạc xỉu</div>
-                            <div class="item-qty">Số lượng: 1</div>
-                        </div>
-                        <div class="item-price">30.000đ</div>
-                    </div>
+                <div class="items-list" id="order-items">
+            
                 </div>
             </div>
 
