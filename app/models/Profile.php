@@ -23,7 +23,7 @@ class Profile extends Model {
 
     public function getOrderDetails($orderId) {
         $stmt = $this->db->prepare("SELECT od.*, p.Name, p.Image 
-                                    FROM Order_Detail od JOIN Product p 
+                                    FROM Order_detail od JOIN Product p 
                                     ON od.ID_product = p.ID 
                                     WHERE od.ID_order = ?");
         $stmt->bind_param("i", $orderId);
