@@ -7,7 +7,7 @@ const formatter = new Intl.NumberFormat('vi-VN', {
     currency: 'VND',
 });
 
-function addToCart(name, price) {
+function addToCart(name, price, image) {
     const existingItem = cart.find(item => item.name === name);
     
     if (existingItem) {
