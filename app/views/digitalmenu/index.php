@@ -272,8 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
-
 // ====================================================
 // Lấy số điện thoại
 // ====================================================
@@ -287,8 +285,6 @@ function confirmCustomerPhone() {
         fetchFavoriteProducts(phone);
     }
 }
-
-
 // ====================================================
 // API: lấy món yêu thích theo SĐT
 // ====================================================
@@ -308,7 +304,6 @@ function fetchFavorite() {
             if (data.length > 0) displayFavoriteSuggestions(data);
         });
 }
-
 // ====================================================
 // Render danh sách món yêu thích
 // ====================================================

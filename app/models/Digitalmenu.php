@@ -125,5 +125,43 @@ class Digitalmenu extends Model {
         return $data;
     }
 
+    public function getRecommended() {
+        $query = "WITH TopCategories AS (
+                        SELECT 
+                            p.CategoryID
+                        FROM Order_Detail od
+                        JOIN Products p ON od.ProductID = p.ID
+                        GROUP BY p.CategoryID
+                        ORDER BY SUM(od.Quantity) DESC
+                        LIMIT 3
+                    ),
+                    ProductSales AS (
+                        SELECT 
+                            p.ID,
+                            p.Name,
+                            p.Price,
+                            p.CategoryID,
+                            SUM(od.Quantity) AS TotalSold,
+                            ROW_NUMBER() OVER (PARTITION BY p.CategoryID ORDER BY SUM(od.Quantity) DESC) AS rn
+                        FROM Order_Detail od
+                        JOIN Products p ON od.ProductID = p.ID
+                        WHERE p.CategoryID IN (SELECT CategoryID FROM TopCategories)
+                        GROUP BY p.ID, p.Name, p.Price, p.CategoryID
+                    )
+                    SELECT *
+                    FROM ProductSales
+                    WHERE rn <= 6;
+                "; // Top 6 món được đề xuất
+
+        $result = $this->db->query($query);
+
+        $data = [];
+        while($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+
 
 }   
