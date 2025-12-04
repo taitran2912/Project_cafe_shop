@@ -94,4 +94,12 @@ class CheckoutController extends Controller {
 
         echo json_encode(['status' => 'error', 'message' => 'OrderID không hợp lệ']);
     }
+
+    public function guest(){
+        $data = [
+            'title' => 'Thanh toán'
+        ];
+
+        $this->view('checkout/guest', $data);
+    }
 }
