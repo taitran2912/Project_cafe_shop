@@ -250,16 +250,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================
 function confirmCustomerPhone() {
     let phone = document.getElementById('customerPhone').value.trim();
-    // if (!phone) {
-    //     alert("Vui lòng nhập số điện thoại!");
-    //     return;
-    // }
-
     window.customerPhone = phone;
-
     bootstrap.Modal.getInstance(document.getElementById('customerPhoneModal')).hide();
-
-    fetchFavoriteProducts(phone);
+    if (!phone) {
+        fetchFavoritePopular()
+    }else{
+        fetchFavoriteProducts(phone);
+    }
     // fetchNewItems();
     // fetchRecommendedItems();
 }
@@ -269,6 +266,14 @@ function confirmCustomerPhone() {
 // =========================
 function fetchFavoriteProducts(phone) {
     fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/favorite?phone=${phone}`)
+    .then(r => r.json())
+    .then(data => {
+        if (data.length > 0) displayFavoriteSuggestions(data);
+    });
+}
+
+function fetchFavorite() {
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/FavoritePopular`)
     .then(r => r.json())
     .then(data => {
         if (data.length > 0) displayFavoriteSuggestions(data);
