@@ -114,7 +114,7 @@ class Digitalmenu extends Model {
         $query = "WITH TopCategories 
                     AS ( SELECT p.ID_category 
                     FROM Order_detail od JOIN Product p ON od.ID_product = p.ID 
-                    GROUP BY p.ID_category ORDER BY SUM(od.Quantity) DESC LIMIT 3 ), 
+                    GROUP BY p.ID_category ORDER BY SUM(od.Quantity) DESC LIMIT 6 ), 
                     ProductSales AS ( SELECT p.ID,p.Image, p.Name, p.Price, p.ID_category, SUM(od.Quantity) AS TotalSold, ROW_NUMBER() 
                     OVER (PARTITION BY p.ID_category ORDER BY SUM(od.Quantity) DESC) AS rn 
                     FROM Order_detail od JOIN Product p ON od.ID_product = p.ID WHERE p.ID_category 
