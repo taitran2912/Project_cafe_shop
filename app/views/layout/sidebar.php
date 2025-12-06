@@ -37,12 +37,6 @@
       "roles" => [0, 1]
     ],
     [
-      "title" => "Thống kê báo cáo",
-      "icon"  => "fas fa-chart-bar",
-      "link"  => "admin/manager/TKBC",
-      "roles" => [0, 1]
-    ],
-    [
       "title" => "Quản lý nhân viên",
       "icon"  => "fas fa-user-shield",
       "link"  => "admin/user",
