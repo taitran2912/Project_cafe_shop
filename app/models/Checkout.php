@@ -242,12 +242,12 @@ class Checkout extends Model {
 //digital menu
     public function saveOrder($data) {
         
-        // // Lấy user ID theo số điện thoại
-        // $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
-        // $stmt->execute([$data["customerPhone"]]);
-        // $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Lấy user ID theo số điện thoại
+        $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
+        $stmt->execute([$data["customerPhone"]]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // $userID = $user["ID"] ?? null;
+        $userID = $user["ID"] ?? null;
 
         // // Câu SQL CHUẨN
         // $sql = "INSERT INTO Orders
@@ -267,16 +267,8 @@ class Checkout extends Model {
 
         // Lấy ID đơn hàng mới
         // return $this->conn->lastInsertId();
-
-        // echo json_encode([
-        //     "customerPhone" => $data["customerPhone"],
-        //     "storeID"       => $data["storeID"],
-        //     "tableNumber"   => $data["tableNumber"],
-        //     "usePoints"     => $data["usePoints"],
-        //     "total"         => $data["total"]
-        // ]);
-        return 1000;
-
+        return $userID; 
+ 
     }
 
 
