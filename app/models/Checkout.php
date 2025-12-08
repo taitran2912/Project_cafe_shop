@@ -187,5 +187,8 @@ class Checkout extends Model {
         return $points;
     }
 
+    public function getCouponByCode($code){
+
+    }
 
 }
