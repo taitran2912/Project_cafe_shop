@@ -264,7 +264,8 @@ function createSuggestSlide(item) {
                     data-id="${item.id}"
                     data-name="${item.name}"
                     data-price="${item.price}"
-                    data-image="${item.image}">
+                    data-image="${item.image}"
+                    style="color: brown;">
                     Thêm vào giỏ
                 </button>
                 <?php else: ?>
