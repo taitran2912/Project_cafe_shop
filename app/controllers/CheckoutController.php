@@ -107,7 +107,7 @@ class CheckoutController extends Controller {
         header('Content-Type: application/json');
 
         // Lấy số điện thoại từ query
-        $phone = $_GET['phone'] ?? '';
+        $phone = $_POST['phone'] ?? '';
 
         if (empty($phone)) {
             echo json_encode([
