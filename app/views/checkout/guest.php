@@ -75,7 +75,7 @@
                     <input type="text" id="couponCode" placeholder="Nhập mã..." class="input-small">
                 </div>
 
-                <button class="btn-apply btn-checkout" onclick="applyCoupon()">Áp dụng mã</button>
+                <button class="btn-apply" onclick="applyCoupon()">Áp dụng mã</button>
 
                 <div class="summary-item discount">
                     <span>Giảm giá</span>

@@ -145,16 +145,17 @@ body {
 ===================================== */
 .btn-apply {
     width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
-    background: #333;
-    color: white;
+    padding: 14px;
+    margin-top: 12px;
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: 10px;
+    background: #d97e3a;
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color .25s, transform .1s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: background .25s, transform .1s;
 }
 
 .btn-apply:hover {
