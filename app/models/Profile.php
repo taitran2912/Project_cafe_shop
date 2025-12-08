@@ -9,7 +9,7 @@ class Profile extends Model {
     }
 
     public function getOrders($userId) {
-        $stmt = $this->db->prepare("SELECT * FROM Orders WHERE ID_Customer = ? AND Status != 'Pending'");
+        $stmt = $this->db->prepare("SELECT * FROM Orders WHERE ID_Customer = ? AND Status NOT IN ('Pending');");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
