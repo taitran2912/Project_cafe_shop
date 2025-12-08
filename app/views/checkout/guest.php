@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="summary-item">
-                    
+
                 <span>Điểm đã tích</span>
                     <span class="price" id="user-points">0đ</span>
                 </div>
@@ -89,11 +89,6 @@
                 </div>
 
                 <button class="btn-checkout">Tiếp tục thanh toán →</button>
-
-                <div class="delivery-time">
-                    <span class="clock-icon">⏱️</span>
-                    <span>Thời gian giao hàng: 15-30 phút</span>
-                </div>
             </div>
         </div>
     </div>

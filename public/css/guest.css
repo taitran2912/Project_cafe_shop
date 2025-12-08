@@ -362,3 +362,22 @@ body {
     margin-top: 20px;
   }
 }
+
+.input-small {
+    width: 120px;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.btn-apply {
+    width: 100%;
+    margin: 6px 0;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
