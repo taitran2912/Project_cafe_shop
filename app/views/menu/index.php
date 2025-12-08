@@ -232,6 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 // Gợi ý món
+// ====== DANH SÁCH GỢI Ý ======
+const suggestItems = [
 <?php if (!empty($data['suggestions'])): ?>
   <?php foreach ($data['suggestions'] as $index => $s): ?>
     {
@@ -243,43 +245,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }<?= $index < count($data['suggestions']) - 1 ? ',' : '' ?>
   <?php endforeach; ?>
 <?php endif; ?>
+];
+
 
 
 function createSuggestSlide(item) {
   return `
-    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
+    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in" style="min-width: 300px; margin-right: 20px;">
         <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
         <div class="p-6">
             <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
             <p class="text-gray-600 mb-4">${item.description || ''}</p>
             <div class="flex justify-between items-center">
                 <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
-  <?php if (!empty($data['userID'])): ?>
-                <button class="btn btn-brown text-white px-4 py-2 add-to-cart" 
-                        data-id="${item.id}"
-                        data-name="${item.name}" 
-                        data-price="${item.price}"
-                        data-image="${item.image}"
-                        style="background-color: rgb(139, 69, 19);">
+
+                <?php if (!empty($userID)): ?>
+                <button class="btn btn-brown text-white px-4 py-2 add-to-cart"
+                    data-id="${item.id}"
+                    data-name="${item.name}"
+                    data-price="${item.price}"
+                    data-image="${item.image}">
                     Thêm vào giỏ
                 </button>
-  <?php else: ?>
-                <a href="login" class="btn-brown text-sm px-4 py-2">
-                    Thêm vào giỏ
-                </a>
-  <?php endif; ?>
+                <?php else: ?>
+                <a href="login" class="btn-brown text-sm px-4 py-2">Thêm vào giỏ</a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-  `
+  `;
 }
+
 
 
 // ====== SLIDER ======
 let suggestPos = 0;
 const slider = document.getElementById("suggest-slider");
+const slideWidth = 320; // 300px + khoảng cách
+const maxPos = suggestItems.length - 1;
 
-// Render slide
 function loadSuggestSlider() {
   slider.innerHTML = "";
   suggestItems.forEach(item => {
@@ -289,22 +293,19 @@ function loadSuggestSlider() {
 
 loadSuggestSlider();
 
-const slideWidth = 320; // 300px + margin
-const maxPos = suggestItems.length - 1;
-
-// Nút next
+// Next
 document.getElementById("suggest-next").addEventListener("click", () => {
   suggestPos = (suggestPos + 1) > maxPos ? 0 : suggestPos + 1;
   slider.style.transform = `translateX(-${suggestPos * slideWidth}px)`;
 });
 
-// Nút prev
+// Prev
 document.getElementById("suggest-prev").addEventListener("click", () => {
   suggestPos = (suggestPos - 1) < 0 ? maxPos : suggestPos - 1;
   slider.style.transform = `translateX(-${suggestPos * slideWidth}px)`;
 });
 
-// Tự động chạy
+// Auto run
 setInterval(() => {
   suggestPos = (suggestPos + 1) > maxPos ? 0 : suggestPos + 1;
   slider.style.transform = `translateX(-${suggestPos * slideWidth}px)`;
