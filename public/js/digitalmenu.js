@@ -1,4 +1,6 @@
-// Data structure for cart
+// =======================
+// CART DATA
+// =======================
 let cart = [];
 
 // Format currency
@@ -7,37 +9,48 @@ const formatter = new Intl.NumberFormat('vi-VN', {
     currency: 'VND',
 });
 
+// =======================
+// ADD ITEM TO CART
+// =======================
 function addToCart(id, name, price, image) {
-    // Nếu đã tồn tại → tăng số lượng
     const existing = cart.find(i => i.id === id);
+
     if (existing) {
         existing.quantity++;
     } else {
         cart.push({
-            id: id,
-            name: name,
-            price: price,
-            quantity: 1,
-            image: image
+            id,
+            name,
+            price,
+            image,
+            quantity: 1
         });
     }
 
     updateCartUI();
+    saveCart();
 }
 
+// =======================
+// REMOVE ITEM
+// =======================
+function removeFromCart(id) {
+    const index = cart.findIndex(item => item.id === id);
 
-function removeFromCart(name) {
-    const index = cart.findIndex(item => item.name === name);
     if (index > -1) {
         if (cart[index].quantity > 1) {
-            cart[index].quantity -= 1;
+            cart[index].quantity--;
         } else {
             cart.splice(index, 1);
         }
     }
     updateCartUI();
+    saveCart();
 }
 
+// =======================
+// RENDER UI
+// =======================
 function updateCartUI() {
     const emptyState = document.getElementById('cart-empty-state');
     const itemsContainer = document.getElementById('cart-items-container');
@@ -45,7 +58,7 @@ function updateCartUI() {
     const cartCount = document.getElementById('cart-count');
     const totalPriceEl = document.getElementById('cart-total-price');
 
-    // Update Count
+    // Count
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.innerText = totalItems;
 
@@ -53,56 +66,50 @@ function updateCartUI() {
         emptyState.style.display = 'block';
         itemsContainer.style.display = 'none';
         cartFooter.style.display = 'none';
-    } else {
-        emptyState.style.display = 'none';
-        itemsContainer.style.display = 'block';
-        cartFooter.style.display = 'block';
-
-        // Render Items
-        let html = '';
-        let total = 0;
-
-        cart.forEach(item => {
-            total += item.price * item.quantity;
-            html += `
-                <div class="cart-item">
-                    <div class="cart-item-info">
-                        <div class="cart-item-title">${item.name}</div>
-                        <div class="cart-item-price">${formatter.format(item.price)}</div>
-                    </div>
-                    <div class="cart-item-qty">
-                        <button class="btn-qty" onclick="removeFromCart('${item.name}')">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="btn-qty" onclick="addToCart(${item.ID},'${item.name}', ${item.price}, ${item.image} )">+</button>
-                    </div>
-                </div>
-            `;
-        });
-
-        itemsContainer.innerHTML = html;
-        totalPriceEl.innerText = formatter.format(total);
+        return;
     }
+
+    emptyState.style.display = 'none';
+    itemsContainer.style.display = 'block';
+    cartFooter.style.display = 'block';
+
+    let html = '';
+    let total = 0;
+
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+
+        html += `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">${item.name}</div>
+                    <div class="cart-item-price">${formatter.format(item.price)}</div>
+                </div>
+
+                <div class="cart-item-qty">
+                    <button class="btn-qty" onclick="removeFromCart(${item.id})">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="btn-qty" onclick="addToCart(${item.id}, '${item.name}', ${item.price}, '${item.image}')">+</button>
+                </div>
+            </div>
+        `;
+    });
+
+    itemsContainer.innerHTML = html;
+    totalPriceEl.innerText = formatter.format(total);
 }
 
-// Active link highlighting on scroll
-const sections = document.querySelectorAll('.menu-section');
-const navLinks = document.querySelectorAll('.category-link');
+// =======================
+// SAVE & LOAD CART
+// =======================
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 
-window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= (sectionTop - 150)) {
-            current = section.getAttribute('id');
-        }
-    });
+function loadCart() {
+    const saved = localStorage.getItem("cart");
+    if (saved) cart = JSON.parse(saved);
+    updateCartUI();
+}
 
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
-            link.classList.add('active');
-        }
-    });
-});
-
+document.addEventListener("DOMContentLoaded", loadCart);
