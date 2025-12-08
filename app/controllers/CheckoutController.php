@@ -143,7 +143,7 @@ class CheckoutController extends Controller {
 
         // Gọi model
         $checkoutModel = $this->model('Checkout');
-        $coupon = $checkoutModel->getCouponByCode($code);
+        // $coupon = $checkoutModel->getCouponByCode($code);
 
         // Không tồn tại hoặc hết hạn
         if (!$coupon) {
