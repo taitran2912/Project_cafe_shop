@@ -242,31 +242,34 @@ class Checkout extends Model {
 //digital menu
     public function saveOrder($data) {
         // Lấy user ID theo số điện thoại
-        $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
-        $stmt->execute([$data["customerPhone"]]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = :phone");
+        $stmt->bindParam(':phone', $data["customerPhone"], PDO::PARAM_STR);
+        $stmt->execute();
 
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
         $userID = $user["ID"] ?? null;
 
-        // Câu SQL CHUẨN
+        // Câu SQL CHUẨN dùng bindParam
         $sql = "INSERT INTO Orders
                 (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
                 Payment_status, Method, Note, Date, Points, Total)
-                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)";
+                VALUES (:customer, :branch, :table, 'Ordered', NULL, 0, 
+                'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), :points, :total)";
 
         $stmt = $this->conn->prepare($sql);
 
-        $stmt->execute([
-            $userID,
-            $data["storeID"],
-            $data["tableNumber"],       // NOTE = mã đơn hàng
-            $data["usePoints"],  // điểm dùng
-            $data["total"]       // tổng tiền cuối cùng
-        ]);
+        $stmt->bindParam(':customer', $userID, PDO::PARAM_INT);
+        $stmt->bindParam(':branch', $data["storeID"], PDO::PARAM_INT);
+        $stmt->bindParam(':table', $data["tableNumber"], PDO::PARAM_INT);
+        $stmt->bindParam(':points', $data["usePoints"], PDO::PARAM_INT);
+        $stmt->bindParam(':total', $data["total"], PDO::PARAM_INT);
 
-        // Lấy ID đơn hàng mới
+        $stmt->execute();
+
+        // Trả về ID đơn hàng mới
         return $this->conn->lastInsertId();
     }
+
 
 
     // Lưu từng sản phẩm
