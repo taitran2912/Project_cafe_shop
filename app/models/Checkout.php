@@ -241,35 +241,67 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        
-        // Lấy user ID theo số điện thoại
-        $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
-        $stmt->execute([$data["customerPhone"]]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            // 1️⃣ Lấy user ID theo số điện thoại
+            $sqlUser = "SELECT ID FROM Account WHERE Phone = ?";
+            $stmtUser = $this->db->prepare($sqlUser);
+            if (!$stmtUser) {
+                die("Prepare failed (User): " . $this->db->error);
+            }
 
-        $userID = $user["ID"] ?? null;
+            $stmtUser->bind_param("s", $data["customerPhone"]);
 
-        // // Câu SQL CHUẨN
-        // $sql = "INSERT INTO Orders
-        //         (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
-        //         Payment_status, Method, Note, Date, Points, Total)
-        //         VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)";
+            if (!$stmtUser->execute()) {
+                die("Execute failed (User): " . $stmtUser->error);
+            }
 
-        // $stmt = $this->conn->prepare($sql);
+            $resultUser = $stmtUser->get_result();
+            $user = $resultUser->fetch_assoc();
+            $stmtUser->close();
 
-        // $stmt->execute([
-        //     $userID,
-        //     $data["storeID"],
-        //     $data["tableNumber"],       // NOTE = mã đơn hàng
-        //     $data["usePoints"],  // điểm dùng
-        //     $data["total"]       // tổng tiền cuối cùng
-        // ]);
+            $userID = $user["ID"] ?? null;
 
-        // Lấy ID đơn hàng mới
-        // return $this->conn->lastInsertId();
-        return $userID; 
- 
+
+            // 2️⃣ Insert đơn hàng
+            $sql = "
+                INSERT INTO Orders
+                (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
+                Payment_status, Method, Note, Date, Points, Total)
+                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash',
+                        'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) {
+                die("Prepare failed (Order): " . $this->db->error);
+            }
+
+            // gán biến
+            $stmt->bind_param(
+                "iiidd",
+                $userID,
+                $data["storeID"],
+                $data["tableNumber"],
+                $data["usePoints"],
+                $data["total"]
+            );
+
+            if (!$stmt->execute()) {
+                die("Execute failed (Order): " . $stmt->error);
+            }
+
+            // Lấy ID đơn hàng vừa tạo
+            $orderId = $stmt->insert_id;
+            $stmt->close();
+
+            return $orderId;
+
+        } catch (Exception $e) {
+            error_log("SQL ERROR saveOrder: " . $e->getMessage());
+            return false;
+        }
     }
+
 
 
     // Lưu từng sản phẩm
