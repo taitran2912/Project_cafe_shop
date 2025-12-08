@@ -272,7 +272,7 @@ class Checkout extends Model {
     $stmt = $this->db->prepare("
         INSERT INTO Orders 
         (ID_Customer, ID_Branch, ID_Table, Status, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
-        VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
+        VALUES (?, ?, ?, 'Ordered', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
     ");
 
     // 7 params theo đúng thứ tự
