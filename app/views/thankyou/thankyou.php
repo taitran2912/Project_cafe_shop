@@ -378,48 +378,9 @@
                     <span>#ORD-2024-12345</span>
                 </div>
 
-                <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #d97836;">
-                    <p style="font-size: 13px; color: #666; margin: 0;">
-                        <strong>Thời gian giao hàng dự kiến:</strong> 3-5 ngày làm việc<br>
-                        <strong>Phí vận chuyển:</strong> Miễn phí
-                    </p>
-                </div>
+                <button class="btn btn-secondary" onclick="continueShop()">Tiếp tục mua sắm</button>
             </div>
 
-            <!-- Summary Section -->
-            <div class="summary-section">
-                <h3>Tóm tắt đơn hàng</h3>
-                
-                <div class="summary-row">
-                    <span class="summary-label">Tổng tiền hàng</span>
-                    <span class="summary-value highlight">850.000đ</span>
-                </div>
-
-                <div class="summary-row">
-                    <span class="summary-label">Phí vận chuyển</span>
-                    <span class="summary-value highlight">0đ</span>
-                </div>
-
-                <div class="summary-row">
-                    <span class="summary-label">Mã giảm giá</span>
-                    <span class="summary-value highlight">-50.000đ</span>
-                </div>
-
-                <div class="summary-row">
-                    <span class="summary-label">Thuế (10%)</span>
-                    <span class="summary-value highlight">80.000đ</span>
-                </div>
-
-                <div class="total-row">
-                    <span>Tổng cộng</span>
-                    <span class="amount">880.000đ</span>
-                </div>
-
-                <div class="button-group">
-                    <button class="btn btn-primary" onclick="downloadInvoice()">Tải hóa đơn</button>
-                    <button class="btn btn-secondary" onclick="continueShop()">Tiếp tục mua sắm</button>
-                </div>
-            </div>
         </div>
     </div>
 
