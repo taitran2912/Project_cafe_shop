@@ -217,23 +217,29 @@ function updateSummaryAfterPoints() {
     const subtotal = updateSubtotal(order.items);
 
     const userPoints = Number(document.getElementById("user-points").innerText.replace(/\D/g, "")) || 0;
-    const usePoints = Number(document.getElementById("usePoints").value) || 0;
+    let usePoints = Number(document.getElementById("usePoints").value) || 0;
 
-    // Không cho dùng điểm vượt quá điểm đang có
+    // Chặn vượt quá điểm đang có
     if (usePoints > userPoints) {
-        document.getElementById("usePoints").value = userPoints;
+        usePoints = userPoints;  // cập nhật biến trước
+        document.getElementById("usePoints").value = userPoints; // cập nhật input
     }
 
-    // Không cho dùng quá tổng tiền
-    let validUsePoints = Math.min(usePoints, subtotal);
+    // Chặn vượt quá tổng tiền hàng
+    if (usePoints > subtotal) {
+        usePoints = subtotal;
+        document.getElementById("usePoints").value = subtotal;
+    }
 
-    let finalTotal = subtotal - validUsePoints;
+    // --> GIÁ TRỊ CHUẨN ĐÃ ĐƯỢC GIỮ ĐÚNG <- HERE!
+    let finalTotal = subtotal - usePoints;
 
     document.getElementById("total").innerText =
         finalTotal.toLocaleString("vi-VN") + "đ";
 
     return finalTotal;
 }
+
 
 function confirmOrder() {
     const order = JSON.parse(localStorage.getItem("pendingOrder"));
