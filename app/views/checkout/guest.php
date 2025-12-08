@@ -60,6 +60,29 @@
                     <span class="price">5.400đ</span>
                 </div>
 
+                <div class="summary-item">
+                    
+                <span>Điểm đã tích</span>
+                    <span class="price" id="user-points">0đ</span>
+                </div>
+
+                <div class="summary-item">
+                    <span>Điểm muốn dùng</span>
+                    <input type="number" id="usePoints" min="0" value="0" class="input-small">
+                </div>
+
+                <div class="summary-item">
+                    <span>Mã giảm giá</span>
+                    <input type="text" id="couponCode" placeholder="Nhập mã..." class="input-small">
+                </div>
+
+                <button class="btn-apply" onclick="applyCoupon()">Áp dụng mã</button>
+
+                <div class="summary-item discount">
+                    <span>Giảm giá</span>
+                    <span class="price" id="discountAmount">0đ</span>
+                </div>
+
                 <div class="summary-item total">
                     <span>Tổng cộng</span>
                     <span class="price">113.400đ</span>
