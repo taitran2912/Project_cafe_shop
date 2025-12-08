@@ -1,8 +1,6 @@
-    <!-- Header -->
-<?php
-    include 'app/views/layout/header.php'; 
-?>
-    <!-- Page Header  -->
+<?php include 'app/views/layout/header.php'; ?>
+
+<!-- Page Header -->
 <section class="page-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="font-display text-5xl font-bold mb-4">Tài khoản</h1>
@@ -12,11 +10,12 @@
     </div>
 </section>
 
-    <!-- Profile Content  -->
+<!-- Profile Content -->
 <section class="content-section bg-muted">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Profile Sidebar  -->
+
+            <!-- Sidebar -->
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-2xl p-6 shadow-lg">
                     <div class="text-center mb-6">
@@ -28,116 +27,105 @@
                         <h3 class="font-display text-xl font-bold"><?= $data['Name'] ?></h3>
                         <p class="text-gray-600"><?= $data['Mail'] ?></p>
                     </div>
-                    
+
                     <nav class="space-y-2">
-                        <button class="profile-tab active w-full text-left px-4 py-3 rounded-lg bg-primary text-white" data-tab="info">
-                            Thông tin cá nhân
-                        </button>
-                        <button class="profile-tab w-full text-left px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100" data-tab="orders">
-                            Đơn hàng của tôi
-                        </button>
-                        <button class="profile-tab w-full text-left px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100" data-tab="favorites">
-                            Địa chỉ nhận hàng
-                        </button>
+                        <button class="profile-tab active w-full text-left px-4 py-3 rounded-lg bg-primary text-white" data-tab="info">Thông tin cá nhân</button>
+                        <button class="profile-tab w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100" data-tab="orders">Đơn hàng của tôi</button>
+                        <button class="profile-tab w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100" data-tab="addresses">Địa chỉ nhận hàng</button>
                     </nav>
                 </div>
             </div>
 
-                <!-- Profile Content  -->
+            <!-- Main Content -->
             <div class="lg:col-span-2">
-                    <!-- Personal Info Tab  -->
+
+                <!-- INFO -->
                 <div id="info-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg">
                     <h2 class="font-display text-2xl font-bold mb-6">Thông tin cá nhân</h2>
-                    
-                    <form class="space-y-6" method="POST" action="https://caffeshop.hieuthuocyentam.id.vn/profile/updateInfor">
+
+                    <form class="space-y-6" method="POST" action="/profile/updateInfor">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="form-group">
+                            <div>
                                 <label class="form-label">Họ tên</label>
-                                <input type="text" class="form-input" value="<?= $data['Name'] ?>">
+                                <input type="text" class="form-input" name="Name" value="<?= $data['Name'] ?>">
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-input" value="<?= $data['Mail'] ?>">
+                                <input type="email" class="form-input" name="Mail" value="<?= $data['Mail'] ?>">
                             </div>
                         </div>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="form-group">
+                            <div>
                                 <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-input" value="<?= $data['Phone'] ?>">
+                                <input type="tel" class="form-input" name="Phone" value="<?= $data['Phone'] ?>">
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label class="form-label">Điểm thưởng</label>
-                                 <p class="form-input cursor-not-allowed bg-gray-100"><?= htmlspecialchars($data['Point']) ?></p>
+                                <p class="form-input bg-gray-100 cursor-not-allowed">
+                                    <?= htmlspecialchars($data['Point']) ?>
+                                </p>
                             </div>
                         </div>
-                        
+
                         <button type="submit" class="btn-primary">Cập nhật thông tin</button>
                     </form>
                 </div>
 
-                    <!-- Orders Tab  -->
-                <div id="orders-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
+                <!-- ORDERS -->
+                <div id="orders-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg hidden">
                     <h2 class="font-display text-2xl font-bold mb-6">Đơn hàng của tôi</h2>
-                    <div id="orders-list">
-                            Orders will be loaded here 
-                    </div>
+                    <div id="orders-list"></div>
                 </div>
 
-                    <!-- Favorites Tab  -->
-                <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
-                
-                    <div class="text-center py-12">
-                        <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-600 mb-4">Chưa có sản phẩm yêu thích</h3>
-                        <p class="text-gray-500 mb-8">Hãy thêm những sản phẩm bạn yêu thích để dễ dàng tìm lại</p>
-                        <a href="menu.html" class="btn-primary">Khám phá thực đơn</a>
+                <!-- ADDRESSES -->
+                <div id="addresses-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg hidden">
+
+                    <div class="flex justify-end mb-6">
+                        <button onclick="openAddressModal()" 
+                                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                            + Thêm địa chỉ
+                        </button>
                     </div>
+
+                    <div id="address-list">
+                        <!-- JS render address list -->
+                    </div>
+
                 </div>
+
             </div>
         </div>
     </div>
 </section>
+
+<!-- Modal Thêm Địa Chỉ -->
+<div id="address-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-4">Thêm địa chỉ mới</h3>
+
+        <form id="addAddressForm">
+            <textarea name="address" class="form-input w-full h-32" placeholder="Nhập địa chỉ..."></textarea>
+
+            <div class="flex justify-end gap-3 mt-4">
+                <button type="button" onclick="closeAddressModal()" class="px-4 py-2 bg-gray-200 rounded-lg">
+                    Hủy
+                </button>
+                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg">
+                    Lưu
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 const profileData = {
-    orders: [
-        <?php foreach ($data['Order'] as $o): ?>
-        {
-            id: <?= $o['ID'] ?>,
-            date: "<?= $o['Date'] ?>",
-            status: "<?= $o['Status'] ?>",
-
-            ship: <?= $o['Shipping_Cost'] ?>,
-            total: <?= $o['Total'] ?>,
-            items: [
-                <?php foreach ($o['Details'] as $it): ?>
-                {
-                    name: "<?= htmlspecialchars($it['Name']) ?>",
-                    quantity: <?= $it['Quantity'] ?>,
-                    price: <?= $it['Price'] ?>
-                },
-                <?php endforeach; ?>
-            ]
-        },
-        <?php endforeach; ?>
-    ],
-    addresses: [
-        <?php foreach ($data['Address'] as $a): ?>
-        {
-            id: <?= $a['ID'] ?>,
-            address: "<?= htmlspecialchars($a['Address']) ?>",
-            isDefault: <?= $a['AddressDefault'] ?>
-        },
-        <?php endforeach; ?>
-    ]
+    orders: <?= json_encode($data['Order']) ?>,
+    addresses: <?= json_encode($data['Address']) ?>
 };
 </script>
-<script src='https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js'></script>
-    <!-- Footer  -->
-<?php
-    include 'app/views/layout/footer.php'; 
-?>
+
+<script src="/public/js/profile.js"></script>
+
+<?php include 'app/views/layout/footer.php'; ?>
