@@ -210,6 +210,63 @@ function loadUserPoints(phone) {
         });
 }
 
+document.getElementById("usePoints").addEventListener("input", updateSummaryAfterPoints);
+
+function updateSummaryAfterPoints() {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+    const subtotal = updateSubtotal(order.items);
+
+    const userPoints = Number(document.getElementById("user-points").innerText.replace(/\D/g, "")) || 0;
+    const usePoints = Number(document.getElementById("usePoints").value) || 0;
+
+    // Không cho dùng điểm vượt quá điểm đang có
+    if (usePoints > userPoints) {
+        document.getElementById("usePoints").value = userPoints;
+    }
+
+    // Không cho dùng quá tổng tiền
+    let validUsePoints = Math.min(usePoints, subtotal);
+
+    let finalTotal = subtotal - validUsePoints;
+
+    document.getElementById("total").innerText =
+        finalTotal.toLocaleString("vi-VN") + "đ";
+
+    return finalTotal;
+}
+
+function confirmOrder() {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+    if (!order) {
+        alert("Không tìm thấy đơn hàng!");
+        return;
+    }
+
+    const usePoints = Number(document.getElementById("usePoints").value) || 0;
+
+    order.usePoints = usePoints;        // Gửi lên server
+    order.finalTotal = updateSummaryAfterPoints(); // Tổng tiền sau giảm
+
+    fetch("https://caffeshop.hieuthuocyentam.id.vn/api/order/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.success) {
+            localStorage.removeItem("pendingOrder");
+            window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou";
+        } else {
+            alert("Không thể đặt hàng, vui lòng thử lại!");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Lỗi kết nối server!");
+    });
+}
+
 </script>
 </body>
 </html>
