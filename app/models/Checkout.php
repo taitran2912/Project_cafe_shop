@@ -248,22 +248,18 @@ class Checkout extends Model {
 
         $userID = $user["ID"] ?? null;
 
-        // Mã đơn (ghi vào Note)
-        $orderCode = "ORD-" . strtoupper(bin2hex(random_bytes(3)));
-
         // Câu SQL CHUẨN
         $sql = "INSERT INTO Orders
                 (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
                 Payment_status, Method, Note, Date, Points, Total)
-                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', ?, NOW(), ?, ?)";
+                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)";
 
         $stmt = $this->conn->prepare($sql);
 
         $stmt->execute([
             $userID,
             $data["storeID"],
-            $data["tableNumber"],
-            $orderCode,          // NOTE = mã đơn hàng
+            $data["tableNumber"],       // NOTE = mã đơn hàng
             $data["usePoints"],  // điểm dùng
             $data["total"]       // tổng tiền cuối cùng
         ]);
