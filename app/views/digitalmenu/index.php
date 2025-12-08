@@ -347,8 +347,12 @@ function goToPayment() {
     const orderData = {
         phone: window.customerPhone ?? null,
         items: cart,
-        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        storeID: STORE_ID,                        // ★ BẮT BUỘC
+        tableNumber: <?= $data['tableNumber'] ?? "null" ?>,  // nếu không có thì null
+        storeName: "<?= $data['storeName'] ?>",   // hiển thị ở trang checkout
     };
+
 
     // Lưu vào localStorage
     localStorage.setItem("pendingOrder", JSON.stringify(orderData));
@@ -363,8 +367,11 @@ function goToPayment() {
     }
 }
 
-
+</scrip>
+<script>
+    const STORE_ID = <?= $data['storeID'] ?>;
 </script>
+
 
 </body>
 </html>
