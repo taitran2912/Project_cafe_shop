@@ -239,11 +239,10 @@ class Checkout extends Model {
         }
     }
 
-    public function insertOrder($data) {
+   public function insertOrder($data) {
 
-        // 1. Lấy Customer ID từ SĐT
+        // 1. Lấy Customer ID
         $phone = $data["customerPhone"];
-
         $sql = $this->db->prepare("
             SELECT CP.ID 
             FROM Customer_Profile CP 
@@ -258,7 +257,6 @@ class Checkout extends Model {
             return ["success" => false, "message" => "Customer not found"];
 
         $customerID = $user["ID"];
-
 
         // 2. Insert ORDER
         $branchID   = $data["storeID"];
@@ -275,8 +273,9 @@ class Checkout extends Model {
             VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
         ");
 
+        // *** FIX QUAN TRỌNG: Total là DECIMAL ***
         $stmt->bind_param(
-            "iiissii",
+            "iiissid",
             $customerID,
             $branchID,
             $tableID,
@@ -286,25 +285,34 @@ class Checkout extends Model {
             $finalTotal
         );
 
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            return ["success" => false, "message" => "Order insert failed: " . $stmt->error];
+        }
+
         $orderID = $this->db->insert_id;
 
-
-        // 3. Insert ORDER DETAIL + TRỪ TỒN KHO
+        // 3. Insert ORDER DETAIL
         foreach ($data["items"] as $item) {
 
-            $productID = $item["id"];
-            $quantity  = $item["quantity"];
-            $price     = $item["price"];
+            if (!isset($item["id"])) {
+                return ["success" => false, "message" => "Item missing ID"];
+            }
+
+            $productID = (int)$item["id"];
+            $quantity  = (int)$item["quantity"];
+            $price     = (float)$item["price"];
 
             $stmtD = $this->db->prepare("
                 INSERT INTO Order_detail (ID_order, ID_product, Quantity, Price)
                 VALUES (?, ?, ?, ?)
             ");
             $stmtD->bind_param("iiid", $orderID, $productID, $quantity, $price);
-            $stmtD->execute();
 
-            // Trừ tồn kho theo branch
+            if (!$stmtD->execute()) {
+                return ["success" => false, "message" => "Order detail failed: " . $stmtD->error];
+            }
+
+            // Trừ kho
             $sqlUpdate = "
                 UPDATE Inventory I
                 JOIN Product_detail PD ON I.ID_Material = PD.ID_Material
@@ -315,7 +323,6 @@ class Checkout extends Model {
             $this->db->query($sqlUpdate);
         }
 
-
         // 4. Trừ điểm
         if ($usePoints > 0) {
             $uP = $this->db->prepare("
@@ -325,34 +332,8 @@ class Checkout extends Model {
             $uP->execute();
         }
 
-
-        // 5. Coupon usage
-        if (isset($data["couponCode"]) && $data["couponCode"] !== "") {
-
-            $code = $data["couponCode"];
-            $discountAmount = $data["discountAmount"] ?? 0;
-
-            $getC = $this->db->prepare("SELECT ID FROM Coupons WHERE Code = ?");
-            $getC->bind_param("s", $code);
-            $getC->execute();
-            $coupon = $getC->get_result()->fetch_assoc();
-
-            if ($coupon) {
-                $couponID = $coupon["ID"];
-
-                $insertC = $this->db->prepare("
-                    INSERT INTO Coupon_usage (ID_coupon, ID_customer, ID_order, DiscountAmount)
-                    VALUES (?, ?, ?, ?)
-                ");
-                $insertC->bind_param("iiii", $couponID, $customerID, $orderID, $discountAmount);
-                $insertC->execute();
-            }
-        }
-
-        return [
-            "success" => true,
-            "order_id" => $orderID
-        ];
+        return ["success" => true, "order_id" => $orderID];
     }
+
 
 }
