@@ -155,27 +155,37 @@ class Checkout extends Model {
     }
 
     public function getPointsByPhone($phone) {
-        try {
-            $sql = "
-                SELECT c.Points 
-                FROM Customer_Profile c 
-                JOIN Account a ON c.ID_account = a.ID 
-                WHERE a.Phone = ? 
-                LIMIT 1
-            ";
+        $sql = "
+            SELECT c.Points 
+            FROM Customer_Profile c 
+            JOIN Account a ON c.ID_account = a.ID 
+            WHERE a.Phone = ? 
+            LIMIT 1
+        ";
 
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([$phone]);
-
-            $points = $stmt->fetchColumn();
-
-            return $points !== false ? (int)$points : 0;
-
-        } catch (Exception $e) {
-            // Debug lỗi SQL nếu cần
-            error_log("SQL ERROR getPointsByPhone: " . $e->getMessage());
-            return 0;
+        // Prepare
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->db->error);
         }
+
+        // Bind parameter
+        $stmt->bind_param("s", $phone);
+
+        // Execute
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
+
+        // Bind result
+        $stmt->bind_result($points);
+        $stmt->fetch();
+
+        $stmt->close();
+
+        // Nếu không có dữ liệu → trả về 0
+        return $points !== null ? (int)$points : 0;
     }
+
 
 }
