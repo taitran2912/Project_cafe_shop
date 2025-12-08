@@ -91,6 +91,17 @@
                             class="btn-primary mb-6 px-4 py-2 rounded-lg">
                         + Thêm địa chỉ
                     </button>
+
+                    <div class="text-center py-12">
+                        <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-600 mb-4">Chưa có sản phẩm yêu thích</h3>
+                        <p class="text-gray-500 mb-8">Hãy thêm những sản phẩm bạn yêu thích để dễ dàng tìm lại</p>
+                        <a href="menu.html" class="btn-primary">Khám phá thực đơn</a>
+                    </div>
                 </div>
             </div>
         </div>
