@@ -79,7 +79,7 @@
                 </div>
 
                 <!-- ADDRESSES -->
-                <div id="addresses-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg hidden">
+                <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg hidden">
 
                     <div class="flex justify-end mb-6">
                         <button onclick="openAddressModal()" 
