@@ -214,10 +214,10 @@ class CheckoutController extends Controller {
             "total"         => $finalTotal
         ]);
 
-        // // if (!$orderId) {
-        // //     echo json_encode(["success" => false, "message" => "Cannot save order"]);
-        // //     return;
-        // // }
+        if (!$orderId) {
+            echo json_encode(["success" => false, "message" => "Cannot save order"]);
+            return;
+        }
 
         // // // --- LƯU CHI TIẾT ---
         // // foreach ($items as $item) {
