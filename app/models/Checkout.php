@@ -275,7 +275,7 @@ class Checkout extends Model {
 
         // *** FIX QUAN TRỌNG: Total là DECIMAL ***
         $stmt->bind_param(
-            "iiissid",
+            "iiissii",
             $customerID,
             $branchID,
             $tableID,
