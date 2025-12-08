@@ -239,7 +239,7 @@ function loadUserPoints(phone) {
         .then(data => {
             if (data.success) {
                 const points = Number(data.points) || 0;
-                document.getElementById("user-ppoints").innerText = 
+                document.getElementById("user-points").innerText = 
                     points.toLocaleString("vi-VN") + "đ";
             } else {
                 document.getElementById("user-points").innerText = "0đ";
