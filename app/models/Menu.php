@@ -132,7 +132,7 @@ class Menu extends Model {
                     JOIN Product p ON od.ID_product = p.ID
                     GROUP BY p.ID_category
                     ORDER BY SUM(od.Quantity) DESC
-                    LIMIT 3
+                    LIMIT 4
                     ),
                     ProductRank AS (
                     SELECT 
@@ -153,7 +153,7 @@ class Menu extends Model {
                     )
                     SELECT *
                     FROM ProductRank
-                    WHERE rn <= 4
+                    WHERE rn <= 2
                     ORDER BY ID_category, TotalSold DESC;
                 "; // Top 6 món được đề xuất
 
