@@ -249,25 +249,29 @@ class Checkout extends Model {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         $userID = $user["ID"] ?? null;
 
-        // Câu SQL CHUẨN dùng bindParam
-        $sql = "INSERT INTO Orders
-                (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
-                Payment_status, Method, Note, Date, Points, Total)
-                VALUES (:customer, :branch, :table, 'Ordered', NULL, 0, 
-                'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), :points, :total)";
+        exit();
 
-        $stmt = $this->conn->prepare($sql);
+        // return $this->conn->lastInsertId();
 
-        $stmt->bindParam(':customer', $userID, PDO::PARAM_INT);
-        $stmt->bindParam(':branch', $data["storeID"], PDO::PARAM_INT);
-        $stmt->bindParam(':table', $data["tableNumber"], PDO::PARAM_INT);
-        $stmt->bindParam(':points', $data["usePoints"], PDO::PARAM_INT);
-        $stmt->bindParam(':total', $data["total"], PDO::PARAM_INT);
+        // // Câu SQL CHUẨN dùng bindParam
+        // $sql = "INSERT INTO Orders
+        //         (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
+        //         Payment_status, Method, Note, Date, Points, Total)
+        //         VALUES (:customer, :branch, :table, 'Ordered', NULL, 0, 
+        //         'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), :points, :total)";
 
-        $stmt->execute();
+        // $stmt = $this->conn->prepare($sql);
 
-        // Trả về ID đơn hàng mới
-        return $this->conn->lastInsertId();
+        // $stmt->bindParam(':customer', $userID, PDO::PARAM_INT);
+        // $stmt->bindParam(':branch', $data["storeID"], PDO::PARAM_INT);
+        // $stmt->bindParam(':table', $data["tableNumber"], PDO::PARAM_INT);
+        // $stmt->bindParam(':points', $data["usePoints"], PDO::PARAM_INT);
+        // $stmt->bindParam(':total', $data["total"], PDO::PARAM_INT);
+
+        // $stmt->execute();
+
+        // // Trả về ID đơn hàng mới
+        // return $this->conn->lastInsertId();
     }
 
 
