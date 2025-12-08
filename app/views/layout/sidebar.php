@@ -21,7 +21,7 @@
       "title" => "Dashboard",
       "icon"  => "fas fa-chair",
       "link"  => "admin/dashboard",
-      "roles" => [0, 1, 2, 3  ]
+      "roles" => [0, 1, 2, 3]
     ],
     // Quản lý chuỗi
     [
@@ -31,7 +31,7 @@
       "roles" => [0, 1]
     ],
     [
-      "title" => "Quản lý chi nhánh",
+      "title" => "Quản lý chi nhánh",//tí sửa
       "icon"  => "fas fa-store",
       "link"  => "admin/branch",
       "roles" => [0, 1]
@@ -48,14 +48,13 @@
       "link"  => "admin/coupon",
       "roles" => [0, 1]
     ],
+// Nhân viên //tí sửa
     [
       "title" => "Nhận đơn hàng",
       "icon"  => "fas fa-receipt",
       "link"  => "admin/orders",
       "roles" => [0, 3]
     ],
-
-    // Nhân viên
     [
       "title" => "Xem thực đơn",
       "icon"  => "fas fa-list",
@@ -77,7 +76,7 @@
       "roles" => [0, 2]
     ],
     [
-      "title" => "Bàn",
+      "title" => "Bàn",//tí sửa
       "icon"  => "fas fa-chair",
       "link"  => "admin/table",
       "roles" => [0, 2]
