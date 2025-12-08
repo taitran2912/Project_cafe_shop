@@ -242,7 +242,6 @@ class Checkout extends Model {
 //digital menu
     public function saveOrder($data) {
         try {
-            // SQL dùng INSERT ... SELECT
             $sql = "
                 INSERT INTO Orders
                 (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
@@ -260,19 +259,13 @@ class Checkout extends Model {
                 die("Prepare failed (Order): " . $this->db->error);
             }
 
-            // Bind với đúng kiểu dữ liệu và đúng thứ tự
-            //   i = integer
-            //   i = integer
-            //   i = integer
-            //   d = double
-            //   s = string
             $stmt->bind_param(
                 "iiids",
-                $data["storeID"],        // ?
-                $data["tableNumber"],    // ?
-                $data["usePoints"],      // ?
-                $data["total"],          // ?
-                $data["customerPhone"]   // ?
+                $data["storeID"],      
+                $data["tableNumber"],  
+                $data["usePoints"],    
+                $data["total"],        
+                $data["customerPhone"] 
             );
 
             if (!$stmt->execute()) {
@@ -289,6 +282,7 @@ class Checkout extends Model {
             return false;
         }
     }
+
 
 
 
