@@ -84,7 +84,6 @@
                 </div>
 
                 <!-- Favorites Tab -->
-                <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="font-display text-2xl font-bold">Địa chỉ nhận hàng</h2>
 
@@ -93,6 +92,10 @@
                             + Thêm địa chỉ
                         </button>
                     </div>
+
+<!-- Danh sách địa chỉ -->
+                <div id="address-list"></div>
+
 
 
                     <!-- Danh sách địa chỉ -->

@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadAddresses() {
     const list = profileData.addresses;
-    const container = document.getElementById("favorites-tab");
+    const container = document.getElementById("address-list"); // ⭐ chỉ update phần list
 
     if (!list || list.length === 0) {
         container.innerHTML = `
@@ -168,11 +168,9 @@ function loadAddresses() {
         </div>
     `).join("");
 
-    container.innerHTML = `
-        <h2 class="font-display text-2xl font-bold mb-6">Địa chỉ nhận hàng</h2>
-        ${html}
-    `;
+    container.innerHTML = html;
 }
+
 
 
 
