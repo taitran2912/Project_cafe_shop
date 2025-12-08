@@ -251,7 +251,7 @@ const suggestItems = [
 
 function createSuggestSlide(item) {
   return `
-    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in" style="min-width: 300px; margin-right: 20px;">
+    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
         <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
         <div class="p-6">
             <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
