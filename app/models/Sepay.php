@@ -69,7 +69,7 @@ class Sepay extends Model
         try {
 
             // 1. Update trạng thái đơn
-            $update = $this->db->prepare("UPDATE Orders SET Payment_status='Paid', Status = 'Confirmed', Method = 'QRcode' WHERE ID=?");
+            $update = $this->db->prepare("UPDATE Orders SET Payment_status='Paid', Status = 'Ordered', Method = 'QRcode' WHERE ID=?");
             $update->bind_param("i", $order['ID']);
             $update->execute();
 

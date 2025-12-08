@@ -16,7 +16,7 @@ function formatDate(dateString) {
 
 function getStatusClass(status) {
   switch (status) {
-    case "Pending": return "status-pending"
+    case "Ordered": return "status-pending"
     case "Confirmed": return "status-processing"
     case "Completed": return "status-completed"
     case "Cancelled": return "status-cancelled"
@@ -26,7 +26,7 @@ function getStatusClass(status) {
 
 function getStatusText(status) {
   switch (status) {
-    case "Pending": return "Chờ xử lý"
+    case "Ordered": return "Chờ xử lý"
     case "Confirmed": return "Nhận đơn"
     case "Completed": return "Hoàn thành"
     case "Cancelled": return "Đã hủy"
