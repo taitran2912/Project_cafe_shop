@@ -52,13 +52,9 @@
 
                 <div class="summary-item">
                     <span>Tổng tiền hàng</span>
-                    <span class="price">108.000đ</span>
+                    <span class="price" id="subtotal">0đ</span>
                 </div>
 
-                <div class="summary-item">
-                    <span>Thuế (5%)</span>
-                    <span class="price">5.400đ</span>
-                </div>
 
                 <div class="summary-item">
                 <span>Điểm đã tích</span>
@@ -211,6 +207,31 @@ function setOrderLocation(order) {
     document.getElementById("order-location").innerText =
         `Đơn hàng của bạn tại ${store} - ${table}`;
 }
+
+function updateSubtotal(items) {
+    // Tính tổng tiền hàng
+    let subtotal = items.reduce((sum, item) => {
+        return sum + (item.price * item.quantity);
+    }, 0);
+
+    // Hiển thị ra giao diện
+    document.getElementById("subtotal").innerText =
+        subtotal.toLocaleString("vi-VN") + "đ";
+
+    return subtotal;
+}
+
+function updateSummary(items) {
+    let subtotal = updateSubtotal(items); // ✔ tính + hiển thị
+
+    let tax = Math.round(subtotal * 0.05);
+    let total = subtotal + tax;
+
+    document.getElementById("tax").innerText = tax.toLocaleString("vi-VN") + "đ";
+    document.getElementById("total").innerText = total.toLocaleString("vi-VN") + "đ";
+}
+
+
 
 
 </script>
