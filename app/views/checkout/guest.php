@@ -260,15 +260,18 @@ function confirmOrder() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order)
     })
-    .then(r => r.json())
+    ..then(r => r.json())
     .then(res => {
+        console.log("SERVER RESPONSE:", res); // <=== THÊM DÒNG NÀY
+
         if (res.success) {
             localStorage.removeItem("pendingOrder");
             window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou";
         } else {
-            alert("Không thể đặt hàng, vui lòng thử lại!");
+            alert(res.message || "Không thể đặt hàng, vui lòng thử lại!");
         }
     })
+
     .catch(err => {
         console.error(err);
         alert("Lỗi kết nối server!");
