@@ -187,9 +187,8 @@ class Checkout extends Model {
         return $points;
     }
 
-    public function getCouponByCode($code, $phone){
+    public function getCouponByCode($code, $phone) {
         try {
-
             $sql = "
                 SELECT c.*
                 FROM Coupons c
@@ -209,20 +208,37 @@ class Checkout extends Model {
                                 LIMIT 1
                         )
                 )
-                LIMIT 1;
+                LIMIT 1
             ";
 
+            // Chuẩn bị
             $stmt = $this->db->prepare($sql);
-            $stmt->execute([$code, $phone]); // <-- ĐÚNG
+            if (!$stmt) {
+                die("Prepare failed: " . $this->db->error);
+            }
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result ?: false;
+            // Gắn biến
+            $stmt->bind_param("ss", $code, $phone);
+
+            // Thực thi
+            if (!$stmt->execute()) {
+                die("Execute failed: " . $stmt->error);
+            }
+
+            // Lấy kết quả
+            $result = $stmt->get_result();
+            $coupon = $result->fetch_assoc();
+
+            $stmt->close();
+
+            return $coupon ?: false;
 
         } catch (Exception $e) {
             error_log("SQL ERROR getCouponByCode: " . $e->getMessage());
             return false;
         }
     }
+
 
 
 }
