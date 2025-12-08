@@ -265,7 +265,8 @@ class Checkout extends Model {
                 $data["tableNumber"],  
                 $data["usePoints"],    
                 $data["total"],        
-                $data["customerPhone"] 
+                var_dump($data["customerPhone"])
+
             );
 
             if (!$stmt->execute()) {
