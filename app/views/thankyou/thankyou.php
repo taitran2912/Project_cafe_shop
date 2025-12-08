@@ -337,7 +337,7 @@
     </style>
 </head>
 <body>
-    <div class="container fade-in">
+    <div class="container">
         <a href="#" class="back-link">Quay lại của hàng</a>
 
         <!-- Progress Steps -->
