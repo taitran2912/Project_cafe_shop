@@ -4,15 +4,29 @@ class MenuController extends Controller {
     public function index() {
         $productModel = $this->model('Menu');
 
+        // Kiểm tra user đăng nhập
+        $userID = isset($_SESSION['user']['ID']) ? $_SESSION['user']['ID'] : null;
+
+        // Lấy categories và products
         $categories = $productModel->getAllCategory();
         $products = $productModel->getAll();
 
+        // Lấy suggestions theo user
+        if (!empty($userID)) {
+            $suggestions = $productModel->getAllSuggestionsForUser($userID);
+        } else {
+            $suggestions = $productModel->getAllSuggestions();
+        }
+
+        // Truyền dữ liệu sang view
         $data = [
             'title' => 'Thực đơn',
             'categories' => $categories,
             'products' => $products,
+            'suggestions' => $suggestions,
             'js' => 'menu'
         ];
+
         $this->view('menu/index', $data);
     }
     
