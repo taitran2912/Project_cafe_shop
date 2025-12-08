@@ -240,6 +240,7 @@ class CheckoutController extends Controller {
             "orderID" => $orderId,
             "message" => "Đặt hàng thành công"
         ]);
+        exit
 
 
     // echo json_encode([
