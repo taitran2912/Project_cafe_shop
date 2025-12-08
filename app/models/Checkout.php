@@ -241,6 +241,7 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
+        exit();
         // Lấy user ID theo số điện thoại
         // $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
         // $stmt->execute([$data["customerPhone"]]);
