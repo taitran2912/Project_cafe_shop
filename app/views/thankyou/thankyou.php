@@ -366,7 +366,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="content">
+        <div class="container">
             <!-- Thank You Section -->
             <div class="thank-you-section">
                 <div class="thank-you-icon">✓</div>
