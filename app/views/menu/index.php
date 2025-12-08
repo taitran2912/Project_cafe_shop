@@ -251,7 +251,7 @@ const suggestItems = [
 
 function createSuggestSlide(item) {
   return `
-    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
+    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in" style="min-width: 600px; margin-right: 20px;">
         <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
         <div class="p-6">
             <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
@@ -261,12 +261,12 @@ function createSuggestSlide(item) {
 
                 <?php if (!empty($userID)): ?>
                 <button class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium transition"
-                    data-id="${item.id}"
-                    data-name="${item.name}"
-                    data-price="${item.price}"
-                    data-image="${item.image}">
-                    Thêm vào giỏ
-                </button>
+                  data-id="${item.id}"
+                  data-name="${item.name}"
+                  data-price="${item.price}"
+                  data-image="${item.image}">
+                  Thêm vào giỏ
+              </button>
 
                 <?php else: ?>
                 <a href="login" class="btn-brown text-sm px-4 py-2">Thêm vào giỏ</a>
