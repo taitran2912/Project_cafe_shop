@@ -241,12 +241,10 @@ class Checkout extends Model {
 
     public function insertOrder($data) {
 
-        // ==========================
         // 1. Lấy Customer ID từ SĐT
-        // ==========================
         $phone = $data["customerPhone"];
 
-        $sql = $this->conn->prepare("
+        $sql = $this->db->prepare("
             SELECT CP.ID 
             FROM Customer_Profile CP 
             JOIN Account A ON CP.ID_account = A.ID
@@ -261,9 +259,8 @@ class Checkout extends Model {
 
         $customerID = $user["ID"];
 
-        // ==========================
+
         // 2. Insert ORDER
-        // ==========================
         $branchID   = $data["storeID"];
         $tableID    = $data["tableNumber"] ?? NULL;
 
@@ -273,7 +270,7 @@ class Checkout extends Model {
         $paymentMethod = $data["method"] ?? "Cash";
         $today = date("Y-m-d");
 
-        $stmt = $this->conn->prepare("
+        $stmt = $this->db->prepare("
             INSERT INTO Orders (ID_Customer, ID_Branch, ID_Table, Status, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
             VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
         ");
@@ -290,56 +287,52 @@ class Checkout extends Model {
         );
 
         $stmt->execute();
-        $orderID = $this->conn->insert_id;
+        $orderID = $this->db->insert_id;
 
-        // =====================================================
-        // 3. Insert ORDER DETAIL + TRỪ TỒN KHO theo Branch
-        // =====================================================
+
+        // 3. Insert ORDER DETAIL + TRỪ TỒN KHO
         foreach ($data["items"] as $item) {
 
             $productID = $item["id"];
             $quantity  = $item["quantity"];
             $price     = $item["price"];
 
-            // Insert order_detail
-            $stmtD = $this->conn->prepare("
+            $stmtD = $this->db->prepare("
                 INSERT INTO Order_detail (ID_order, ID_product, Quantity, Price)
                 VALUES (?, ?, ?, ?)
             ");
             $stmtD->bind_param("iiid", $orderID, $productID, $quantity, $price);
             $stmtD->execute();
 
-            // Trừ tồn kho: Inventory -= Product_detail.Quantity * quantity
+            // Trừ tồn kho theo branch
             $sqlUpdate = "
                 UPDATE Inventory I
                 JOIN Product_detail PD ON I.ID_Material = PD.ID_Material
                 SET I.Quantity = I.Quantity - (PD.Quantity * $quantity)
                 WHERE PD.ID_Product = $productID
-                  AND I.ID_Branch = $branchID
+                AND I.ID_Branch = $branchID
             ";
-            $this->conn->query($sqlUpdate);
+            $this->db->query($sqlUpdate);
         }
 
-        // ==========================
-        // 4. Trừ điểm nếu dùng
-        // ==========================
+
+        // 4. Trừ điểm
         if ($usePoints > 0) {
-            $uP = $this->conn->prepare("
+            $uP = $this->db->prepare("
                 UPDATE Customer_Profile SET Points = Points - ? WHERE ID = ?
             ");
             $uP->bind_param("ii", $usePoints, $customerID);
             $uP->execute();
         }
 
-        // ==========================
-        // 5. Lưu coupon usage nếu có
-        // ==========================
+
+        // 5. Coupon usage
         if (isset($data["couponCode"]) && $data["couponCode"] !== "") {
 
             $code = $data["couponCode"];
             $discountAmount = $data["discountAmount"] ?? 0;
 
-            $getC = $this->conn->prepare("SELECT ID FROM Coupons WHERE Code = ?");
+            $getC = $this->db->prepare("SELECT ID FROM Coupons WHERE Code = ?");
             $getC->bind_param("s", $code);
             $getC->execute();
             $coupon = $getC->get_result()->fetch_assoc();
@@ -347,7 +340,7 @@ class Checkout extends Model {
             if ($coupon) {
                 $couponID = $coupon["ID"];
 
-                $insertC = $this->conn->prepare("
+                $insertC = $this->db->prepare("
                     INSERT INTO Coupon_usage (ID_coupon, ID_customer, ID_order, DiscountAmount)
                     VALUES (?, ?, ?, ?)
                 ");
@@ -361,4 +354,5 @@ class Checkout extends Model {
             "order_id" => $orderID
         ];
     }
+
 }
