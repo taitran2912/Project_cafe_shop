@@ -80,10 +80,13 @@ function loadOrders() {
 
       <div class="border-t pt-4 flex justify-between items-center">
         <span class="font-bold">Tổng cộng: ${formatPrice(order.total)}</span>
-        <div class="space-x-2">
-          ${order.status.trim() === "Ordered" ? `
-          <button onclick="cancelOrder(${order.id})" class="text-red-500 hover:text-red-700 text-sm">Hủy đơn</button>` : ""}
-        </div>
+        ${(order.status || "").trim() === "Ordered" ? `
+          <button onclick="cancelOrder(${order.id})" 
+                  class="text-red-500 hover:text-red-700 text-sm">
+            Hủy đơn
+          </button>
+        ` : ""}
+
       </div>
     </div>
   `).join("")
