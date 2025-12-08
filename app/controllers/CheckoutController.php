@@ -161,7 +161,7 @@ class CheckoutController extends Controller {
         // Thành công
         echo json_encode([
             'success' => true,
-            'percent' => (int)$coupon['Percent'],  // phần trăm giảm
+            'percent' => (int)$coupon['Discount_value'],  // phần trăm giảm
             'message' => 'Áp dụng mã thành công!'
         ]);
     }
