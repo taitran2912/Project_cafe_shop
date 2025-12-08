@@ -240,116 +240,159 @@ class Checkout extends Model {
     }
 
    public function insertOrder($data) {
+    // Enable mysqli exceptions to be thrown for easier debugging
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        // -----------------------------
-        // 1. Lấy Customer ID theo số điện thoại
-        // -----------------------------
-        $phone = $data["customerPhone"];
-        
-        $sql = $this->db->prepare("
+    // Quick validation
+    if (empty($data['items']) || !is_array($data['items'])) {
+        return ["success" => false, "message" => "Items missing or invalid"];
+    }
+
+    if (empty($data['customerPhone']) && empty($data['phone'])) {
+        return ["success" => false, "message" => "Customer phone missing"];
+    }
+
+    // Normalize phone field
+    $phone = $data['customerPhone'] ?? $data['phone'];
+
+    // Start transaction
+    $this->db->begin_transaction();
+
+    try {
+        // 1) Get customer ID
+        $stmt = $this->db->prepare("
             SELECT CP.ID 
             FROM Customer_Profile CP 
             JOIN Account A ON CP.ID_account = A.ID
             WHERE A.Phone = ?
+            LIMIT 1
         ");
-        $sql->bind_param("s", $phone);
-        $sql->execute();
-        $user = $sql->get_result()->fetch_assoc();
+        $stmt->bind_param("s", $phone);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $user = $res->fetch_assoc();
+        $stmt->close();
 
-        if (!$user)
-            return ["success" => false, "message" => "Customer not found"];
+        if (!$user) {
+            $this->db->rollback();
+            return ["success" => false, "message" => "Customer not found for phone: $phone"];
+        }
+        $customerID = (int)$user['ID'];
 
-        $customerID = $user["ID"];
-
-
-        // -----------------------------
-        // 2. Insert ORDER
-        // -----------------------------
-        $branchID   = $data["storeID"];
-        $tableID    = $data["tableNumber"] ?? NULL;
-
-        $usePoints  = $data["usePoints"] ?? 0;
-        $finalTotal = $data["finalTotal"] ?? 0;
-
-        $paymentMethod = $data["method"] ?? "Cash";
+        // 2) Prepare order fields
+        $branchID   = isset($data['storeID']) ? (int)$data['storeID'] : 0;
+        $tableID    = isset($data['tableNumber']) ? (int)$data['tableNumber'] : 0; // adjust if DB allows NULL
+        $usePoints  = isset($data['usePoints']) ? (int)$data['usePoints'] : 0;
+        $finalTotal = isset($data['finalTotal']) ? (float)$data['finalTotal'] : 0.0;
+        $paymentMethod = $data['method'] ?? 'Cash';
         $today = date("Y-m-d");
 
+        // 3) Insert Orders (bind types: iiissid -> last is double)
         $stmt = $this->db->prepare("
-            INSERT INTO Orders 
+            INSERT INTO Orders
             (ID_Customer, ID_Branch, ID_Table, Status, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
             VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
         ");
-
         $stmt->bind_param(
             "iiissid",
-            $customerID,    // i
-            $branchID,      // i
-            $tableID,       // i
-            $paymentMethod, // s
-            $today,         // s
-            $usePoints,     // i
-            $finalTotal     // d (decimal)
+            $customerID,
+            $branchID,
+            $tableID,
+            $paymentMethod,
+            $today,
+            $usePoints,
+            $finalTotal
         );
 
-        if (!$stmt->execute()) {
-            return [
-                "success" => false,
-                "message" => "Order insert failed: " . $stmt->error
-            ];
+        $stmt->execute();
+        $orderID = $this->db->insert_id;
+        $stmt->close();
+
+        if (!$orderID) {
+            throw new Exception("Failed to create order");
         }
 
+        // 4) Insert order details
+        $stmtD = $this->db->prepare("
+            INSERT INTO Order_detail (ID_order, ID_product, Quantity, Price)
+            VALUES (?, ?, ?, ?)
+        ");
 
-        $orderID = $this->db->insert_id;
-
-
-        // -----------------------------
-        // 3. Insert ORDER DETAIL
-        // -----------------------------
-        foreach ($data["items"] as $item) {
-
-            if (!isset($item["id"])) {
-                return ["success" => false, "message" => "Item missing ID"];
+        foreach ($data['items'] as $item) {
+            // Validate each item
+            if (!isset($item['id'])) {
+                throw new Exception("Item missing ID: " . json_encode($item));
             }
+            $productID = (int)$item['id'];
+            $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
+            $price = isset($item['price']) ? (float)$item['price'] : 0.0;
 
-            $productID = (int)$item["id"];
-            $quantity  = (int)$item["quantity"];
-            $price     = (float)$item["price"];
-
-            $stmtD = $this->db->prepare("
-                INSERT INTO Order_detail (ID_order, ID_product, Quantity, Price)
-                VALUES (?, ?, ?, ?)
-            ");
             $stmtD->bind_param("iiid", $orderID, $productID, $quantity, $price);
+            $stmtD->execute();
 
-            if (!$stmtD->execute()) {
-                return ["success" => false, "message" => "Order detail failed: " . $stmtD->error];
-            }
-
-            // TRỪ TỒN KHO
-            $this->db->query("
+            // Decrease inventory (best-effort)
+            $sqlUpdate = "
                 UPDATE Inventory I
                 JOIN Product_detail PD ON I.ID_Material = PD.ID_Material
-                SET I.Quantity = I.Quantity - (PD.Quantity * $quantity)
-                WHERE PD.ID_Product = $productID
-                AND I.ID_Branch = $branchID
-            ");
+                SET I.Quantity = I.Quantity - (PD.Quantity * ?)
+                WHERE PD.ID_Product = ?
+                AND I.ID_Branch = ?
+            ";
+            $uStmt = $this->db->prepare($sqlUpdate);
+            $uStmt->bind_param("iii", $quantity, $productID, $branchID);
+            $uStmt->execute();
+            $uStmt->close();
         }
+        $stmtD->close();
 
-
-        // -----------------------------
-        // 4. Trừ điểm
-        // -----------------------------
+        // 5) Deduct points if used
         if ($usePoints > 0) {
-            $uP = $this->db->prepare("
-                UPDATE Customer_Profile SET Points = Points - ? WHERE ID = ?
-            ");
+            $uP = $this->db->prepare("UPDATE Customer_Profile SET Points = Points - ? WHERE ID = ?");
             $uP->bind_param("ii", $usePoints, $customerID);
             $uP->execute();
+            $uP->close();
         }
 
+        // 6) Save coupon usage if any (optional)
+        if (!empty($data['couponCode'])) {
+            $code = $data['couponCode'];
+            $discountAmount = isset($data['discountAmount']) ? (float)$data['discountAmount'] : 0.0;
+
+            $getC = $this->db->prepare("SELECT ID FROM Coupons WHERE Code = ? LIMIT 1");
+            $getC->bind_param("s", $code);
+            $getC->execute();
+            $couponRow = $getC->get_result()->fetch_assoc();
+            $getC->close();
+
+            if ($couponRow) {
+                $couponID = (int)$couponRow['ID'];
+                $insertC = $this->db->prepare("
+                    INSERT INTO Coupon_usage (ID_coupon, ID_customer, ID_order, DiscountAmount)
+                    VALUES (?, ?, ?, ?)
+                ");
+                $insertC->bind_param("iiii", $couponID, $customerID, $orderID, (int)$discountAmount);
+                $insertC->execute();
+                $insertC->close();
+            }
+        }
+
+        // Commit everything
+        $this->db->commit();
+
         return ["success" => true, "order_id" => $orderID];
+    } catch (Throwable $e) {
+        // Rollback and return error; also log to file
+        $this->db->rollback();
+        $err = [
+            "success" => false,
+            "message" => "Insert order failed",
+            "error" => $e->getMessage(),
+            "line" => $e->getLine()
+        ];
+        file_put_contents(__DIR__ . "/../../debug/order_errors.log", date("c") . " " . print_r($err, true) . "\n", FILE_APPEND);
+        return $err;
+    } finally {
+        // restore mysqli reporting? optional
     }
-
-
-
+}
 }
