@@ -37,10 +37,10 @@ function renderProductCard($p) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/public/css/digitalmenu.css">
+    <link rel="stylesheet" href="https://caffeshop.hieuthuocyentam.id.vn/public/css/digitalmenu.css">
 
     <!-- JS -->
-    <script src="/public/js/digitalmenu.js" defer></script>
+    <script src="https://caffeshop.hieuthuocyentam.id.vn/public/js/digitalmenu.js" defer></script>
 </head>
 <body>
 
