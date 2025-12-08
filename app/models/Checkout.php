@@ -253,7 +253,7 @@ class Checkout extends Model {
 
 
         $sql = "INSERT INTO Orders(ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total) 
-        VALUES (?,?,?, 'Ordered', Null, 0, 'Unpaid', 'Cash', ?, Now(),?,?)";
+        VALUES (?,?,?, 'Ordered', Null, 0, 'Unpaid', 'Cash', '?', Now(),?,?)";
         // INSERT INTO Coupon_usage(ID_coupon, ID_customer, ID_order, Used_at) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]')
 
         $stmt = $this->conn->prepare($sql);
