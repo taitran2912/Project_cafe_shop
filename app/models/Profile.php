@@ -50,7 +50,7 @@ class Profile extends Model {
         return $addresses;
     }
     
-    public function addAddress($userId, $address, $latitude = null, $longitude = null, $isDefault = 0) {
+    public function addAddress($userId, $address, $latitude, $longitude, $isDefault) {
         $mysqli = $this->db;
 
         // Nếu là mặc định, reset các địa chỉ khác
