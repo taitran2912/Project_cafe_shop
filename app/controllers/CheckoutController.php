@@ -134,24 +134,32 @@ class CheckoutController extends Controller {
     header('Content-Type: application/json');
 
     // Nhận số điện thoại từ POST
-    $phone = $_GET['phone'] ?? '';
+        $phone = $_GET['phone'] ?? '';
 
-    // Kiểm tra rỗng
-    if (empty($phone)) {
+        // Kiểm tra rỗng
+        if (empty($phone)) {
+            echo json_encode([
+                'success' => false,
+                'received_phone' => null,
+                'message' => 'Không nhận được số điện thoại'
+            ]);
+            return;
+        }
+
+        // Trả về để kiểm tra client có gửi đúng không
         echo json_encode([
-            'success' => false,
-            'received_phone' => null,
-            'message' => 'Không nhận được số điện thoại'
+            'success' => true,
+            'received_phone' => $phone,
+            'message' => 'Đã nhận số điện thoại'
         ]);
-        return;
-    }
 
-    // Trả về để kiểm tra client có gửi đúng không
-    echo json_encode([
-        'success' => true,
-        'received_phone' => $phone,
-        'message' => 'Đã nhận số điện thoại'
-    ]);
+        $checkoutModel = $this->model('Checkout');
+        $points = $checkoutModel->getPointsByPhone($phone);  
+
+        echo json_encode([
+            'success' => true,
+            'points' => (int) $points
+        ]);
     }
 
 
