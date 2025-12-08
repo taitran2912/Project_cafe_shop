@@ -241,40 +241,55 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        // 2️⃣ Insert đơn hàng
-        $sql = "
-    INSERT INTO Orders (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
-    SELECT ID, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), 2, 1000 FROM Account  WHERE Phone = ?; ";
+        try {
+            // SQL dùng INSERT ... SELECT
+            $sql = "
+                INSERT INTO Orders
+                (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
+                Payment_status, Method, Note, Date, Points, Total)
+                SELECT 
+                    ID, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash',
+                    'Đơn hàng tại quán hoặc mua mang về',
+                    NOW(), ?, ?
+                FROM Account
+                WHERE Phone = ?
+            ";
 
-        $stmt = $this->db->prepare($sql);
-        if (!$stmt) {
-            die("Prepare failed (Order): " . $this->db->error);
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) {
+                die("Prepare failed (Order): " . $this->db->error);
+            }
+
+            // Bind với đúng kiểu dữ liệu và đúng thứ tự
+            //   i = integer
+            //   i = integer
+            //   i = integer
+            //   d = double
+            //   s = string
+            $stmt->bind_param(
+                "iiids",
+                $data["storeID"],        // ?
+                $data["tableNumber"],    // ?
+                $data["usePoints"],      // ?
+                $data["total"],          // ?
+                $data["customerPhone"]   // ?
+            );
+
+            if (!$stmt->execute()) {
+                die("Execute failed (Order): " . $stmt->error);
+            }
+
+            $orderId = $stmt->insert_id;
+            $stmt->close();
+
+            return $orderId;
+
+        } catch (Exception $e) {
+            error_log("SQL ERROR saveOrder: " . $e->getMessage());
+            return false;
         }
+    }
 
-        // gán biến
-        $stmt->bind_param(
-            "iiddi",
-            
-            $data["storeID"],
-            $data["tableNumber"],
-            $data["usePoints"],
-            $data["total"], 
-            $data["customerPhone"]
-        );
-
-        if (!$stmt->execute()) {
-            die("Execute failed (Order): " . $stmt->error);
-        }
-
-        // Lấy ID đơn hàng vừa tạo
-        $orderId = $stmt->insert_id;
-        $stmt->close();
-
-        return $orderId;
-
-
-    
-}
 
 
 
