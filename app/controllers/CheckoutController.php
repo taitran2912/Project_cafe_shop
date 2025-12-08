@@ -126,8 +126,8 @@ class CheckoutController extends Controller {
             'points' => $points
         ]);
     }
-    
-    public function coupon() {
+
+    public function coupon($code) {
         header('Content-Type: application/json');
 
         // Nhận mã từ GET hoặc POST
