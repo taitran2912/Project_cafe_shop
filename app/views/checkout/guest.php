@@ -234,7 +234,7 @@ function updateSummary(items) {
 function loadUserPoints(phone) {
     if (!phone) return;
 
-    fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/points/${phone}`)
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/points?phone=${phone}`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -251,6 +251,7 @@ function loadUserPoints(phone) {
         });
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
     const order = JSON.parse(localStorage.getItem("pendingOrder"));
 
@@ -258,8 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
         loadUserPoints(order.customerPhone);
     }
 });
-
-
 
 
 </script>
