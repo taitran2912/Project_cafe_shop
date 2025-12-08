@@ -395,7 +395,7 @@
 
         // Continue Shopping function
         function continueShop() {
-            window.location.href = '/';
+            window.location.href = 'https://caffeshop.hieuthuocyentam.id.vn/digitalmenu/store/5';
         }
 
         // Back link
