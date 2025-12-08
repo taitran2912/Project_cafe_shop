@@ -86,13 +86,14 @@
                 <!-- Favorites Tab -->
                 <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                     <div class="flex justify-between items-center mb-6">
+                        <h2 class="font-display text-2xl font-bold">Địa chỉ nhận hàng</h2>
+
                         <button onclick="openAddressModal()" 
-        class="btn-primary mb-6 px-4 py-2 rounded-lg">
-        + Thêm địa chỉ
-</button>
-
-
+                            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                            + Thêm địa chỉ
+                        </button>
                     </div>
+
 
                     <!-- Danh sách địa chỉ -->
                     <div id="address-list"></div>
