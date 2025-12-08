@@ -167,6 +167,7 @@ class CheckoutController extends Controller {
     }
 
     public function save() {
+        exit();
         header('Content-Type: application/json; charset=utf-8');
         // Chỉ chấp nhận POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
