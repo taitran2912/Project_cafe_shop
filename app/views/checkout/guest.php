@@ -371,6 +371,7 @@ function payCash() {
 
 function payQRCode() {
     console.log("THANH TOÁN QR CODE");
+    
     confirmOrder();
 }
 
