@@ -126,7 +126,40 @@ class CheckoutController extends Controller {
             'points' => $points
         ]);
     }
+    
+    public function coupon() {
+        header('Content-Type: application/json');
 
+        // Nhận mã từ GET hoặc POST
+        $code = $_GET['code'] ?? $_POST['code'] ?? '';
 
+        if (empty($code)) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Thiếu mã giảm giá!'
+            ]);
+            return;
+        }
+
+        // Gọi model
+        $checkoutModel = $this->model('Checkout');
+        $coupon = $checkoutModel->getCouponByCode($code);
+
+        // Không tồn tại hoặc hết hạn
+        if (!$coupon) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!'
+            ]);
+            return;
+        }
+
+        // Thành công
+        echo json_encode([
+            'success' => true,
+            'percent' => (int)$coupon['Percent'],
+            'message' => 'Áp dụng mã thành công!'
+        ]);
+    }
 
 }
