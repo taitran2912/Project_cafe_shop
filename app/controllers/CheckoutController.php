@@ -127,7 +127,7 @@ class CheckoutController extends Controller {
         ]);
     }
 
-    public function coupon($code) {
+    public function coupon() {
         header('Content-Type: application/json');
 
         // Nhận mã từ GET hoặc POST
