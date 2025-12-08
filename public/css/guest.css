@@ -362,3 +362,51 @@ body {
     margin-top: 20px;
   }
 }
+.summary-item input {
+    width: 130px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f8f5;
+    text-align: right;
+    transition: 0.2s;
+}
+
+.summary-item input:focus {
+    background: white;
+    border-color: #d97e3a;
+    outline: none;
+}
+
+.summary-item input::-webkit-inner-spin-button,
+.summary-item input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+.btn-apply {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .25s, transform .1s;
+}
+
+.btn-apply:hover {
+    background-color: #555;
+}
+
+.btn-apply:active {
+    transform: scale(.97);
+}
+
+.discount-applied {
+    color: #27ae60;
+    font-size: 14px;
+    margin-top: 4px;
+}
