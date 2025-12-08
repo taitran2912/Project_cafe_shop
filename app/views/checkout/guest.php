@@ -255,7 +255,7 @@ function confirmOrder() {
     order.usePoints = usePoints;        // Gửi lên server
     order.finalTotal = updateSummaryAfterPoints(); // Tổng tiền sau giảm
 
-    fetch("https://caffeshop.hieuthuocyentam.id.vn/api/order/save", {
+    fetch("https://caffeshop.hieuthuocyentam.id.vn/checkout/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order)
@@ -348,80 +348,14 @@ async function applyCoupon() {
 }
 
 // === SỰ KIỆN THANH TOÁN ===
-//Lấy dữ liệu
-function getCheckoutData() {
-    const order = JSON.parse(localStorage.getItem("pendingOrder"));
-
-    if (!order) return null;
-
-    // Lấy lại số điểm dùng
-    const usePoints = Number(document.getElementById("usePoints").value) || 0;
-    
-    // Lấy mã giảm giá
-    const couponCode = document.getElementById("couponCode").value.trim() || null;
-
-    // Lấy thông tin giảm giá hiện có
-    const discountAmount = Number(document.getElementById("discountAmount").innerText.replace(/\D/g, "")) || 0;
-
-    // Lấy tổng cuối cùng từ giao diện
-    const finalTotal = Number(document.getElementById("total").innerText.replace(/\D/g, "")) || 0;
-
-    // Cập nhật vào order
-    order.usePoints = usePoints;
-    order.couponCode = couponCode;
-    order.discountAmount = discountAmount;
-    order.finalTotal = finalTotal;
-
-    return order;
-}
-
 function payCash() {
-    const checkout = getCheckoutData();
-
-    if (!checkout) {
-        alert("Không tìm thấy đơn hàng!");
-        return;
-    }
-
-    console.log("DỮ LIỆU THANH TOÁN TIỀN MẶT:", checkout);
-
-    fetch("https://caffeshop.hieuthuocyentam.id.vn/checkout/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(checkout)
-    })
-    .then(async response => {
-        const raw = await response.text();      // Lấy dữ liệu thô
-        console.log("RAW RESPONSE:", raw);      // Debug xem server trả gì
-
-        try {
-            return JSON.parse(raw);             // Parse JSON an toàn
-        } catch (err) {
-            console.error("JSON PARSE ERROR:", err);
-            throw new Error("API không trả JSON hợp lệ");
-        }
-    })
-    .then(res => {
-        console.log("PARSED JSON:", res);
-
-        if (res.success) {
-            localStorage.removeItem("pendingOrder");
-            window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou/digital";
-        } else {
-            alert("Lỗi khi tạo đơn hàng: " + (res.message || "Không rõ lỗi"));
-        }
-    })
-    .catch(err => {
-        console.error("FETCH ERROR:", err);
-        alert("Không thể kết nối server!");
-    });
+    console.log("THANH TOÁN TIỀN MẶT");
+    confirmOrder();
 }
-
-
 
 function payQRCode() {
     console.log("THANH TOÁN QR CODE");
-    // confirmOrder();
+    confirmOrder();
 }
 
 // Gán onclick

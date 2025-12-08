@@ -239,95 +239,126 @@ class Checkout extends Model {
         }
     }
 
-//digital menu
     public function saveOrder($data) {
-        
-            // 1. Kiểm tra phone tồn tại
-            $stmt = $this->db->prepare("SELECT ID FROM Account WHERE Phone = ?");
-            if (!$stmt) {
-                return ["success" => false, "message" => "Prepare failed (Customer): " . $this->db->error];
-            }
-            $stmt->bind_param("s", $data["customerPhone"]);
-            $stmt->execute();
-            $stmt->bind_result($customerID);
-            if (!$stmt->fetch()) {
-                $stmt->close();
-                return ["success" => false, "message" => "Customer not found"];
-            }
-            $stmt->close();
 
-            // 2. Chuẩn hóa dữ liệu
-            $storeID = (int)$data["storeID"];
-            $tableNumber = (int)$data["tableNumber"];
-            $usePoints = (int)($data["usePoints"] ?? 0);
-            $total = (float)$data["total"];
-            $note = $data["note"] ?? "Đơn hàng tại quán hoặc mua mang về";
+        // ==========================
+        // 1. Lấy Customer ID từ SĐT
+        // ==========================
+        $phone = $data["customerPhone"];
 
-            // 3. Insert Order
-            $sql = "
-                INSERT INTO Orders
-                (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
-                Payment_status, Method, Note, Date, Points, Total)
-                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', ?, NOW(), ?, ?)
+        $sql = $this->conn->prepare("
+            SELECT CP.ID 
+            FROM Customer_Profile CP 
+            JOIN Account A ON CP.ID_account = A.ID
+            WHERE A.Phone = ?
+        ");
+        $sql->bind_param("s", $phone);
+        $sql->execute();
+        $user = $sql->get_result()->fetch_assoc();
+
+        if (!$user)
+            return ["success" => false, "message" => "Customer not found"];
+
+        $customerID = $user["ID"];
+
+        // ==========================
+        // 2. Insert ORDER
+        // ==========================
+        $branchID   = $data["storeID"];
+        $tableID    = $data["tableNumber"] ?? NULL;
+
+        $usePoints  = $data["usePoints"] ?? 0;
+        $finalTotal = $data["finalTotal"] ?? 0;
+
+        $paymentMethod = $data["method"] ?? "Cash";
+        $today = date("Y-m-d");
+
+        $stmt = $this->conn->prepare("
+            INSERT INTO Orders (ID_Customer, ID_Branch, ID_Table, Status, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
+            VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
+        ");
+
+        $stmt->bind_param(
+            "iiissii",
+            $customerID,
+            $branchID,
+            $tableID,
+            $paymentMethod,
+            $today,
+            $usePoints,
+            $finalTotal
+        );
+
+        $stmt->execute();
+        $orderID = $this->conn->insert_id;
+
+        // =====================================================
+        // 3. Insert ORDER DETAIL + TRỪ TỒN KHO theo Branch
+        // =====================================================
+        foreach ($data["items"] as $item) {
+
+            $productID = $item["id"];
+            $quantity  = $item["quantity"];
+            $price     = $item["price"];
+
+            // Insert order_detail
+            $stmtD = $this->conn->prepare("
+                INSERT INTO Order_detail (ID_order, ID_product, Quantity, Price)
+                VALUES (?, ?, ?, ?)
+            ");
+            $stmtD->bind_param("iiid", $orderID, $productID, $quantity, $price);
+            $stmtD->execute();
+
+            // Trừ tồn kho: Inventory -= Product_detail.Quantity * quantity
+            $sqlUpdate = "
+                UPDATE Inventory I
+                JOIN Product_detail PD ON I.ID_Material = PD.ID_Material
+                SET I.Quantity = I.Quantity - (PD.Quantity * $quantity)
+                WHERE PD.ID_Product = $productID
+                  AND I.ID_Branch = $branchID
             ";
+            $this->conn->query($sqlUpdate);
+        }
 
-            $stmt = $this->db->prepare($sql);
-            if (!$stmt) {
-                return ["success" => false, "message" => "Prepare failed (Order): " . $this->db->error];
+        // ==========================
+        // 4. Trừ điểm nếu dùng
+        // ==========================
+        if ($usePoints > 0) {
+            $uP = $this->conn->prepare("
+                UPDATE Customer_Profile SET Points = Points - ? WHERE ID = ?
+            ");
+            $uP->bind_param("ii", $usePoints, $customerID);
+            $uP->execute();
+        }
+
+        // ==========================
+        // 5. Lưu coupon usage nếu có
+        // ==========================
+        if (isset($data["couponCode"]) && $data["couponCode"] !== "") {
+
+            $code = $data["couponCode"];
+            $discountAmount = $data["discountAmount"] ?? 0;
+
+            $getC = $this->conn->prepare("SELECT ID FROM Coupons WHERE Code = ?");
+            $getC->bind_param("s", $code);
+            $getC->execute();
+            $coupon = $getC->get_result()->fetch_assoc();
+
+            if ($coupon) {
+                $couponID = $coupon["ID"];
+
+                $insertC = $this->conn->prepare("
+                    INSERT INTO Coupon_usage (ID_coupon, ID_customer, ID_order, DiscountAmount)
+                    VALUES (?, ?, ?, ?)
+                ");
+                $insertC->bind_param("iiii", $couponID, $customerID, $orderID, $discountAmount);
+                $insertC->execute();
             }
+        }
 
-            $stmt->bind_param(
-                "iiisid",
-                $customerID,
-                $storeID,
-                $tableNumber,
-                $note,
-                $usePoints,
-                $total
-            );
-
-            if (!$stmt->execute()) {
-                $stmt->close();
-                return ["success" => false, "message" => "Execute failed (Order): " . $stmt->error];
-            }
-
-            $orderId = $stmt->insert_id;
-            $stmt->close();
-
-            return ["success" => true, "orderID" => $orderId];
-
+        return [
+            "success" => true,
+            "order_id" => $orderID
+        ];
     }
-
-    // Lưu từng sản phẩm
-    public function saveOrderItem($orderId, $item) {
-        $sql = "INSERT INTO order_items (order_id, product_id, product_name, price, quantity, total_price)
-                VALUES (?, ?, ?, ?, ?, ?)";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([
-            $orderId,
-            $item["id"],
-            $item["name"],
-            $item["price"],
-            $item["quantity"],
-            $item["price"] * $item["quantity"]
-        ]);
-    }
-
-    // Trừ điểm khách
-    public function subtractPoints($phone, $points) {
-        $sql = "UPDATE customers SET points = points - ? WHERE phone = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$points, $phone]);
-    }
-
-    // Lưu việc dùng mã giảm giá
-    public function applyCoupon($phone, $code) {
-        $sql = "INSERT INTO used_coupons (phone, code, used_at) VALUES (?, ?, NOW())";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$phone, $code]);
-    }
-
-
-
 }

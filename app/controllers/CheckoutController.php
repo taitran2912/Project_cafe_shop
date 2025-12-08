@@ -167,94 +167,21 @@ class CheckoutController extends Controller {
     }
 
     public function save() {
-        header('Content-Type: application/json; charset=utf-8');
 
-        $input = json_decode(file_get_contents("php://input"), true);
-        // // Chỉ chấp nhận POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(["success" => false, "message" => "Invalid method"]);
+        header("Content-Type: application/json");
+
+        $body = json_decode(file_get_contents("php://input"), true);
+
+        if (!$body || !isset($body["items"])) {
+            echo json_encode(["success" => false, "message" => "Invalid data"]);
             return;
         }
 
-        // Lấy JSON từ body request
-        $input = json_decode(file_get_contents("php://input"), true);
-
-        if (!$input) {
-            echo json_encode(["success" => false, "message" => "Invalid JSON data"]);
-            return;
-        }
-
-        // Kiểm tra dữ liệu chính
-        if (empty($input['items']) || empty($input['finalTotal'])) {
-            echo json_encode(["success" => false, "message" => "Missing order data"]);
-            return;
-        }
-
-        // // --- LẤY DỮ LIỆU ---
-        $customerPhone   = $input['customerPhone'] ?? null;
-        $storeId         = $input['storeID'] ?? 0;
-        $tableNumber     = $input['tableNumber'] ?? null;
-
-        $items           = $input['items'];
-        $usePoints       = $input['usePoints'] ?? 0;
-        $couponCode      = $input['couponCode'] ?? null;
-        $discountAmount  = $input['discountAmount'] ?? 0;
-        $finalTotal      = $input['finalTotal'];
-
-        // --- LƯU ĐƠN HÀNG ---
+        // Gọi model xử lý
         $checkoutModel = $this->model('Checkout');
-        $orderId = $checkoutModel->saveOrder([
-            "customerPhone" => $customerPhone,
-            "storeID"       => $storeId,
-            "tableNumber"   => $tableNumber,
-            "usePoints"     => $usePoints,
-            "total"         => $finalTotal
-        ]);
+        $response = $checkoutModel->saveOrder($body);
 
-        if (!$orderId) {
-            echo json_encode(["success" => false, "message" => "Cannot save order"]);
-            return;
-        }
-
-        // // // --- LƯU CHI TIẾT ---
-        // // foreach ($items as $item) {
-        // //     $checkoutModel->saveOrderItem($orderId, $item);
-        // // }
-
-        // // // --- TRỪ ĐIỂM (NẾU CÓ) ---
-        // // if ($customerPhone && $usePoints > 0) {
-        // //     $checkoutModel->subtractPoints($customerPhone, $usePoints);
-        // // }
-
-        // // // --- LƯU MÃ GIẢM GIÁ ---
-        // // if ($couponCode) {
-        // //     $checkoutModel->applyCoupon($customerPhone, $couponCode);
-        // // }
-
-        // // --- TRẢ KẾT QUẢ ---
-        echo json_encode([
-            "success" => true,
-            "orderID" => $orderId,
-            "message" => "Đặt hàng thành công"
-        ]);
-
-
-    // echo json_encode([
-    //     "debug" => true,
-    //     "received_raw" => $input,
-    //     "parsed" => [
-    //         "customerPhone" => $input["customerPhone"] ?? null,
-    //         "storeID"       => $input["storeID"] ?? null,
-    //         "tableNumber"   => $input["tableNumber"] ?? null,
-    //         "items"         => $input["items"] ?? null,
-    //         "usePoints"     => $input["usePoints"] ?? null,
-    //         "couponCode"    => $input["couponCode"] ?? null,
-    //         "discountAmount"=> $input["discountAmount"] ?? null,
-    //         "finalTotal"    => $input["finalTotal"] ?? null
-    //     ]
-    // ]);
-
-        return;
+        echo json_encode($response);
     }
 
 
