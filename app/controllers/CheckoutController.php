@@ -206,15 +206,15 @@ class CheckoutController extends Controller {
 
         // --- LƯU ĐƠN HÀNG ---
         $checkoutModel = $this->model('Checkout');
-        $orderId = $checkoutModel->saveOrder([
-            "customerPhone" => $customerPhone,
-            "storeID"       => $storeId,
-            "tableNumber"   => $tableNumber,
-            "usePoints"     => $usePoints,
-            // "couponCode"    => $couponCode,
-            // "discount"      => $discountAmount,
-            "total"         => $finalTotal
-        ]);
+        // $orderId = $checkoutModel->saveOrder([
+        //     "customerPhone" => $customerPhone,
+        //     "storeID"       => $storeId,
+        //     "tableNumber"   => $tableNumber,
+        //     "usePoints"     => $usePoints,
+        //     // "couponCode"    => $couponCode,
+        //     // "discount"      => $discountAmount,
+        //     "total"         => $finalTotal
+        // ]);
 
         // // if (!$orderId) {
         // //     echo json_encode(["success" => false, "message" => "Cannot save order"]);
@@ -259,7 +259,7 @@ class CheckoutController extends Controller {
     //     ]
     // ]);
 
-    return;
+        return;
     }
 
 
