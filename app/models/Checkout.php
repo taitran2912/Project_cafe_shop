@@ -241,7 +241,7 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        try {
+        
             // 1. Kiểm tra phone tồn tại
             $stmt = $this->db->prepare("SELECT ID FROM Account WHERE Phone = ?");
             if (!$stmt) {
@@ -296,10 +296,6 @@ class Checkout extends Model {
 
             return ["success" => true, "orderID" => $orderId];
 
-        } catch (Exception $e) {
-            error_log("SQL ERROR saveOrder: " . $e->getMessage());
-            return ["success" => false, "message" => "Cannot save order"];
-        }
     }
 
     // Lưu từng sản phẩm
