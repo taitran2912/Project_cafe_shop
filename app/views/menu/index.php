@@ -12,6 +12,14 @@
     </div>
 </section>
 
+<section class="content-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold mb-6">Gợi ý cho bạn ✨</h2>
+
+      <div id="suggest-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </div>
+</section>
+
 <!-- Menu Section  -->
 <section class="content-section bg-muted">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,5 +211,56 @@ document.addEventListener("DOMContentLoaded", () => {
       loadMenuItems()
     }, 1000)
   })
+
+  loadSuggestions();
 })
+
+//Gợi ý món 
+const suggestItems = [
+<?php if (!empty($data['suggestions'])): ?>
+  <?php foreach ($data['suggestions'] as $index => $s): ?>
+    {
+      id: <?= (int)$s['ID'] ?>,
+      name: "<?= htmlspecialchars($s['Name'], ENT_QUOTES) ?>",
+      price: <?= (int)$s['Price'] ?>,
+      image: "<?= BASE_URL ?>/public/image/<?= htmlspecialchars($s['Image'], ENT_QUOTES) ?>",
+    }<?= $index < count($data['suggestions']) - 1 ? ',' : '' ?>
+  <?php endforeach; ?>
+<?php endif; ?>
+];
+
+function createSuggestItemHTML(item) {
+  return `
+    <div class="menu-item bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
+        <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
+        <div class="p-6">
+            <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
+            <div class="flex justify-between items-center">
+                <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
+            </div>
+        </div>
+    </div>
+  `
+}
+
+let suggestIndex = 0;
+
+function loadSuggestions() {
+  const grid = document.getElementById("suggest-grid");
+  grid.innerHTML = "";
+
+  // Lấy 3 món theo index
+  for (let i = 0; i < 3; i++) {
+    const item = suggestItems[(suggestIndex + i) % suggestItems.length];
+    grid.innerHTML += createSuggestItemHTML(item);
+  }
+
+  // Tăng index để lần sau hiển thị món khác
+  suggestIndex = (suggestIndex + 1) % suggestItems.length;
+}
+
+// Tự động đổi món mỗi 4 giây
+setInterval(loadSuggestions, 4000);
+
+
 </script>
