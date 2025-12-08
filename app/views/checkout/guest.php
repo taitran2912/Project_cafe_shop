@@ -255,6 +255,13 @@ function confirmOrder() {
     order.usePoints = usePoints;        // Gửi lên server
     order.finalTotal = updateSummaryAfterPoints(); // Tổng tiền sau giảm
 
+    order.customerPhone =
+    order.customerPhone ??
+    order.phone ??
+    localStorage.getItem("customerPhone") ??
+    new URLSearchParams(window.location.search).get("phone") ??
+    null;
+    
     fetch("https://caffeshop.hieuthuocyentam.id.vn/checkout/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
