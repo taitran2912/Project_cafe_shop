@@ -38,14 +38,14 @@
                  <!-- Desktop Menu  -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="index" class=" font-medium">Trang chủ</a>
-                        <a href="menu" class="text-gray-700 hover: transition-colors">Thực đơn</a>
-                        <a href="about" class="text-gray-700 hover: transition-colors">Về chúng tôi</a>
-                        <a href="contact" class="text-gray-700 hover: transition-colors">Liên hệ</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vn/index" class=" font-medium">Trang chủ</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vn/menu" class="text-gray-700 hover: transition-colors">Thực đơn</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vn/about" class="text-gray-700 hover: transition-colors">Về chúng tôi</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vn/contact" class="text-gray-700 hover: transition-colors">Liên hệ</a>
 <?php if(isset($userID)): ?>
-                        <a href="cart" class="text-gray-700 hover: transition-colors">Giỏ hàng</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vn/cart" class="text-gray-700 hover: transition-colors">Giỏ hàng</a>
 <?php else: ?>
-                        <a href="login" class="text-gray-700 hover: transition-colors">Giỏ hàng</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vn/login" class="text-gray-700 hover: transition-colors">Giỏ hàng</a>
 <?php endif; ?>
                     <?php if ($userID !=0): ?>
                         <!-- <a href="profile" class="text-yellow-950 hover: transition-colors">My Profile</a> -->
@@ -76,7 +76,7 @@
                         </script>
 
                     <?php else: ?>
-                        <a href="login" class="text-gray-700 hover: transition-colors">Đăng nhập</a>
+                        <a href="https://caffeshop.hieuthuocyentam.id.vnlogin" class="text-gray-700 hover: transition-colors">Đăng nhập</a>
                     <?php endif; ?>
                     </div>
                 </div>
@@ -95,12 +95,12 @@
          <!-- Mobile Menu  -->
         <div id="mobile-menu" class="mobile-menu fixed top-16 left-0 w-full h-screen bg-white z-40 md:hidden">
             <div class="px-4 py-6 space-y-4">
-                <a href="index.html" class="block  font-medium text-lg">Trang chủ</a>
-                <a href="menu.html" class="block text-gray-700 hover: text-lg">Thực đơn</a>
-                <a href="about.html" class="block text-gray-700 hover: text-lg">Về chúng tôi</a>
-                <a href="contact.html" class="block text-gray-700 hover: text-lg">Liên hệ</a>
-                <a href="cart.html" class="block text-gray-700 hover: text-lg">Giỏ hàng</a>
-                <a href="profile.html" class="block text-gray-700 hover: text-lg">Tài khoản</a>
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/index" class="block  font-medium text-lg">Trang chủ</a>
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/menu" class="block text-gray-700 hover: text-lg">Thực đơn</a>
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/about" class="block text-gray-700 hover: text-lg">Về chúng tôi</a>
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/contact" class="block text-gray-700 hover: text-lg">Liên hệ</a>
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/cart" class="block text-gray-700 hover: text-lg">Giỏ hàng</a>
+                <a href="https://caffeshop.hieuthuocyentam.id.vn/profile" class="block text-gray-700 hover: text-lg">Tài khoản</a>
             </div>
         </div>
     </header>

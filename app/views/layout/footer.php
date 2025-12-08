@@ -12,19 +12,18 @@
                 <div>
                     <h3 class="font-semibold text-lg mb-4">Liên kết nhanh</h3>
                     <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-900 hover:text-black transition-colors">Trang chủ</a></li>
-                        <li><a href="menu.html" class="text-gray-900 hover:text-black transition-colors">Thực đơn</a></li>
-                        <li><a href="about.html" class="text-gray-900 hover:text-black transition-colors">Về chúng tôi</a></li>
-                        <li><a href="contact.html" class="text-gray-900 hover:text-black transition-colors">Liên hệ</a></li>
+                        <li><a href="https://caffeshop.hieuthuocyentam.id.vn/index" class="text-gray-900 hover:text-black transition-colors">Trang chủ</a></li>
+                        <li><a href="https://caffeshop.hieuthuocyentam.id.vn/menu" class="text-gray-900 hover:text-black transition-colors">Thực đơn</a></li>
+                        <li><a href="https://caffeshop.hieuthuocyentam.id.vn/about" class="text-gray-900 hover:text-black transition-colors">Về chúng tôi</a></li>
+                        <li><a href="https://caffeshop.hieuthuocyentam.id.vn/contact" class="text-gray-900 hover:text-black transition-colors">Liên hệ</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h3 class="font-semibold text-lg mb-4">Tài khoản</h3>
                     <ul class="space-y-2">
-                        <li><a href="profile.html" class="text-gray-900 hover:text-black transition-colors">Tài khoản</a></li>
-                        <li><a href="cart.html" class="text-gray-900 hover:text-black transition-colors">Giỏ hàng</a></li>
-                        <li><a href="order.html" class="text-gray-900 hover:text-black transition-colors">Đơn hàng</a></li>
+                        <li><a href="https://caffeshop.hieuthuocyentam.id.vn/profile" class="text-gray-900 hover:text-black transition-colors">Tài khoản</a></li>
+                        <li><a href="https://caffeshop.hieuthuocyentam.id.vn/cart" class="text-gray-900 hover:text-black transition-colors">Giỏ hàng</a></li>
                     </ul>
                 </div>
             </div>
