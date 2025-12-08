@@ -1,8 +1,8 @@
 <!-- Header -->
 <?php include 'app/views/layout/header.php'; ?>
 
-<!-- Page Header -->
-<section class="page-header py-16 text-center">
+<!-- Page Header  -->
+<section class="page-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="font-display text-5xl font-bold mb-4">Tài khoản</h1>
         <p class="text-xl opacity-90 max-w-2xl mx-auto">
@@ -11,13 +11,13 @@
     </div>
 </section>
 
-<!-- Profile Content -->
-<section class="content-section bg-muted py-12">
+<!-- Profile Content  -->
+<section class="content-section bg-muted">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Sidebar -->
-            <aside class="lg:col-span-1">
+            <!-- Profile Sidebar  -->
+            <div class="lg:col-span-1">
                 <div class="bg-white rounded-2xl p-6 shadow-lg">
                     <div class="text-center mb-6">
                         <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -30,40 +30,46 @@
                     </div>
 
                     <nav class="space-y-2">
-                        <button class="profile-tab active w-full px-4 py-3 rounded-lg bg-primary text-white" data-tab="info">Thông tin cá nhân</button>
-                        <button class="profile-tab w-full px-4 py-3 rounded-lg hover:bg-gray-100" data-tab="orders">Đơn hàng của tôi</button>
-                        <button class="profile-tab w-full px-4 py-3 rounded-lg hover:bg-gray-100" data-tab="favorites">Địa chỉ nhận hàng</button>
+                        <button class="profile-tab active w-full text-left px-4 py-3 rounded-lg bg-primary text-white" data-tab="info">
+                            Thông tin cá nhân
+                        </button>
+                        <button class="profile-tab w-full text-left px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100" data-tab="orders">
+                            Đơn hàng của tôi
+                        </button>
+                        <button class="profile-tab w-full text-left px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100" data-tab="favorites">
+                            Địa chỉ nhận hàng
+                        </button>
                     </nav>
                 </div>
-            </aside>
+            </div>
 
-            <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-8">
+            <!-- Profile Content -->
+            <div class="lg:col-span-2">
 
-                <!-- Info -->
+                <!-- Personal Info Tab -->
                 <div id="info-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg">
                     <h2 class="font-display text-2xl font-bold mb-6">Thông tin cá nhân</h2>
 
-                    <form method="POST" action="https://caffeshop.hieuthuocyentam.id.vn/profile/updateInfor" class="space-y-6">
+                    <form class="space-y-6" method="POST" action="https://caffeshop.hieuthuocyentam.id.vn/profile/updateInfor">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
+                            <div class="form-group">
                                 <label class="form-label">Họ tên</label>
                                 <input type="text" class="form-input" name="name" value="<?= $data['Name'] ?>">
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label class="form-label">Email</label>
                                 <input type="email" class="form-input" name="mail" value="<?= $data['Mail'] ?>">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
+                            <div class="form-group">
                                 <label class="form-label">Số điện thoại</label>
                                 <input type="tel" class="form-input" name="phone" value="<?= $data['Phone'] ?>">
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label class="form-label">Điểm thưởng</label>
-                                <input disabled class="form-input bg-gray-100 cursor-not-allowed" value="<?= htmlspecialchars($data['Point']) ?>">
+                                <p class="form-input cursor-not-allowed bg-gray-100"><?= htmlspecialchars($data['Point']) ?></p>
                             </div>
                         </div>
 
@@ -71,21 +77,33 @@
                     </form>
                 </div>
 
-                <!-- Orders -->
-                <div id="orders-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg hidden">
+                <!-- Orders Tab -->
+                <div id="orders-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                     <h2 class="font-display text-2xl font-bold mb-6">Đơn hàng của tôi</h2>
-                    <div id="orders-list"></div>
+                    <div id="orders-list">Orders will be loaded here</div>
                 </div>
 
-                <!-- Address -->
-                <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg hidden">
+                <!-- Favorites Tab -->
+                <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="font-display text-2xl font-bold">Địa chỉ nhận hàng</h2>
-                        <button onclick="openAddressModal()" class="btn-primary px-4 py-2 rounded-lg">+ Thêm địa chỉ</button>
+
                     </div>
 
-                    <div id="address-list"></div>
+                    <div class="grid grid-cols-1">
+                    <!-- Danh sách địa chỉ -->
+                        <div id="address-list"></div>
+                    </div>
+
+                    <button onclick="openAddressModal()" 
+                            class="btn-primary mb-6 px-4 py-2 rounded-lg">
+                            + Thêm địa chỉ
+                    </button>
+
+
                 </div>
+
+            
 
             </div>
         </div>
@@ -93,7 +111,9 @@
 </section>
 
 <!-- Address Modal -->
-<div id="addressModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+<div id="addressModal"
+     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+
     <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-xl">
         <h3 class="text-2xl font-bold mb-4">Thêm địa chỉ mới</h3>
 
@@ -106,28 +126,66 @@
                 <input type="text" name="address" class="form-input w-full" placeholder="Nhập địa chỉ của bạn" required>
             </div>
 
-            <label class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
                 <input type="checkbox" name="isDefault" value="1" class="w-4 h-4">
-                Đặt làm địa chỉ mặc định
-            </label>
+                <label>Đặt làm địa chỉ mặc định</label>
+            </div>
 
             <div class="flex justify-end gap-3 pt-4">
-                <button type="button" onclick="closeAddressModal()" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Hủy</button>
-                <button type="submit" class="btn-primary px-4 py-2 rounded-lg">Lưu địa chỉ</button>
+                <button type="button" onclick="closeAddressModal()" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">
+                    Hủy
+                </button>
+                <button type="submit" class="btn-primary px-4 py-2 rounded-lg">
+                    Lưu địa chỉ
+                </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Inject profile data -->
 <script>
-    const profileData = {
-        orders: <?= json_encode($data['Order'], JSON_UNESCAPED_UNICODE) ?>,
-        addresses: <?= json_encode($data['Address'], JSON_UNESCAPED_UNICODE) ?>
-    };
+function openAddressModal() {
+    document.getElementById('addressModal').classList.remove('hidden');
+}
+function closeAddressModal() {
+    document.getElementById('addressModal').classList.add('hidden');
+}
+
+const profileData = {
+    orders: [
+        <?php foreach ($data['Order'] as $o): ?>
+        {
+            id: <?= $o['ID'] ?>,
+            date: "<?= $o['Date'] ?>",
+            status: "<?= $o['Status'] ?>",
+            ship: <?= $o['Shipping_Cost'] ?>,
+            total: <?= $o['Total'] ?>,
+            items: [
+                <?php foreach ($o['Details'] as $it): ?>
+                {
+                    name: "<?= htmlspecialchars($it['Name']) ?>",
+                    quantity: <?= $it['Quantity'] ?>,
+                    price: <?= $it['Price'] ?>
+                },
+                <?php endforeach; ?>
+            ]
+        },
+        <?php endforeach; ?>
+    ],
+
+    addresses: [
+        <?php foreach ($data['Address'] as $a): ?>
+        {
+            id: <?= $a['ID'] ?>,
+            address: "<?= htmlspecialchars($a['Address']) ?>",
+            isDefault: <?= $a['AddressDefault'] ?>
+        },
+        <?php endforeach; ?>
+    ]
+};
 </script>
 
-<script src="https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js"></script>
+<script src='https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js'></script>
 
 <!-- Footer -->
 <?php include 'app/views/layout/footer.php'; ?>
