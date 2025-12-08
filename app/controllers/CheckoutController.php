@@ -128,13 +128,13 @@ class CheckoutController extends Controller {
     }
 
     public function coupon() {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=utf-8');
 
-        // Nhận mã từ GET hoặc POST
-        $code = $_GET['code'] ?? $_POST['code'] ?? '';
+        // Nhận dữ liệu từ client
+        $code  = $_GET['code']  ?? $_POST['code']  ?? '';
         $phone = $_GET['phone'] ?? $_POST['phone'] ?? '';
 
-
+        // Kiểm tra thiếu mã
         if (empty($code)) {
             echo json_encode([
                 'success' => false,
@@ -143,15 +143,17 @@ class CheckoutController extends Controller {
             return;
         }
 
-        // Gọi model
+        // Tải model
         $checkoutModel = $this->model('Checkout');
+
+        // Gọi hàm lấy coupon
         $coupon = $checkoutModel->getCouponByCode($code, $phone);
 
-        // Không tồn tại hoặc hết hạn
+        // Không tồn tại / hết hạn / đã dùng
         if (!$coupon) {
             echo json_encode([
                 'success' => false,
-                'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!'
+                'message' => 'Mã giảm giá không hợp lệ, đã hết hạn hoặc bạn đã sử dụng!'
             ]);
             return;
         }
@@ -159,15 +161,10 @@ class CheckoutController extends Controller {
         // Thành công
         echo json_encode([
             'success' => true,
-            'percent' => (int)$coupon['Percent'],
+            'percent' => (int)$coupon['Percent'],  // phần trăm giảm
             'message' => 'Áp dụng mã thành công!'
         ]);
-        // echo json_encode([
-        //     'success' => true,
-        //     'received_code'  => $code,
-        //     'received_phone' => $phone,
-        //     'message' => 'Đã nhận dữ liệu từ client'
-        // ]);
     }
+
 
 }
