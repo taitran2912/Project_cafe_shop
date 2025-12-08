@@ -370,7 +370,6 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px);
 }
 
 .modal.show {

@@ -79,7 +79,9 @@
                     <span class="price" id="total">0đ</span>
                 </div>
 
-                <button class="btn-checkout">Tiếp tục thanh toán →</button>
+                <button class="btn-checkout" id="btn-cash">Thanh toán tiền mặt</button>
+                <button class="btn-checkout" id="btn-qr">Thanh toán QRcode</button>
+
             </div>
         </div>
     </div>
@@ -344,6 +346,24 @@ async function applyCoupon() {
         discountElement.innerText = "0đ";
     }
 }
+
+// === SỰ KIỆN THANH TOÁN ===
+function payCash() {
+    console.log("THANH TOÁN TIỀN MẶT");
+    confirmOrder();
+}
+
+function payQRCode() {
+    console.log("THANH TOÁN QR CODE");
+    confirmOrder();
+}
+
+// Gán onclick
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btn-cash").addEventListener("click", payCash);
+    document.getElementById("btn-qr").addEventListener("click", payQRCode);
+});
+
 
 
 
