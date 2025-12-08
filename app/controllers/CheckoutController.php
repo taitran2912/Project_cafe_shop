@@ -166,22 +166,25 @@ class CheckoutController extends Controller {
         ]);
     }
 
-    public function save() {
 
+
+    public function save() {
         header("Content-Type: application/json");
 
-        $body = json_decode(file_get_contents("php://input"), true);
+        $data = json_decode(file_get_contents("php://input"), true);
 
-        if (!$body || !isset($body["items"])) {
-            echo json_encode(["success" => false, "message" => "Invalid data"]);
+        if (!$data) {
+            echo json_encode(["success" => false, "message" => "Không nhận được dữ liệu"]);
             return;
         }
 
-        // Gọi model xử lý
-        $checkoutModel = $this->model('Checkout');
-        $response = $checkoutModel->saveOrder($body);
+        $orderModel = $this->model("OrderModel");
+        // $result = $orderModel->insertOrder($data);
 
-        echo json_encode($response);
+        echo json_encode([
+            "success" => $result,
+            "message" => $result ? "Đặt hàng thành công" : "Lỗi insert"
+        ]);
     }
 
 
