@@ -348,14 +348,68 @@ async function applyCoupon() {
 }
 
 // === SỰ KIỆN THANH TOÁN ===
-function payCash() {
-    console.log("THANH TOÁN TIỀN MẶT");
-    confirmOrder();
+//Lấy dữ liệu
+function getCheckoutData() {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+    if (!order) return null;
+
+    // Lấy lại số điểm dùng
+    const usePoints = Number(document.getElementById("usePoints").value) || 0;
+    
+    // Lấy mã giảm giá
+    const couponCode = document.getElementById("couponCode").value.trim() || null;
+
+    // Lấy thông tin giảm giá hiện có
+    const discountAmount = Number(document.getElementById("discountAmount").innerText.replace(/\D/g, "")) || 0;
+
+    // Lấy tổng cuối cùng từ giao diện
+    const finalTotal = Number(document.getElementById("total").innerText.replace(/\D/g, "")) || 0;
+
+    // Cập nhật vào order
+    order.usePoints = usePoints;
+    order.couponCode = couponCode;
+    order.discountAmount = discountAmount;
+    order.finalTotal = finalTotal;
+
+    return order;
 }
+
+function payCash() {
+    const checkout = getCheckoutData();
+
+    if (!checkout) {
+        alert("Không tìm thấy đơn hàng!");
+        return;
+    }
+
+    console.log("DỮ LIỆU THANH TOÁN TIỀN MẶT:", checkout);
+
+    // Gửi API lưu đơn
+    fetch("https://caffeshop.hieuthuocyentam.id.vn/checkout/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(checkout)
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.success) {
+            localStorage.removeItem("pendingOrder");
+            window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou/digital";
+        } else {
+            alert("Lỗi khi tạo đơn hàng!");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Không thể kết nối server!");
+    });
+}
+
 
 function payQRCode() {
     console.log("THANH TOÁN QR CODE");
-    confirmOrder();
+    // confirmOrder();
 }
 
 // Gán onclick

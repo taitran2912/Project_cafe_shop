@@ -239,6 +239,64 @@ class Checkout extends Model {
         }
     }
 
+//digital menu
+    public function saveOrder($data) {
+        // Lấy user ID từ bảng Account theo số điện thoại
+        $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
+        $stmt->execute([$data["customerPhone"]]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Nếu không tìm thấy user → đặt ID = NULL
+        $userID = $user ? $user["ID"] : null;
+
+
+        $sql = "INSERT INTO Orders(ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total) 
+        VALUES (?,?,?, Ordered, Null, 0, Unpaid, Cash, Null, Now(),?,?)";
+        // INSERT INTO Coupon_usage(ID_coupon, ID_customer, ID_order, Used_at) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]')
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            $userID,
+            $data["storeID"],
+            $data["tableNumber"],
+            $data["usePoints"],
+            // $data["couponCode"],
+            $data["total"]
+        ]);
+
+        return $this->conn->lastInsertId();
+    }
+
+    // Lưu từng sản phẩm
+    public function saveOrderItem($orderId, $item) {
+        $sql = "INSERT INTO order_items (order_id, product_id, product_name, price, quantity, total_price)
+                VALUES (?, ?, ?, ?, ?, ?)";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            $orderId,
+            $item["id"],
+            $item["name"],
+            $item["price"],
+            $item["quantity"],
+            $item["price"] * $item["quantity"]
+        ]);
+    }
+
+    // Trừ điểm khách
+    public function subtractPoints($phone, $points) {
+        $sql = "UPDATE customers SET points = points - ? WHERE phone = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$points, $phone]);
+    }
+
+    // Lưu việc dùng mã giảm giá
+    public function applyCoupon($phone, $code) {
+        $sql = "INSERT INTO used_coupons (phone, code, used_at) VALUES (?, ?, NOW())";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$phone, $code]);
+    }
+
 
 
 }
