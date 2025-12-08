@@ -1,7 +1,7 @@
 <?php
 class ThankyouController extends Controller {
     public function index() {
-        $branch = $branchModel->getAllBranch();
+        // $branch = $branchModel->getAllBranch();
 
 
         $data = [
