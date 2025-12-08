@@ -167,8 +167,7 @@ class CheckoutController extends Controller {
     }
 
     public function save() {
-        echo 'dúng r';
-        exit();
+        
         // Chỉ chấp nhận POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode(["success" => false, "message" => "Invalid method"]);
