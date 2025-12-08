@@ -280,21 +280,24 @@ class Checkout extends Model {
             VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
         ");
 
-        // FIX QUAN TRỌNG — kiểu dữ liệu chính xác
         $stmt->bind_param(
             "iiissid",
-            $customerID,   // i
-            $branchID,     // i
-            $tableID,      // i
-            $paymentMethod,// s
-            $today,        // s
-            $usePoints,    // i
-            $finalTotal    // d  <-- decimal/double
+            $customerID,    // i
+            $branchID,      // i
+            $tableID,       // i
+            $paymentMethod, // s
+            $today,         // s
+            $usePoints,     // i
+            $finalTotal     // d (decimal)
         );
 
         if (!$stmt->execute()) {
-            return ["success" => false, "message" => "Order insert failed: " . $stmt->error];
+            return [
+                "success" => false,
+                "message" => "Order insert failed: " . $stmt->error
+            ];
         }
+
 
         $orderID = $this->db->insert_id;
 
