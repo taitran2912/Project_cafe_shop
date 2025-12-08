@@ -241,33 +241,37 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        // Lấy user ID từ bảng Account theo số điện thoại
+        // Lấy user ID theo số điện thoại
         $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
         $stmt->execute([$data["customerPhone"]]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Nếu không tìm thấy user → đặt ID = NULL
-        $userID = $user ? $user["ID"] : null;
+        $userID = $user["ID"] ?? null;
 
-        $orderCode = "ORD-" . strtoupper(bin2hex(random_bytes(3))); 
+        // Mã đơn (ghi vào Note)
+        $orderCode = "ORD-" . strtoupper(bin2hex(random_bytes(3)));
 
-
-        $sql = "INSERT INTO Orders(ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total) 
-        VALUES (?,?,?, 'Ordered', Null, 0, 'Unpaid', 'Cash', '?', Now(),?,?)";
-        // INSERT INTO Coupon_usage(ID_coupon, ID_customer, ID_order, Used_at) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]')
+        // Câu SQL CHUẨN
+        $sql = "INSERT INTO Orders
+                (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
+                Payment_status, Method, Note, Date, Points, Total)
+                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', ?, NOW(), ?, ?)";
 
         $stmt = $this->conn->prepare($sql);
+
         $stmt->execute([
             $userID,
             $data["storeID"],
             $data["tableNumber"],
-            $orderCode,         // GHI NOTE = MÃ ĐƠN
-            $data["usePoints"],
-            $data["total"]
+            $orderCode,          // NOTE = mã đơn hàng
+            $data["usePoints"],  // điểm dùng
+            $data["total"]       // tổng tiền cuối cùng
         ]);
 
+        // Lấy ID đơn hàng mới
         return $this->conn->lastInsertId();
     }
+
 
     // Lưu từng sản phẩm
     public function saveOrderItem($orderId, $item) {
