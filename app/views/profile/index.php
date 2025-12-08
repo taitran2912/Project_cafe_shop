@@ -87,6 +87,11 @@
                     <!-- Favorites Tab  -->
                 <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                     <h2 class="font-display text-2xl font-bold mb-6">Địa chỉ nhận hàng</h2>
+                    <button onclick="openAddressModal()" 
+                            class="btn-primary mb-6 px-4 py-2 rounded-lg">
+                        + Thêm địa chỉ
+                    </button>
+
                     <div class="text-center py-12">
                         <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
                             <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
