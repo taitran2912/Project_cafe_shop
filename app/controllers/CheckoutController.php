@@ -179,7 +179,7 @@ class CheckoutController extends Controller {
         }
 
         $orderModel = $this->model("OrderModel");
-        // $result = $orderModel->insertOrder($data);
+        $result = $orderModel->insertOrder($data);
 
         echo json_encode([
             "success" => $result,

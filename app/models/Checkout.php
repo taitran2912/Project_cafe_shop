@@ -239,7 +239,7 @@ class Checkout extends Model {
         }
     }
 
-    public function saveOrder($data) {
+    public function insertOrder($data) {
 
         // ==========================
         // 1. Lấy Customer ID từ SĐT
