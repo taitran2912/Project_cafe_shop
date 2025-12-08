@@ -259,7 +259,7 @@ class CheckoutController extends Controller {
     //     ]
     // ]);
 
-    return;
+    
     }
 
 
