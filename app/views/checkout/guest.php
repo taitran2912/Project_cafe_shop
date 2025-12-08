@@ -267,7 +267,11 @@ function confirmOrder() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order)
     })
-    .then(r => r.json())
+    .then(async r => {
+        const text = await r.text();
+        console.log("RAW RESPONSE FROM SERVER:", text); // <=== thêm dòng này
+        return JSON.parse(text);
+    })
     .then(res => {
         console.log("SERVER RESPONSE:", res); // <=== THÊM DÒNG NÀY
         console.log("ORDER SENT TO SERVER:", order);
