@@ -241,7 +241,7 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        echo "<script>console.log(" . json_encode($data) . ");</script>";
+        // echo "<script>console.log(" . json_encode($data) . ");</script>";
 
         try {
             $sql = "
