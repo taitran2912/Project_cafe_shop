@@ -85,13 +85,13 @@
                 </div>
 
                     <!-- Favorites Tab  -->
+                <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                     <h2 class="font-display text-2xl font-bold mb-6">Địa chỉ nhận hàng</h2>
                     <button onclick="openAddressModal()" 
                             class="btn-primary mb-6 px-4 py-2 rounded-lg">
                         + Thêm địa chỉ
                     </button>
-
-
+                </div>
             </div>
         </div>
     </div>
