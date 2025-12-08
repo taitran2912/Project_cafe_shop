@@ -87,9 +87,9 @@
                     <!-- Favorites Tab  -->
                 <div id="favorites-tab" class="tab-content bg-white rounded-2xl p-8 shadow-lg" style="display: none;">
                 <button onclick="openAddressModal()" 
-        class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
-        + Thêm địa chỉ
-    </button>
+                    class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
+                    + Thêm địa chỉ
+                </button>
                     <div class="text-center py-12">
                         <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
                             <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,6 +105,26 @@
         </div>
     </div>
 </section>
+<!-- Address Modal -->
+<div id="addressModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-xl">
+        <h2 class="text-xl font-bold mb-4">Thêm địa chỉ mới</h2>
+
+        <form id="addAddressForm">
+            <input id="newAddress" type="text" 
+                   placeholder="Nhập địa chỉ..." 
+                   class="w-full border px-4 py-2 rounded-lg mb-4">
+
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeAddressModal()" 
+                        class="px-4 py-2 bg-gray-200 rounded-lg">Hủy</button>
+                <button type="submit" 
+                        class="px-4 py-2 bg-primary text-white rounded-lg">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 const profileData = {
     orders: [
@@ -138,6 +158,37 @@ const profileData = {
         <?php endforeach; ?>
     ]
 };
+
+function openAddressModal() {
+    document.getElementById("addressModal").classList.remove("hidden");
+}
+
+function closeAddressModal() {
+    document.getElementById("addressModal").classList.add("hidden");
+}
+
+document.getElementById("addAddressForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const address = document.getElementById("newAddress").value.trim();
+    if (!address) return alert("Vui lòng nhập địa chỉ!");
+
+    fetch("https://caffeshop.hieuthuocyentam.id.vn/profile/addAddress", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ address })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Thêm địa chỉ thành công!");
+            location.reload();
+        } else {
+            alert("Không thể thêm địa chỉ.");
+        }
+    });
+});
+
 </script>
 <script src='https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js'></script>
     <!-- Footer  -->
