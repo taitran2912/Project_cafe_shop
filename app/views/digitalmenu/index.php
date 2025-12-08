@@ -256,6 +256,11 @@ function renderProductCard($p) {
         });
     }
 
+    document.getElementById("mobile-cart-btn").onclick = () => {
+        document.getElementById("mobile-cart-sheet").classList.add("active");
+    };
+
+
     function closeCartSheet() {
         document.getElementById("mobile-cart-sheet").classList.remove("active");
     }
