@@ -167,23 +167,46 @@ class CheckoutController extends Controller {
     }
 
     public function save() {
-        header("Content-Type: application/json");
+        header("Content-Type: application/json; charset=utf-8");
 
-        $json = file_get_contents("php://input");
-        $data = json_decode($json, true);
+        try {
+            // Read input
+            $json = file_get_contents("php://input");
+            $data = json_decode($json, true);
 
-        if (!$data) {
-            echo json_encode(["success" => false, "message" => "Invalid JSON"]);
+            if (!$data) {
+                echo json_encode(["success" => false, "message" => "Invalid JSON or empty body"]);
+                return;
+            }
+
+            // Optional: write incoming payload to debug file (remove in production)
+            file_put_contents(__DIR__ . "/../../debug/order_input.log", date("c") . " INPUT: " . print_r($data, true) . "\n", FILE_APPEND);
+
+            // Load model and call insert
+            $checkout = $this->model("Checkout");
+            $result = $checkout->insertOrder($data);
+
+            // Ensure $result is JSON-serializable
+            if (!is_array($result)) {
+                echo json_encode(["success" => false, "message" => "Model returned unexpected result"]);
+                return;
+            }
+
+            echo json_encode($result);
+            return;
+        } catch (Throwable $e) {
+            // Catch fatal errors and return JSON so frontend can parse
+            $err = [
+                "success" => false,
+                "message" => "Server exception",
+                "error" => $e->getMessage(),
+                "line" => $e->getLine()
+            ];
+            // Log for server operator
+            file_put_contents(__DIR__ . "/../../debug/order_errors.log", date("c") . " EXCEPTION: " . print_r($err, true) . "\n", FILE_APPEND);
+            echo json_encode($err);
             return;
         }
-
-        // Load model Checkout
-        $checkout = $this->model("Checkout");
-
-        // Gọi hàm insertOrder trong model
-        $result = $checkout->insertOrder($data);
-
-        echo json_encode($result);
     }
 
 
