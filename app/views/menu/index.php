@@ -232,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 // Gợi ý món
-const suggestItems = [
 <?php if (!empty($data['suggestions'])): ?>
   <?php foreach ($data['suggestions'] as $index => $s): ?>
     {
@@ -240,21 +239,22 @@ const suggestItems = [
       name: "<?= htmlspecialchars($s['Name'], ENT_QUOTES) ?>",
       price: <?= (int)$s['Price'] ?>,
       image: "<?= BASE_URL ?>/public/image/<?= htmlspecialchars($s['Image'], ENT_QUOTES) ?>",
+      description: "<?= htmlspecialchars($s['Description'] ?? '', ENT_QUOTES) ?>"
     }<?= $index < count($data['suggestions']) - 1 ? ',' : '' ?>
   <?php endforeach; ?>
 <?php endif; ?>
-];
+
 
 function createSuggestSlide(item) {
   return `
-    <div class="menu-item ${item.category} card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
+    <div class="menu-item card-hover bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
         <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
         <div class="p-6">
             <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
-            <p class="text-gray-600 mb-4">${item.description}</p>
+            <p class="text-gray-600 mb-4">${item.description || ''}</p>
             <div class="flex justify-between items-center">
                 <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
-<?php if (isset($userID)): ?>
+  <?php if (!empty($data['userID'])): ?>
                 <button class="btn btn-brown text-white px-4 py-2 add-to-cart" 
                         data-id="${item.id}"
                         data-name="${item.name}" 
@@ -263,16 +263,17 @@ function createSuggestSlide(item) {
                         style="background-color: rgb(139, 69, 19);">
                     Thêm vào giỏ
                 </button>
-<?php else: ?>
+  <?php else: ?>
                 <a href="login" class="btn-brown text-sm px-4 py-2">
                     Thêm vào giỏ
                 </a>
-<?php endif; ?>
+  <?php endif; ?>
             </div>
         </div>
     </div>
   `
 }
+
 
 // ====== SLIDER ======
 let suggestPos = 0;
