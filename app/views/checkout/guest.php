@@ -78,9 +78,9 @@
                     <span class="price" id="discountAmount">0đ</span>
                 </div>
 
-                <div class="summary-item total">
+               <div class="summary-item total">
                     <span>Tổng cộng</span>
-                    <span class="price">113.400đ</span>
+                    <span class="price" id="total">0đ</span>
                 </div>
 
                 <button class="btn-checkout">Tiếp tục thanh toán →</button>
