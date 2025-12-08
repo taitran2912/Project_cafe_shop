@@ -93,6 +93,7 @@
     // =====================================================
     document.addEventListener("DOMContentLoaded", () => {
         const order = JSON.parse(localStorage.getItem("pendingOrder"));
+        console.log("PENDING ORDER:", order);
 
         if (!order || !order.items?.length) {
             document.getElementById("order-items").innerHTML =
@@ -101,20 +102,24 @@
             return;
         }
 
-        // Gán thông tin cửa hàng / bàn
         setOrderLocation(order);
-
-        // Hiển thị sản phẩm
         renderOrderItems(order.items);
-
-        // Tính tổng tiền
         updateSummary(order.items);
 
-        // Load điểm khách hàng nếu có số điện thoại
-        if (order.customerPhone) {
-            loadUserPoints(order.customerPhone);
+        // ===================================
+        // FIX QUAN TRỌNG -> LUÔN LẤY PHONE
+        // ===================================
+        let phone = order.customerPhone 
+                ?? new URLSearchParams(window.location.search).get("phone") 
+                ?? null;
+
+        console.log("PHONE FOR POINTS:", phone);
+
+        if (phone) {
+            loadUserPoints(phone);
         }
     });
+
 
     // =====================================================
     // HIỂN THỊ "Đơn hàng của bạn tại cửa hàng ..."
