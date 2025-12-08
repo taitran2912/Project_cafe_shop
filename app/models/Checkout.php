@@ -241,8 +241,11 @@ class Checkout extends Model {
 
    public function insertOrder($data) {
 
-        // 1. Lấy Customer ID
+        // -----------------------------
+        // 1. Lấy Customer ID theo số điện thoại
+        // -----------------------------
         $phone = $data["customerPhone"];
+        
         $sql = $this->db->prepare("
             SELECT CP.ID 
             FROM Customer_Profile CP 
@@ -258,7 +261,10 @@ class Checkout extends Model {
 
         $customerID = $user["ID"];
 
+
+        // -----------------------------
         // 2. Insert ORDER
+        // -----------------------------
         $branchID   = $data["storeID"];
         $tableID    = $data["tableNumber"] ?? NULL;
 
@@ -269,20 +275,21 @@ class Checkout extends Model {
         $today = date("Y-m-d");
 
         $stmt = $this->db->prepare("
-            INSERT INTO Orders (ID_Customer, ID_Branch, ID_Table, Status, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
+            INSERT INTO Orders 
+            (ID_Customer, ID_Branch, ID_Table, Status, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
             VALUES (?, ?, ?, 'Pending', 0, 'Unpaid', ?, 'Đơn hàng tại quán hoặc mang về', ?, ?, ?)
         ");
 
-        // *** FIX QUAN TRỌNG: Total là DECIMAL ***
+        // FIX QUAN TRỌNG — kiểu dữ liệu chính xác
         $stmt->bind_param(
-            "iiissii",
-            $customerID,
-            $branchID,
-            $tableID,
-            $paymentMethod,
-            $today,
-            $usePoints,
-            $finalTotal
+            "iiissid",
+            $customerID,   // i
+            $branchID,     // i
+            $tableID,      // i
+            $paymentMethod,// s
+            $today,        // s
+            $usePoints,    // i
+            $finalTotal    // d  <-- decimal/double
         );
 
         if (!$stmt->execute()) {
@@ -291,7 +298,10 @@ class Checkout extends Model {
 
         $orderID = $this->db->insert_id;
 
+
+        // -----------------------------
         // 3. Insert ORDER DETAIL
+        // -----------------------------
         foreach ($data["items"] as $item) {
 
             if (!isset($item["id"])) {
@@ -312,18 +322,20 @@ class Checkout extends Model {
                 return ["success" => false, "message" => "Order detail failed: " . $stmtD->error];
             }
 
-            // Trừ kho
-            $sqlUpdate = "
+            // TRỪ TỒN KHO
+            $this->db->query("
                 UPDATE Inventory I
                 JOIN Product_detail PD ON I.ID_Material = PD.ID_Material
                 SET I.Quantity = I.Quantity - (PD.Quantity * $quantity)
                 WHERE PD.ID_Product = $productID
                 AND I.ID_Branch = $branchID
-            ";
-            $this->db->query($sqlUpdate);
+            ");
         }
 
+
+        // -----------------------------
         // 4. Trừ điểm
+        // -----------------------------
         if ($usePoints > 0) {
             $uP = $this->db->prepare("
                 UPDATE Customer_Profile SET Points = Points - ? WHERE ID = ?
@@ -334,6 +346,7 @@ class Checkout extends Model {
 
         return ["success" => true, "order_id" => $orderID];
     }
+
 
 
 }
