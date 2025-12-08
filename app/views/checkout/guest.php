@@ -392,14 +392,14 @@ function payCash() {
         body: JSON.stringify(checkout)
     })
     .then(r => r.json())
-    .then(res => {
-        if (res.success) {
-            localStorage.removeItem("pendingOrder");
-            window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou/digital";
-        } else {
-            alert("Lỗi khi tạo đơn hàng!");
-        }
-    })
+    // .then(res => {
+    //     if (res.success) {
+    //         localStorage.removeItem("pendingOrder");
+    //         window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou/digital";
+    //     } else {
+    //         alert("Lỗi khi tạo đơn hàng!");
+    //     }
+    // })
     .catch(err => {
         console.error(err);
         alert("Không thể kết nối server!");
