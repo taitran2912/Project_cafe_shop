@@ -205,7 +205,7 @@ class CheckoutController extends Controller {
         $finalTotal      = $input['finalTotal'];
 
         // --- LƯU ĐƠN HÀNG ---
-        // $checkoutModel = $this->model('Checkout');
+        $checkoutModel = $this->model('Checkout');
         // $orderId = $checkoutModel->saveOrder([
         //     "customerPhone" => $customerPhone,
         //     "storeID"       => $storeId,
