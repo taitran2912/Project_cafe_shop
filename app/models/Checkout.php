@@ -193,26 +193,27 @@ class Checkout extends Model {
             $sql = "
                 SELECT c.*
                 FROM Coupons c
-                WHERE c.Code = :code
-                    AND c.Status = 'active'
-                    AND c.Quantity > 0
-                    AND CURDATE() BETWEEN c.Start AND c.End
-                    AND NOT EXISTS (
+                WHERE c.Code = ?
+                AND c.Status = 'active'
+                AND c.Quantity > 0
+                AND CURDATE() BETWEEN c.Start AND c.End
+                AND NOT EXISTS (
                         SELECT 1
                         FROM Coupon_usage cu
                         WHERE cu.ID_coupon = c.ID
-                            AND cu.ID_customer = (
-                                SELECT ID FROM Customers WHERE Phone = :phone LIMIT 1
-                            )
-                    )
+                        AND cu.ID_customer = (
+                                SELECT cp.ID 
+                                FROM Customer_Profile cp 
+                                JOIN Account a ON cp.ID_account = a.ID 
+                                WHERE a.Phone = ?
+                                LIMIT 1
+                        )
+                )
                 LIMIT 1;
             ";
 
             $stmt = $this->db->prepare($sql);
-            $stmt->execute([
-                ':code'  => $code,
-                ':phone' => $phone
-            ]);
+            $stmt->execute([$code, $phone]); // <-- ĐÚNG
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result ?: false;
@@ -222,5 +223,6 @@ class Checkout extends Model {
             return false;
         }
     }
+
 
 }
