@@ -260,14 +260,14 @@ function createSuggestSlide(item) {
                 <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
 
                 <?php if (!empty($userID)): ?>
-                <button class="btn btn-brown text-white px-4 py-2 add-to-cart"
+                <button class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium transition"
                     data-id="${item.id}"
                     data-name="${item.name}"
                     data-price="${item.price}"
-                    data-image="${item.image}"
-                    style="color: brown;">
+                    data-image="${item.image}">
                     Thêm vào giỏ
                 </button>
+
                 <?php else: ?>
                 <a href="login" class="btn-brown text-sm px-4 py-2">Thêm vào giỏ</a>
                 <?php endif; ?>
