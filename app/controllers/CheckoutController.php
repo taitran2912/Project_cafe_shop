@@ -118,7 +118,7 @@ class CheckoutController extends Controller {
 
         $checkoutModel = $this->model('Checkout');
 
-        $points = $checkoutModel->getPointsByPhone($phone);
+        // $points = $checkoutModel->getPointsByPhone($phone);
 
         echo json_encode([
             'success' => true,
