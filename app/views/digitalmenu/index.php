@@ -218,6 +218,47 @@ function renderProductCard($p) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    function fetchFavoriteProducts(phone) {
+        fetch(`/digitalmenu/favorite?phone=${phone}`)
+            .then(r => r.json())
+            .then(displayFavoriteSuggestions);
+    }
+
+    function fetchPopular() {
+        fetch(`/digitalmenu/popular`)
+            .then(r => r.json())
+            .then(displayFavoriteSuggestions);
+    }
+
+    function displayFavoriteSuggestions(list) {
+        const container = document.getElementById('favorite-container');
+        container.innerHTML = "";
+
+        list.forEach(p => {
+            container.innerHTML += `
+                <div class="col">
+                    <div class="product-card h-100">
+                        <div class="product-img-wrapper">
+                            <img src="/public/image/${p.Image}" class="product-img">
+                        </div>
+
+                        <div class="product-body">
+                            <div class="product-title">${p.Name}</div>
+                            <div class="product-price">${Number(p.Price).toLocaleString('vi-VN')}₫</div>
+
+                            <button class="btn-add" onclick="addToCart('${p.Name}', ${p.Price}, '${p.Image}')">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function closeCartSheet() {
+        document.getElementById("mobile-cart-sheet").classList.remove("active");
+    }
     // =====================
     // CART STORAGE
     // =====================
@@ -345,6 +386,7 @@ function renderProductCard($p) {
     function closeCartSheet() {
         document.getElementById("mobile-cart-sheet").classList.remove("active");
     }
+    
 </script>
     <button id="mobile-cart-btn" class="mobile-cart-button">
         <i class="fa fa-shopping-cart"></i>
@@ -352,20 +394,22 @@ function renderProductCard($p) {
     </button>
 
     <div id="mobile-cart-sheet" class="mobile-cart-sheet">
-    <div class="sheet-header">
-        <span>Giỏ hàng của bạn</span>
-        <button class="close-sheet" onclick="closeCartSheet()">✕</button>
-    </div>
-
-    <div id="mobile-cart-items"></div>
-
-    <div class="sheet-footer">
-        <div class="d-flex justify-content-between">
-            <span>Tổng cộng:</span>
-            <strong id="mobile-cart-total"></strong>
+        <div class="sheet-header">
+            <span>Giỏ hàng của bạn</span>
+            <button class="close-sheet" onclick="closeCartSheet()">✕</button>
         </div>
-        <button class="btn btn-primary w-100 mt-2">Thanh toán</button>
+
+        <div id="mobile-cart-items"></div>
+
+        <div class="sheet-footer">
+            <div class="d-flex justify-content-between">
+                <span>Tổng cộng:</span>
+                <strong id="mobile-cart-total">0₫</strong>
+            </div>
+            <button class="btn btn-primary w-100 mt-2">Thanh toán</button>
+        </div>
     </div>
+
 </div>
 </body>
 </html>
