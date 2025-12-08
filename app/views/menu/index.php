@@ -282,7 +282,7 @@ function createSuggestSlide(item) {
 // ====== SLIDER ======
 let suggestPos = 0;
 const slider = document.getElementById("suggest-slider");
-const slideWidth = 320; // 300px + khoảng cách
+const slideWidth = 620; // 300px + khoảng cách
 const maxPos = suggestItems.length - 1;
 
 function loadSuggestSlider() {
