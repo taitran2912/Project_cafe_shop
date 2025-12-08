@@ -88,189 +88,156 @@
         </div>
     </div>
     <script>
-// =====================================================
-// LẤY DỮ LIỆU GIỎ HÀNG
-// =====================================================
-document.addEventListener("DOMContentLoaded", () => {
-    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+    // =====================================================
+    // KHỞI CHẠY TRANG CHECKOUT
+    // =====================================================
+    document.addEventListener("DOMContentLoaded", () => {
+        const order = JSON.parse(localStorage.getItem("pendingOrder"));
 
-    if (!order || !order.items || order.items.length === 0) {
-        document.getElementById("order-items").innerHTML =
-            "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
-
-        document.querySelector(".btn-checkout").style.display = "none";
-        return;
-    }
-
-    renderOrderItems(order.items);
-    updateSummary(order.items);
-});
-
-// =====================================================
-// HIỂN THỊ DANH SÁCH MÓN
-// =====================================================
-function renderOrderItems(items) {
-    const container = document.getElementById("order-items");
-    container.innerHTML = "";
-
-    items.forEach(item => {
-        container.innerHTML += `
-            <div class="order-item">
-                <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${item.image ?? 'default.jpg'}"
-                     alt="${item.name}" class="item-image">
-
-                <div class="item-info">
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-qty">Số lượng: ${item.quantity}</div>
-                </div>
-
-                <div class="item-price">${Number(item.price * item.quantity).toLocaleString('vi-VN')}đ</div>
-            </div>
-        `;
-    });
-}
-
-// =====================================================
-// TÍNH TIỀN
-// =====================================================
-function updateSummary(items) {
-    let subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-    let tax = Math.round(subtotal * 0.05);
-    let total = subtotal + tax;
-
-    document.getElementById("subtotal").innerText = subtotal.toLocaleString("vi-VN") + "đ";
-    document.getElementById("tax").innerText = tax.toLocaleString("vi-VN") + "đ";
-    document.getElementById("total").innerText = total.toLocaleString("vi-VN") + "đ";
-}
-
-// =====================================================
-// XÁC NHẬN ĐƠN HÀNG
-// =====================================================
-function confirmOrder() {
-    const order = JSON.parse(localStorage.getItem("pendingOrder"));
-
-    if (!order) {
-        alert("Không tìm thấy đơn hàng!");
-        return;
-    }
-
-    // Gửi về API lưu đơn hàng — bạn tự thay URL
-    fetch("https://caffeshop.hieuthuocyentam.id.vn/api/order/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(order)
-    })
-    .then(r => r.json())
-    .then(res => {
-        if (res.success) {
-            // Xóa giỏ hàng khi thành công
-            localStorage.removeItem("pendingOrder");
-
-            alert("Đặt hàng thành công!");
-
-            // Điều hướng sang trang cảm ơn
-            window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou";
-        } else {
-            alert("Không thể đặt hàng, vui lòng thử lại!");
+        if (!order || !order.items?.length) {
+            document.getElementById("order-items").innerHTML =
+                "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
+            document.querySelector(".btn-checkout").style.display = "none";
+            return;
         }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Lỗi kết nối server!");
+
+        // Gán thông tin cửa hàng / bàn
+        setOrderLocation(order);
+
+        // Hiển thị sản phẩm
+        renderOrderItems(order.items);
+
+        // Tính tổng tiền
+        updateSummary(order.items);
+
+        // Load điểm khách hàng nếu có số điện thoại
+        if (order.customerPhone) {
+            loadUserPoints(order.customerPhone);
+        }
     });
-}
 
-document.addEventListener("DOMContentLoaded", () => {
-    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+    // =====================================================
+    // HIỂN THỊ "Đơn hàng của bạn tại cửa hàng ..."
+    // =====================================================
+    function setOrderLocation(order) {
+        const store = order.storeName ?? "Cửa hàng";
+        const table = order.tableNumber ? `tại bàn ${order.tableNumber}` : "mang về";
 
-    if (!order || !order.items || order.items.length === 0) {
-        document.getElementById("order-items").innerHTML =
-            "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
-
-        document.querySelector(".btn-checkout").style.display = "none";
-        return;
+        document.getElementById("order-location").innerText =
+            `Đơn hàng của bạn tại ${store} - ${table}`;
     }
 
-    // --- Thêm đoạn này ---
-    setOrderLocation(order);
+    // =====================================================
+    // HIỂN THỊ DANH SÁCH SẢN PHẨM
+    // =====================================================
+    function renderOrderItems(items) {
+        const container = document.getElementById("order-items");
+        container.innerHTML = "";
 
-    renderOrderItems(order.items);
-    updateSummary(order.items);
-});
+        items.forEach(item => {
+            container.innerHTML += `
+                <div class="order-item">
+                    <img src="https://caffeshop.hieuthuocyentam.id.vn/public/image/${item.image ?? 'default.jpg'}"
+                        alt="${item.name}" class="item-image">
 
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-qty">Số lượng: ${item.quantity}</div>
+                    </div>
 
-function setOrderLocation(order) {
-    const store = order.storeName ?? "Cửa hàng";
-    const table = order.tableNumber ? `tại bàn ${order.tableNumber}` : "mang về";
-    const type = order.type ?? ""; // nếu có thêm type: dine-in | take-away
-
-    document.getElementById("order-location").innerText =
-        `Đơn hàng của bạn tại ${store} - ${table}`;
-}
-
-function updateSubtotal(items) {
-    // Tính tổng tiền hàng
-    let subtotal = items.reduce((sum, item) => {
-        return sum + (item.price * item.quantity);
-    }, 0);
-
-    // Hiển thị ra giao diện
-    document.getElementById("subtotal").innerText =
-        subtotal.toLocaleString("vi-VN") + "đ";
-
-    return subtotal;
-}
-
-function updateSummary(items) {
-    let subtotal = updateSubtotal(items); // ✔ tính + hiển thị
-
-    let tax = Math.round(subtotal * 0.05);
-    let total = subtotal + tax;
-
-    document.getElementById("tax").innerText = tax.toLocaleString("vi-VN") + "đ";
-    document.getElementById("total").innerText = total.toLocaleString("vi-VN") + "đ";
-}
-
-function loadUserPoints(phone) {
-    if (!phone) return;
-
-    fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/points?phone=${phone}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                const points = Number(data.points) || 0;
-                document.getElementById("user-points").innerText =
-                    points.toLocaleString("vi-VN") + "đ";
-            } else {
-                document.getElementById("user-points").innerText = "0đ";
-            }
-        })
-        .catch(err => {
-            console.error("Lỗi load điểm:", err);
-            document.getElementById("user-points").innerText = "0đ";
+                    <div class="item-price">
+                        ${(item.price * item.quantity).toLocaleString('vi-VN')}đ
+                    </div>
+                </div>
+            `;
         });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const order = JSON.parse(localStorage.getItem("pendingOrder"));
-
-    if (!order || !order.items?.length) {
-        document.getElementById("order-items").innerHTML =
-            "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
-        document.querySelector(".btn-checkout").style.display = "none";
-        return;
     }
 
-    setOrderLocation(order);
-    renderOrderItems(order.items);
-    updateSummary(order.items);
+    // =====================================================
+    // TÍNH TỔNG TIỀN HÀNG
+    // =====================================================
+    function updateSubtotal(items) {
+        let subtotal = items.reduce((sum, item) => {
+            return sum + (item.price * item.quantity);
+        }, 0);
 
-    if (order.customerPhone) {
-        loadUserPoints(order.customerPhone);
+        document.getElementById("subtotal").innerText =
+            subtotal.toLocaleString("vi-VN") + "đ";
+
+        return subtotal;
     }
-});
 
-</script>
+    // =====================================================
+    // TÍNH TỔNG CỘNG (KHÔNG TÍNH THUẾ)
+    // =====================================================
+    function updateSummary(items) {
+        let subtotal = updateSubtotal(items);
+
+        // Không thuế → tổng cộng = tổng tiền hàng
+        let total = subtotal;
+
+        document.getElementById("total").innerText =
+            total.toLocaleString("vi-VN") + "đ";
+    }
+
+    // =====================================================
+    // LOAD ĐIỂM TÍCH TỪ API
+    // =====================================================
+    function loadUserPoints(phone) {
+        if (!phone) return;
+
+        fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/points?phone=${phone}`)
+            .then(res => res.json())
+            .then(data => {
+                const element = document.getElementById("user-points");
+
+                if (!element) return;
+
+                if (data.success) {
+                    const points = Number(data.points) || 0;
+                    element.innerText = points.toLocaleString("vi-VN") + "đ";
+                } else {
+                    element.innerText = "0đ";
+                }
+            })
+            .catch(err => {
+                console.error("Lỗi load điểm:", err);
+                document.getElementById("user-points").innerText = "0đ";
+            });
+    }
+
+    // =====================================================
+    // XÁC NHẬN ĐƠN HÀNG
+    // =====================================================
+    function confirmOrder() {
+        const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+        if (!order) {
+            alert("Không tìm thấy đơn hàng!");
+            return;
+        }
+
+        fetch("https://caffeshop.hieuthuocyentam.id.vn/api/order/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order)
+        })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    localStorage.removeItem("pendingOrder");
+                    window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou";
+                } else {
+                    alert("Không thể đặt hàng, vui lòng thử lại!");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Lỗi kết nối server!");
+            });
+    }
+    </script>
+
 
 </body>
 </html>
