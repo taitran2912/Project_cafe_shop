@@ -16,7 +16,23 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-bold mb-6">Gợi ý cho bạn ✨</h2>
 
-      <div id="suggest-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+      <div class="relative overflow-hidden">
+          <!-- Nút trái -->
+          <button id="suggest-prev" 
+              class="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100 z-10">
+              ◀
+          </button>
+
+          <!-- Vùng chứa slider -->
+          <div id="suggest-slider" class="flex transition-transform duration-700 ease-in-out"></div>
+
+          <!-- Nút phải -->
+          <button id="suggest-next" 
+              class="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100 z-10">
+              ▶
+          </button>
+      </div>
+
   </div>
 </section>
 
@@ -215,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSuggestions();
 })
 
-//Gợi ý món 
+// Gợi ý món
 const suggestItems = [
 <?php if (!empty($data['suggestions'])): ?>
   <?php foreach ($data['suggestions'] as $index => $s): ?>
@@ -229,38 +245,52 @@ const suggestItems = [
 <?php endif; ?>
 ];
 
-function createSuggestItemHTML(item) {
+function createSuggestSlide(item) {
   return `
-    <div class="menu-item bg-white rounded-2xl overflow-hidden shadow-lg fade-in">
+    <div class="suggest-slide bg-white rounded-2xl overflow-hidden shadow-lg">
         <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
         <div class="p-6">
             <h3 class="font-display text-xl font-semibold mb-2">${item.name}</h3>
-            <div class="flex justify-between items-center">
-                <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
-            </div>
+            <span class="text-2xl font-bold text-brown">${formatPrice(item.price)}</span>
         </div>
     </div>
-  `
+  `;
 }
 
-let suggestIndex = 0;
+// ====== SLIDER ======
+let suggestPos = 0;
+const slider = document.getElementById("suggest-slider");
 
-function loadSuggestions() {
-  const grid = document.getElementById("suggest-grid");
-  grid.innerHTML = "";
-
-  // Lấy 3 món theo index
-  for (let i = 0; i < 3; i++) {
-    const item = suggestItems[(suggestIndex + i) % suggestItems.length];
-    grid.innerHTML += createSuggestItemHTML(item);
-  }
-
-  // Tăng index để lần sau hiển thị món khác
-  suggestIndex = (suggestIndex + 1) % suggestItems.length;
+// Render slide
+function loadSuggestSlider() {
+  slider.innerHTML = "";
+  suggestItems.forEach(item => {
+    slider.innerHTML += createSuggestSlide(item);
+  });
 }
 
-// Tự động đổi món mỗi 4 giây
-setInterval(loadSuggestions, 4000);
+loadSuggestSlider();
+
+const slideWidth = 320; // 300px + margin
+const maxPos = suggestItems.length - 1;
+
+// Nút next
+document.getElementById("suggest-next").addEventListener("click", () => {
+  suggestPos = (suggestPos + 1) > maxPos ? 0 : suggestPos + 1;
+  slider.style.transform = `translateX(-${suggestPos * slideWidth}px)`;
+});
+
+// Nút prev
+document.getElementById("suggest-prev").addEventListener("click", () => {
+  suggestPos = (suggestPos - 1) < 0 ? maxPos : suggestPos - 1;
+  slider.style.transform = `translateX(-${suggestPos * slideWidth}px)`;
+});
+
+// Tự động chạy
+setInterval(() => {
+  suggestPos = (suggestPos + 1) > maxPos ? 0 : suggestPos + 1;
+  slider.style.transform = `translateX(-${suggestPos * slideWidth}px)`;
+}, 4000);
 
 
 </script>

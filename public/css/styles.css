@@ -227,3 +227,8 @@ body {
 .bg-brown {
     background-color: #8b4513;
 }
+.suggest-slide {
+  min-width: 300px;
+  max-width: 300px;
+  margin-right: 20px;
+}
