@@ -60,28 +60,30 @@
                     <span class="price">5.400đ</span>
                 </div>
 
-                <div class="summary-item">
+                <!-- Dùng điểm tích lũy -->
+                <div class="discount-box">
+                    <div class="discount-title">Dùng điểm tích lũy</div>
 
-                <span>Điểm đã tích</span>
-                    <span class="price" id="user-points">0đ</span>
+                    <input type="number" id="usePoints" class="discount-input" placeholder="Nhập số điểm muốn dùng">
+
+                    <div class="points-info">Bạn đang có: <b id="availablePoints">120 điểm</b></div>
+
+                    <button class="btn-apply" onclick="applyPoints()">Áp dụng điểm</button>
+
+                    <div id="pointsResult" class="discount-applied"></div>
                 </div>
 
-                <div class="summary-item">
-                    <span>Điểm muốn dùng</span>
-                    <input type="number" id="usePoints" min="0" value="0" class="input-small">
+                <!-- Mã giảm giá -->
+                <div class="discount-box">
+                    <div class="discount-title">Mã giảm giá</div>
+
+                    <input type="text" id="couponCode" class="discount-input" placeholder="Nhập mã giảm giá">
+
+                    <button class="btn-apply" onclick="applyCoupon()">Áp dụng mã</button>
+
+                    <div id="couponResult" class="discount-applied"></div>
                 </div>
 
-                <div class="summary-item">
-                    <span>Mã giảm giá</span>
-                    <input type="text" id="couponCode" placeholder="Nhập mã..." class="input-small">
-                </div>
-
-                <button class="btn-apply" onclick="applyCoupon()">Áp dụng mã</button>
-
-                <div class="summary-item discount">
-                    <span>Giảm giá</span>
-                    <span class="price" id="discountAmount">0đ</span>
-                </div>
 
                 <div class="summary-item total">
                     <span>Tổng cộng</span>

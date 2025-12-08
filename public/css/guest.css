@@ -370,14 +370,78 @@ body {
     border-radius: 6px;
 }
 
+/* ============================
+   REWARD POINTS & COUPON
+   ============================ */
+
+/* Container của từng nhóm */
+.discount-box {
+    background: #fff8f3;
+    border: 1px solid #e0e0e0;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.discount-title {
+    font-weight: 600;
+    color: #d97e3a;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+/* Input */
+.discount-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f8f5;
+    transition: 0.2s;
+}
+
+.discount-input:focus {
+    background: white;
+    border-color: #d97e3a;
+    outline: none;
+}
+
+/* Nút áp dụng */
 .btn-apply {
     width: 100%;
-    margin: 6px 0;
-    padding: 8px;
-    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #d97e3a;
+    color: white;
     border: none;
-    background: #333;
-    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-apply:hover {
+    background-color: #c46d2a;
+}
+
+.btn-apply:active {
+    transform: scale(0.97);
+}
+
+/* Hiển thị số điểm */
+.points-info {
+    font-size: 14px;
+    margin-top: 6px;
+    color: #666;
+}
+
+/* Giá trị giảm */
+.discount-applied {
+    font-size: 14px;
+    font-weight: 600;
+    color: #27ae60;
+    margin-top: 6px;
 }
 
