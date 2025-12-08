@@ -249,6 +249,8 @@ class Checkout extends Model {
         // Nếu không tìm thấy user → đặt ID = NULL
         $userID = $user ? $user["ID"] : null;
 
+        $orderCode = "ORD-" . strtoupper(bin2hex(random_bytes(3))); 
+
 
         $sql = "INSERT INTO Orders(ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total) 
         VALUES (?,?,?, Ordered, Null, 0, Unpaid, Cash, Null, Now(),?,?)";
@@ -259,8 +261,8 @@ class Checkout extends Model {
             $userID,
             $data["storeID"],
             $data["tableNumber"],
+            $orderCode,         // GHI NOTE = MÃ ĐƠN
             $data["usePoints"],
-            // $data["couponCode"],
             $data["total"]
         ]);
 
