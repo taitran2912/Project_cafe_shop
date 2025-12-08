@@ -385,26 +385,38 @@ function payCash() {
 
     console.log("DỮ LIỆU THANH TOÁN TIỀN MẶT:", checkout);
 
-    // Gửi API lưu đơn
     fetch("https://caffeshop.hieuthuocyentam.id.vn/checkout/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(checkout)
     })
-    .then(r => r.json())
+    .then(async response => {
+        const raw = await response.text();      // Lấy dữ liệu thô
+        console.log("RAW RESPONSE:", raw);      // Debug xem server trả gì
+
+        try {
+            return JSON.parse(raw);             // Parse JSON an toàn
+        } catch (err) {
+            console.error("JSON PARSE ERROR:", err);
+            throw new Error("API không trả JSON hợp lệ");
+        }
+    })
     .then(res => {
+        console.log("PARSED JSON:", res);
+
         if (res.success) {
             localStorage.removeItem("pendingOrder");
             window.location.href = "https://caffeshop.hieuthuocyentam.id.vn/thankyou/digital";
         } else {
-            alert("Lỗi khi tạo đơn hàng!");
+            alert("Lỗi khi tạo đơn hàng: " + (res.message || "Không rõ lỗi"));
         }
     })
     .catch(err => {
-        console.error(err);
+        console.error("FETCH ERROR:", err);
         alert("Không thể kết nối server!");
     });
 }
+
 
 
 function payQRCode() {
