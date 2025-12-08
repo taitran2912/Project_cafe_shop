@@ -366,17 +366,13 @@
         </div>
 
         <!-- Main Content -->
-        <div class="container">
+        <div class="content">
             <!-- Thank You Section -->
-            <div class="">
+            <div class="thank-you-section">
                 <div class="thank-you-icon">✓</div>
                 <h2>Cảm ơn bạn!</h2>
                 <p>Đơn hàng của bạn đã được xác nhận thành công. Chúng tôi sẽ gửi email xác nhận và thông tin theo dõi đơn hàng của bạn trong vòng 24 giờ.</p>
                 
-                <div class="order-number">
-                    <label>Mã đơn hàng</label>
-                    <span>#ORD-2024-12345</span>
-                </div>
 
                 <button class="btn btn-secondary" onclick="continueShop()">Tiếp tục mua sắm</button>
             </div>
