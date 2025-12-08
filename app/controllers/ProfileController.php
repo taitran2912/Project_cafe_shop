@@ -48,4 +48,34 @@ class ProfileController extends Controller {
         ];
         $this->view('profile/index', $data);
     }
+
+    public function addAddress() {
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            echo json_encode(['success' => false, 'message' => 'Bạn chưa đăng nhập']);
+            return;
+        }
+
+        $address = trim($input['address'] ?? '');
+        $isDefault = isset($input['isDefault']) ? intval($input['isDefault']) : 0;
+        $latitude = isset($input['latitude']) ? floatval($input['latitude']) : null;
+        $longitude = isset($input['longitude']) ? floatval($input['longitude']) : null;
+
+        if (!$address) {
+            echo json_encode(['success' => false, 'message' => 'Vui lòng nhập địa chỉ']);
+            return;
+        }
+
+        // Gọi model Profile (thay vì Address)
+        $success = $this->model('Profile')->addAddress($userId, $address, $latitude, $longitude, $isDefault);
+
+        if ($success) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Không thể thêm địa chỉ']);
+        }
+    }
+
 }

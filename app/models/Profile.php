@@ -48,5 +48,24 @@ class Profile extends Model {
             $addresses[] = $row;
         }
         return $addresses;
-    }   
+    }
+    
+    public function addAddress($userId, $address, $latitude = null, $longitude = null, $isDefault = 0) {
+        $mysqli = $this->db;
+
+        // Nếu là mặc định, reset các địa chỉ khác
+        if ($isDefault) {
+            $stmt = $mysqli->prepare("UPDATE Address SET AddressDefault = 0 WHERE ID_Customer = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+        }
+
+        $stmt = $mysqli->prepare("
+            INSERT INTO Address (ID_Customer, Address, Latitude, Longitude, AddressDefault)
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        $stmt->bind_param("issdi", $userId, $address, $latitude, $longitude, $isDefault);
+
+        return $stmt->execute();
+    }
 }

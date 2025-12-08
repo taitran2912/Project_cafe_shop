@@ -115,6 +115,12 @@
                    placeholder="Nhập địa chỉ..." 
                    class="w-full border px-4 py-2 rounded-lg mb-4">
 
+            <!-- Thêm checkbox mặc định -->
+            <div class="mb-4 flex items-center gap-2">
+                <input type="checkbox" id="isDefault" class="h-4 w-4">
+                <label for="isDefault" class="text-gray-700">Đặt làm địa chỉ mặc định</label>
+            </div>
+
             <div class="flex justify-end gap-2">
                 <button type="button" onclick="closeAddressModal()" 
                         class="px-4 py-2 bg-gray-200 rounded-lg">Hủy</button>
@@ -188,6 +194,54 @@ document.getElementById("addAddressForm").addEventListener("submit", function(e)
         }
     });
 });
+
+
+document.getElementById("addAddressForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const address = document.getElementById("newAddress").value.trim();
+    const isDefault = document.getElementById("isDefault").checked ? 1 : 0;
+
+    if (!address) return alert("Vui lòng nhập địa chỉ!");
+
+    // Lấy latitude và longitude từ Nominatim
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.length === 0) {
+                return alert("Không tìm thấy địa chỉ. Vui lòng thử lại.");
+            }
+
+            const latitude = data[0].lat;
+            const longitude = data[0].lon;
+
+            // Gửi lên backend cùng địa chỉ và mặc định
+            fetch("https://caffeshop.hieuthuocyentam.id.vn/profile/addAddress", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ 
+                    address, 
+                    isDefault, 
+                    latitude, 
+                    longitude 
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Thêm địa chỉ thành công!");
+                    location.reload();
+                } else {
+                    alert("Không thể thêm địa chỉ.");
+                }
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Đã có lỗi khi lấy tọa độ.");
+        });
+});
+
 
 </script>
 <script src='https://caffeshop.hieuthuocyentam.id.vn/public/js/profile.js'></script>
