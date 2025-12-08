@@ -242,31 +242,31 @@ class Checkout extends Model {
 //digital menu
     public function saveOrder($data) {
         
-        // Lấy user ID theo số điện thoại
-        $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
-        $stmt->execute([$data["customerPhone"]]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // // Lấy user ID theo số điện thoại
+        // $stmt = $this->conn->prepare("SELECT ID FROM Account WHERE Phone = ?");
+        // $stmt->execute([$data["customerPhone"]]);
+        // $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $userID = $user["ID"] ?? null;
+        // $userID = $user["ID"] ?? null;
 
-        // Câu SQL CHUẨN
-        $sql = "INSERT INTO Orders
-                (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
-                Payment_status, Method, Note, Date, Points, Total)
-                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)";
+        // // Câu SQL CHUẨN
+        // $sql = "INSERT INTO Orders
+        //         (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
+        //         Payment_status, Method, Note, Date, Points, Total)
+        //         VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)";
 
-        $stmt = $this->conn->prepare($sql);
+        // $stmt = $this->conn->prepare($sql);
 
-        $stmt->execute([
-            $userID,
-            $data["storeID"],
-            $data["tableNumber"],       // NOTE = mã đơn hàng
-            $data["usePoints"],  // điểm dùng
-            $data["total"]       // tổng tiền cuối cùng
-        ]);
+        // $stmt->execute([
+        //     $userID,
+        //     $data["storeID"],
+        //     $data["tableNumber"],       // NOTE = mã đơn hàng
+        //     $data["usePoints"],  // điểm dùng
+        //     $data["total"]       // tổng tiền cuối cùng
+        // ]);
 
         // Lấy ID đơn hàng mới
-        return $this->conn->lastInsertId();
+        // return $this->conn->lastInsertId();
 
         // echo json_encode([
         //     "customerPhone" => $data["customerPhone"],
@@ -275,6 +275,7 @@ class Checkout extends Model {
         //     "usePoints"     => $data["usePoints"],
         //     "total"         => $data["total"]
         // ]);
+        return 1000;
 
     }
 
