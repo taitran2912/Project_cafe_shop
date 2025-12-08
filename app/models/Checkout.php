@@ -184,7 +184,7 @@ class Checkout extends Model {
         $stmt->close();
 
         // Nếu không có dữ liệu → trả về 0
-        return $points !== null ? (int)$points : 0;
+        return $points;
     }
 
 
