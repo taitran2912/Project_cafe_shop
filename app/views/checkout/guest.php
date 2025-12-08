@@ -273,6 +273,72 @@ function confirmOrder() {
     });
 }
 
+async function applyCoupon() {
+    const code = document.getElementById("couponCode").value.trim();
+    const discountElement = document.getElementById("discountAmount");
+
+    if (!code) {
+        alert("Vui lòng nhập mã giảm giá!");
+        return;
+    }
+
+    // Lấy order hiện tại
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+    const subtotal = updateSubtotal(order.items);
+
+    // Lấy điểm đang dùng
+    let usePoints = Number(document.getElementById("usePoints").value) || 0;
+
+    // Gọi API kiểm tra coupon
+    try {
+        const res = await fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/coupon?code=${code}`);
+        const data = await res.json();
+
+        console.log("COUPON API:", data);
+
+        if (!data.success) {
+            alert("Mã giảm giá không hợp lệ!");
+            discountElement.innerText = "0đ";
+            updateSummaryAfterPoints();
+            return;
+        }
+
+        const percent = Number(data.coupon.percent) || 0;
+
+        // Tính giảm giá dựa trên % (sau khi trừ điểm đã dùng)
+        const priceAfterPoints = subtotal - usePoints;
+
+        let discount = Math.round(priceAfterPoints * percent / 100);
+
+        if (discount < 0) discount = 0;
+
+        // Hiển thị giảm
+        discountElement.innerText = discount.toLocaleString("vi-VN") + "đ";
+
+        // Tính tổng cuối
+        let finalTotal = priceAfterPoints - discount;
+
+        document.getElementById("total").innerText =
+            finalTotal.toLocaleString("vi-VN") + "đ";
+
+        // Lưu vào order để gửi lên server
+        order.couponCode = code;
+        order.couponPercent = percent;
+        order.discountAmount = discount;
+        order.finalTotal = finalTotal;
+
+        localStorage.setItem("pendingOrder", JSON.stringify(order));
+
+        console.log("ORDER AFTER COUPON:", order);
+
+    } catch (error) {
+        console.error("Lỗi API mã giảm giá:", error);
+        alert("Lỗi kết nối khi kiểm tra mã giảm giá!");
+        discountElement.innerText = "0đ";
+    }
+}
+
+
 </script>
 </body>
 </html>
