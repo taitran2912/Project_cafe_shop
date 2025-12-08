@@ -286,10 +286,16 @@ async function applyCoupon() {
     const order = JSON.parse(localStorage.getItem("pendingOrder"));
     const subtotal = updateSubtotal(order.items);
 
-    // Lấy điểm đang dùng
+    // Điểm đang dùng
     let usePoints = Number(document.getElementById("usePoints").value) || 0;
 
-    // Gọi API kiểm tra coupon
+    // Lấy số điện thoại (phía client luôn có)
+    const phone =
+        order.customerPhone ??
+        order.phone ??
+        localStorage.getItem("customerPhone") ??
+        new URLSearchParams(window.location.search).get("phone");
+
     try {
         const res = await fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/coupon?code=${code}&phone=${phone}`);
         const data = await res.json();
@@ -297,25 +303,26 @@ async function applyCoupon() {
         console.log("COUPON API:", data);
 
         if (!data.success) {
-            alert("Mã giảm giá không hợp lệ!");
+            alert(data.message || "Mã giảm giá không hợp lệ!");
             discountElement.innerText = "0đ";
             updateSummaryAfterPoints();
             return;
         }
 
-        const percent = Number(data.coupon.Discount_value) || 0;
+        // Lấy phần trăm giảm từ API
+        const percent = Number(data.percent) || 0;
 
-        // Tính giảm giá dựa trên % (sau khi trừ điểm đã dùng)
+        // Tính giá sau khi trừ điểm
         const priceAfterPoints = subtotal - usePoints;
 
+        // Tính số tiền giảm giá
         let discount = Math.round(priceAfterPoints * percent / 100);
-
         if (discount < 0) discount = 0;
 
-        // Hiển thị giảm
+        // Hiển thị giảm giá
         discountElement.innerText = discount.toLocaleString("vi-VN") + "đ";
 
-        // Tính tổng cuối
+        // Tổng cuối cùng
         let finalTotal = priceAfterPoints - discount;
 
         document.getElementById("total").innerText =
@@ -329,7 +336,7 @@ async function applyCoupon() {
 
         localStorage.setItem("pendingOrder", JSON.stringify(order));
 
-        console.log("ORDER AFTER COUPON:", order);
+        console.log("ORDER AFTER APPLY COUPON:", order);
 
     } catch (error) {
         console.error("Lỗi API mã giảm giá:", error);
@@ -337,6 +344,7 @@ async function applyCoupon() {
         discountElement.innerText = "0đ";
     }
 }
+
 
 
 </script>
