@@ -143,7 +143,7 @@ body {
 /* =====================================
    NÚT ÁP DỤNG MÃ
 ===================================== */
-.btn-apply {
+.btn-app{
     width: 100%;
     padding: 14px;
     margin-top: 12px;
@@ -158,11 +158,11 @@ body {
     transition: background .25s, transform .1s;
 }
 
-.btn-apply:hover {
+.btn-app:hover {
     background-color: #555;
 }
 
-.btn-apply:active {
+.btn-app:active {
     transform: scale(.97);
 }
 
