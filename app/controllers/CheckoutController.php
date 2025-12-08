@@ -207,7 +207,7 @@ class CheckoutController extends Controller {
             "storeID"       => $storeId,
             "tableNumber"   => $tableNumber,
             "usePoints"     => $usePoints,
-            "couponCode"    => $couponCode,
+            // "couponCode"    => $couponCode,
             // "discount"      => $discountAmount,
             "total"         => $finalTotal
         ]);
