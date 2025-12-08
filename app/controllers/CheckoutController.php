@@ -104,63 +104,29 @@ class CheckoutController extends Controller {
     }
 
     public function points() {
-    //     header('Content-Type: application/json');
+        header('Content-Type: application/json');
 
-    //     // Lấy số điện thoại từ query
-    //     $phone = $_POST['phone'] ?? '';
-
-    //     if (empty($phone)) {
-    //         echo json_encode([
-    //             'success' => false,
-    //             'points' => 0,
-    //             'message' => 'Thiếu số điện thoại'
-    //         ]);
-    //         return;
-    //     }
-
-    //     // Gọi model lấy điểm
-    //     $checkoutModel = $this->model('Checkout');
-    //     // $points = $checkoutModel->getPointsByPhone($phone);  
-
-    //     // Nếu không có dữ liệu → trả về 0
-    //     if (!$points) {
-    //         $points = 0;
-    //     }
-
-    //     echo json_encode([
-    //         'success' => true,
-    //         'points' => (int) $points
-    //     ]);
-    header('Content-Type: application/json');
-
-    // Nhận số điện thoại từ POST
         $phone = $_GET['phone'] ?? '';
 
-        // Kiểm tra rỗng
-        // if (empty($phone)) {
-        //     echo json_encode([
-        //         'success' => false,
-        //         'received_phone' => null,
-        //         'message' => 'Không nhận được số điện thoại'
-        //     ]);
-        //     return;
-        // }
-
-        // // Trả về để kiểm tra client có gửi đúng không
-        // echo json_encode([
-        //     'success' => true,
-        //     'received_phone' => $phone,
-        //     'message' => 'Đã nhận số điện thoại'
-        // ]);
+        if (empty($phone)) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Thiếu số điện thoại'
+            ]);
+            return;
+        }
 
         $checkoutModel = $this->model('Checkout');
-        $points = $checkoutModel->getPointsByPhone($phone);  
+
+        $points = $checkoutModel->getPointsByPhone($phone);
 
         echo json_encode([
             'success' => true,
-            'points' => (int) $points
+            'phone' => $phone,
+            'points' => $points
         ]);
     }
+
 
 
 }

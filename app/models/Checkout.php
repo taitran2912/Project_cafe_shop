@@ -154,7 +154,7 @@ class Checkout extends Model {
         return $row['Payment_status'];  // dạng Pending / Unpaid / Paid / Completed
     }
 
-    public function getPointsByPhone($phone){
+    public function getPointsByPhone($phone) {
         try {
             $sql = "
                 SELECT c.Points 
@@ -169,12 +169,13 @@ class Checkout extends Model {
 
             $points = $stmt->fetchColumn();
 
-            // Nếu null → trả về 0
             return $points !== false ? (int)$points : 0;
 
         } catch (Exception $e) {
-            // Ghi log nếu cần
+            // Debug lỗi SQL nếu cần
+            error_log("SQL ERROR getPointsByPhone: " . $e->getMessage());
             return 0;
         }
     }
+
 }
