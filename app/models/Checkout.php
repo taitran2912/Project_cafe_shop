@@ -241,6 +241,8 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
+        echo "<script>console.log(" . json_encode($data) . ");</script>";
+
         try {
             $sql = "
                 INSERT INTO Orders
@@ -265,8 +267,7 @@ class Checkout extends Model {
                 $data["tableNumber"],  
                 $data["usePoints"],    
                 $data["total"],        
-                var_dump($data["customerPhone"])
-
+                $data["customerPhone"] 
             );
 
             if (!$stmt->execute()) {

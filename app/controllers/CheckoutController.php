@@ -176,9 +176,6 @@ class CheckoutController extends Controller {
             return;
         }
 
-        // Model Checkout
-        
-
         // Lấy JSON từ body request
         $input = json_decode(file_get_contents("php://input"), true);
 
