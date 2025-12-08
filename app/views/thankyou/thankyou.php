@@ -371,7 +371,7 @@
             <div class="thank-you-section">
                 <div class="thank-you-icon">✓</div>
                 <h2>Cảm ơn bạn!</h2>
-                <p>Đơn hàng của bạn đã được xác nhận thành công. Chúng tôi sẽ gửi email xác nhận và thông tin theo dõi đơn hàng của bạn trong vòng 24 giờ.</p>
+                <p>Đơn hàng của bạn đã được đặt thành công. Vui lòng chờ 5 đến 10 phút để chúng tôi có thể chuẩn bị và phục vụ bạn một cách tốt nhất.</p>
                 
 
                 <button class="btn btn-secondary" onclick="continueShop()">Tiếp tục mua sắm</button>
