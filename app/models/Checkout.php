@@ -187,7 +187,22 @@ class Checkout extends Model {
         return $points;
     }
 
-    public function getCouponByCode($code){
+    public function getCouponByCode($code, $phone){
+        try {
+            $sql = "
+                
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$code]);
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ?: false;
+
+        } catch (Exception $e) {
+            error_log("SQL ERROR getCouponByCode: " . $e->getMessage());
+            return false;
+        }
 
     }
 

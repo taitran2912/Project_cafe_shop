@@ -132,33 +132,41 @@ class CheckoutController extends Controller {
 
         // Nhận mã từ GET hoặc POST
         $code = $_GET['code'] ?? $_POST['code'] ?? '';
+        $phone = $_GET['phone'] ?? $_POST['phone'] ?? '';
 
-        if (empty($code)) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Thiếu mã giảm giá!'
-            ]);
-            return;
-        }
 
-        // Gọi model
-        $checkoutModel = $this->model('Checkout');
-        $coupon = $checkoutModel->getCouponByCode($code);
+        // if (empty($code)) {
+        //     echo json_encode([
+        //         'success' => false,
+        //         'message' => 'Thiếu mã giảm giá!'
+        //     ]);
+        //     return;
+        // }
 
-        // Không tồn tại hoặc hết hạn
-        if (!$coupon) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!'
-            ]);
-            return;
-        }
+        // // Gọi model
+        // $checkoutModel = $this->model('Checkout');
+        // $coupon = $checkoutModel->getCouponByCode($code);
 
-        // Thành công
+        // // Không tồn tại hoặc hết hạn
+        // if (!$coupon) {
+        //     echo json_encode([
+        //         'success' => false,
+        //         'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!'
+        //     ]);
+        //     return;
+        // }
+
+        // // Thành công
+        // echo json_encode([
+        //     'success' => true,
+        //     'percent' => (int)$coupon['Percent'],
+        //     'message' => 'Áp dụng mã thành công!'
+        // ]);
         echo json_encode([
             'success' => true,
-            'percent' => (int)$coupon['Percent'],
-            'message' => 'Áp dụng mã thành công!'
+            'received_code'  => $code,
+            'received_phone' => $phone,
+            'message' => 'Đã nhận dữ liệu từ client'
         ]);
     }
 

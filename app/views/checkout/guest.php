@@ -291,7 +291,7 @@ async function applyCoupon() {
 
     // Gọi API kiểm tra coupon
     try {
-        const res = await fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/coupon?code=${code}`);
+        const res = await fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/coupon?code=${code}&phone=${phone}`);
         const data = await res.json();
 
         console.log("COUPON API:", data);
