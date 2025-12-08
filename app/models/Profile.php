@@ -55,13 +55,13 @@ class Profile extends Model {
 
         // Nếu là mặc định, reset các địa chỉ khác
         if ($isDefault) {
-            $stmt = $mysqli->prepare("UPDATE Address SET AddressDefault = 0 WHERE ID_Customer = ?");
+            $stmt = $mysqli->prepare("UPDATE Address a SET AddressDefault= 0 WHERE a.ID_Customer = ?");
             $stmt->bind_param("i", $userId);
             $stmt->execute();
         }
 
         $stmt = $mysqli->prepare("
-            INSERT INTO Address (ID_Customer, Address, Latitude, Longitude, AddressDefault)
+            INSERT INTO Address(ID_Customer, Address, Latitude, Longitude, AddressDefault) VALUES
             VALUES (?, ?, ?, ?, ?)
         ");
         $stmt->bind_param("issdi", $userId, $address, $latitude, $longitude, $isDefault);
