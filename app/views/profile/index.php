@@ -91,8 +91,11 @@
                             class="btn-primary mb-6 px-4 py-2 rounded-lg">
                         + Thêm địa chỉ
                     </button>
-
                 </div>
+                <button onclick="openAddressModal()" 
+                            class="btn-primary mb-6 px-4 py-2 rounded-lg">
+                        + Thêm địa chỉ
+                    </button>
             </div>
         </div>
     </div>
