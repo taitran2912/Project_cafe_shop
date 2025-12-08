@@ -218,81 +218,133 @@ function renderProductCard($p) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// ============================================================
-// AUTO SHOW PHONE MODAL
-// ============================================================
-document.addEventListener("DOMContentLoaded", () => {
-    const modal = new bootstrap.Modal('#customerPhoneModal');
-    modal.show();
+    // =====================
+    // CART STORAGE
+    // =====================
+    let cart = [];
 
-    document.getElementById("customerPhoneModal").addEventListener("hidden.bs.modal", () => {
-        const phone = document.getElementById('customerPhone').value.trim();
-        phone ? fetchFavoriteProducts(phone) : fetchPopular();
-    });
-});
+    // Format tiền VND
+    function formatPrice(num) {
+        return num.toLocaleString("vi-VN") + "₫";
+    }
 
-// ============================================================
-// HANDLE PHONE CONFIRM
-// ============================================================
-function confirmCustomerPhone() {
-    const phone = document.getElementById('customerPhone').value.trim();
-    window.customerPhone = phone;
-    bootstrap.Modal.getInstance('#customerPhoneModal').hide();
-}
+    // =====================
+    // ADD TO CART
+    // =====================
+    function addToCart(name, price, image) {
+        const item = cart.find(p => p.name === name);
 
-// ============================================================
-// API
-// ============================================================
-function fetchFavoriteProducts(phone) {
-    fetch(`/digitalmenu/favorite?phone=${phone}`)
-        .then(r => r.json())
-        .then(displayFavoriteSuggestions);
-}
+        if (item) {
+            item.qty++;
+        } else {
+            cart.push({
+                name, price, image, qty: 1
+            });
+        }
 
-function fetchPopular() {
-    fetch(`/digitalmenu/popular`)
-        .then(r => r.json())
-        .then(displayFavoriteSuggestions);
-}
+        updateCartUI();
+    }
 
-// ============================================================
-// RENDER FAVORITE PRODUCTS
-// ============================================================
-function displayFavoriteSuggestions(list) {
-    const container = document.getElementById('favorite-container');
-    container.innerHTML = "";
+    // =====================
+    // UPDATE CART UI (DESKTOP + MOBILE)
+    // =====================
+    function updateCartUI() {
+        const desktopList = document.getElementById("cart-items-container");
+        const desktopEmpty = document.getElementById("cart-empty-state");
+        const desktopTotalBox = document.getElementById("cart-footer");
+        const desktopCount = document.getElementById("cart-count");
 
-    list.forEach(p => {
-        container.innerHTML += `
-            <div class="col">
-                <div class="product-card h-100">
-                    <div class="product-img-wrapper">
-                        <img src="/public/image/${p.Image}" class="product-img">
+        const mobileList = document.getElementById("mobile-cart-items");
+        const mobileCount = document.getElementById("mobile-cart-count");
+        const mobileTotal = document.getElementById("mobile-cart-total");
+
+        desktopList.innerHTML = "";
+        mobileList.innerHTML = "";
+
+        // Nếu giỏ trống
+        if (cart.length === 0) {
+            desktopEmpty.style.display = "block";
+            desktopTotalBox.style.display = "none";
+            desktopCount.textContent = "0";
+            mobileCount.textContent = "0";
+            mobileTotal.textContent = "0₫";
+            return;
+        }
+
+        desktopEmpty.style.display = "none";
+        desktopTotalBox.style.display = "block";
+
+        let total = 0;
+
+        cart.forEach((p, index) => {
+            total += p.qty * p.price;
+
+            // ---------------------------
+            // DESKTOP CART
+            // ---------------------------
+            desktopList.innerHTML += `
+                <div class="cart-item d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <div class="fw-bold">${p.name}</div>
+                        <div class="text-secondary small">${formatPrice(p.price)}</div>
                     </div>
 
-                    <div class="product-body">
-                        <div class="product-title">${p.Name}</div>
-                        <div class="product-price">${Number(p.Price).toLocaleString('vi-VN')}₫</div>
-
-                        <button class="btn-add" onclick="addToCart('${p.Name}', ${p.Price}, '${p.Image}')">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-light btn-sm" onclick="changeQty(${index}, -1)">-</button>
+                        <span>${p.qty}</span>
+                        <button class="btn btn-light btn-sm" onclick="changeQty(${index}, 1)">+</button>
                     </div>
                 </div>
-            </div>
-        `;
-    });
-}
+            `;
 
-document.getElementById("mobile-cart-btn").onclick = () => {
-    document.getElementById("mobile-cart-sheet").classList.add("active");
-};
+            // ---------------------------
+            // MOBILE CART
+            // ---------------------------
+            mobileList.innerHTML += `
+                <div class="mb-3">
+                    <div class="fw-bold">${p.name}</div>
+                    <div class="text-secondary small">${formatPrice(p.price)}</div>
 
-function closeCartSheet() {
-    document.getElementById("mobile-cart-sheet").classList.remove("active");
-}
+                    <div class="d-flex align-items-center gap-3 mt-1">
+                        <button class="btn btn-light btn-sm" onclick="changeQty(${index}, -1)">-</button>
+                        <span>${p.qty}</span>
+                        <button class="btn btn-light btn-sm" onclick="changeQty(${index}, 1)">+</button>
+                    </div>
+                </div>
+            `;
+        });
 
+        // Update totals
+        document.getElementById("cart-total-price").textContent = formatPrice(total);
+        mobileTotal.textContent = formatPrice(total);
 
+        // Badge
+        const count = cart.reduce((a, c) => a + c.qty, 0);
+        desktopCount.textContent = count;
+        mobileCount.textContent = count;
+    }
+
+    // =====================
+    // CHANGE QTY
+    // =====================
+    function changeQty(index, amount) {
+        cart[index].qty += amount;
+
+        if (cart[index].qty <= 0)
+            cart.splice(index, 1);
+
+        updateCartUI();
+    }
+
+    // =====================
+    // MOBILE CART SLIDE
+    // =====================
+    document.getElementById("mobile-cart-btn").onclick = () => {
+        document.getElementById("mobile-cart-sheet").classList.add("active");
+    };
+    function closeCartSheet() {
+        document.getElementById("mobile-cart-sheet").classList.remove("active");
+    }
 </script>
     <button id="mobile-cart-btn" class="mobile-cart-button">
         <i class="fa fa-shopping-cart"></i>
