@@ -241,54 +241,59 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        // echo "<script>console.log(" . json_encode($data) . ");</script>";
-
         try {
+            // 1. Lấy ID khách hàng
+            $stmt = $this->db->prepare("SELECT ID FROM Account WHERE Phone = ?");
+            if (!$stmt) {
+                return ["success" => false, "message" => "Prepare failed (Customer): " . $this->db->error];
+            }
+            $stmt->bind_param("s", $data["customerPhone"]);
+            $stmt->execute();
+            $stmt->bind_result($customerID);
+            if (!$stmt->fetch()) {
+                $stmt->close();
+                return ["success" => false, "message" => "Customer not found"];
+            }
+            $stmt->close();
+
+            // 2. Chèn đơn hàng
             $sql = "
                 INSERT INTO Orders
                 (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
                 Payment_status, Method, Note, Date, Points, Total)
-                SELECT 
-                    ID, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash',
-                    'Đơn hàng tại quán hoặc mua mang về',
-                    NOW(), ?, ?
-                FROM Account
-                WHERE Phone = ?
+                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash',
+                        'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)
             ";
 
             $stmt = $this->db->prepare($sql);
             if (!$stmt) {
-                die("Prepare failed (Order): " . $this->db->error);
+                return ["success" => false, "message" => "Prepare failed (Order): " . $this->db->error];
             }
 
             $stmt->bind_param(
-                "iiids",
-                $data["storeID"],      
-                $data["tableNumber"],  
-                $data["usePoints"],    
-                $data["total"],        
-                $data["customerPhone"] 
+                "iiiid",
+                $customerID,          // ID_Customer
+                $data["storeID"],     // ID_Branch
+                $data["tableNumber"], // ID_Table
+                $data["usePoints"],   // Points
+                $data["total"]        // Total
             );
 
             if (!$stmt->execute()) {
-                die("Execute failed (Order): " . $stmt->error);
+                $stmt->close();
+                return ["success" => false, "message" => "Execute failed (Order): " . $stmt->error];
             }
 
             $orderId = $stmt->insert_id;
             $stmt->close();
 
-            return $orderId;
+            return ["success" => true, "orderID" => $orderId];
 
         } catch (Exception $e) {
             error_log("SQL ERROR saveOrder: " . $e->getMessage());
-            return false;
+            return ["success" => false, "message" => "Cannot save order"];
         }
     }
-
-
-
-
-
     // Lưu từng sản phẩm
     public function saveOrderItem($orderId, $item) {
         $sql = "INSERT INTO order_items (order_id, product_id, product_name, price, quantity, total_price)
