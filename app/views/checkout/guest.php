@@ -239,7 +239,7 @@ function loadUserPoints(phone) {
         .then(data => {
             if (data.success) {
                 const points = Number(data.points) || 0;
-                document.getElementById("user-points").innerText = 
+                document.getElementById("user-points").innerText =
                     points.toLocaleString("vi-VN") + "đ";
             } else {
                 document.getElementById("user-points").innerText = "0đ";
@@ -251,15 +251,24 @@ function loadUserPoints(phone) {
         });
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
     const order = JSON.parse(localStorage.getItem("pendingOrder"));
 
-    if (order?.customerPhone) {
+    if (!order || !order.items?.length) {
+        document.getElementById("order-items").innerHTML =
+            "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
+        document.querySelector(".btn-checkout").style.display = "none";
+        return;
+    }
+
+    setOrderLocation(order);
+    renderOrderItems(order.items);
+    updateSummary(order.items);
+
+    if (order.customerPhone) {
         loadUserPoints(order.customerPhone);
     }
 });
-
 
 </script>
 
