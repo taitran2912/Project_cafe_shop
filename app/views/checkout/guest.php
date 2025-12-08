@@ -263,6 +263,7 @@ function confirmOrder() {
     .then(r => r.json())
     .then(res => {
         console.log("SERVER RESPONSE:", res); // <=== THÊM DÒNG NÀY
+        console.log("ORDER SENT TO SERVER:", order);
 
         if (res.success) {
             localStorage.removeItem("pendingOrder");
