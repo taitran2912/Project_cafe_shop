@@ -242,7 +242,7 @@ class Checkout extends Model {
 //digital menu
     public function saveOrder($data) {
         try {
-            // 1. Lấy ID khách hàng
+            // 1. Kiểm tra phone tồn tại
             $stmt = $this->db->prepare("SELECT ID FROM Account WHERE Phone = ?");
             if (!$stmt) {
                 return ["success" => false, "message" => "Prepare failed (Customer): " . $this->db->error];
@@ -256,13 +256,19 @@ class Checkout extends Model {
             }
             $stmt->close();
 
-            // 2. Chèn đơn hàng
+            // 2. Chuẩn hóa dữ liệu
+            $storeID = (int)$data["storeID"];
+            $tableNumber = (int)$data["tableNumber"];
+            $usePoints = (int)($data["usePoints"] ?? 0);
+            $total = (float)$data["total"];
+            $note = $data["note"] ?? "Đơn hàng tại quán hoặc mua mang về";
+
+            // 3. Insert Order
             $sql = "
                 INSERT INTO Orders
                 (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
                 Payment_status, Method, Note, Date, Points, Total)
-                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash',
-                        'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)
+                VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', ?, NOW(), ?, ?)
             ";
 
             $stmt = $this->db->prepare($sql);
@@ -271,12 +277,13 @@ class Checkout extends Model {
             }
 
             $stmt->bind_param(
-                "iiiid",
-                $customerID,          // ID_Customer
-                $data["storeID"],     // ID_Branch
-                $data["tableNumber"], // ID_Table
-                $data["usePoints"],   // Points
-                $data["total"]        // Total
+                "iiisid",
+                $customerID,
+                $storeID,
+                $tableNumber,
+                $note,
+                $usePoints,
+                $total
             );
 
             if (!$stmt->execute()) {
@@ -294,6 +301,7 @@ class Checkout extends Model {
             return ["success" => false, "message" => "Cannot save order"];
         }
     }
+
     // Lưu từng sản phẩm
     public function saveOrderItem($orderId, $item) {
         $sql = "INSERT INTO order_items (order_id, product_id, product_name, price, quantity, total_price)
