@@ -174,7 +174,7 @@ class CheckoutController extends Controller {
         }
 
         // Model Checkout
-        $checkoutModel = $this->model('Checkout');
+        
 
         // Lấy JSON từ body request
         $input = json_decode(file_get_contents("php://input"), true);
@@ -202,15 +202,16 @@ class CheckoutController extends Controller {
         $finalTotal      = $input['finalTotal'];
 
         // --- LƯU ĐƠN HÀNG ---
-        $orderId = $checkoutModel->saveOrder([
-            "customerPhone" => $customerPhone,
-            "storeID"       => $storeId,
-            "tableNumber"   => $tableNumber,
-            "usePoints"     => $usePoints,
-            // "couponCode"    => $couponCode,
-            // "discount"      => $discountAmount,
-            "total"         => $finalTotal
-        ]);
+        // $checkoutModel = $this->model('Checkout');
+        // $orderId = $checkoutModel->saveOrder([
+        //     "customerPhone" => $customerPhone,
+        //     "storeID"       => $storeId,
+        //     "tableNumber"   => $tableNumber,
+        //     "usePoints"     => $usePoints,
+        //     // "couponCode"    => $couponCode,
+        //     // "discount"      => $discountAmount,
+        //     "total"         => $finalTotal
+        // ]);
 
         // if (!$orderId) {
         //     echo json_encode(["success" => false, "message" => "Cannot save order"]);
@@ -239,20 +240,20 @@ class CheckoutController extends Controller {
             "message" => "Đặt hàng thành công"
         ]);
 
-        // echo json_encode([
-        //     "success" => true,
-        //     "received_raw" => $input,
-        //     "parsed" => [
-        //         "customerPhone" => $customerPhone,
-        //         "storeID"       => $storeId,
-        //         "tableNumber"   => $tableNumber,
-        //         "items"         => $items,
-        //         "usePoints"     => $usePoints,
-        //         "couponCode"    => $couponCode,
-        //         "discountAmount"=> $discountAmount,
-        //         "finalTotal"    => $finalTotal
-        //     ]
-        // ]);
+        echo json_encode([
+            "success" => true,
+            "received_raw" => $input,
+            "parsed" => [
+                "customerPhone" => $customerPhone,
+                "storeID"       => $storeId,
+                "tableNumber"   => $tableNumber,
+                "items"         => $items,
+                "usePoints"     => $usePoints,
+                "couponCode"    => $couponCode,
+                "discountAmount"=> $discountAmount,
+                "finalTotal"    => $finalTotal
+            ]
+        ]);
 
     }
 
