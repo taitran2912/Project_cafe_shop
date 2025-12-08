@@ -103,7 +103,7 @@
                                     <div class="product-title"><?= $p['Name'] ?></div>
                                     <div class="product-price"><?= number_format($p['Price'], 0, ',', '.') ?>₫</div>
 
-                                    <button class="btn-add" onclick="addToCart('<?= $p['Name'] ?>', <?= $p['Price']?> , '<?= $p['Image'] ?>')">
+                                    <button class="btn-add" onclick="addToCart(<?= $p['ID'] ?>, '<?= $p['Name'] ?>', <?= $p['Price']?> , '<?= $p['Image'] ?>')">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -131,7 +131,7 @@
                                     <div class="product-title"><?= $p['Name'] ?></div>
                                     <div class="product-price"><?= number_format($p['Price'], 0, ',', '.') ?>₫</div>
 
-                                    <button class="btn-add" onclick="addToCart('<?= $p['Name'] ?>', <?= $p['Price'] ?>, '<?= $p['Image'] ?>')">
+                                    <button class="btn-add" onclick="addToCart(<?= $p['ID'] ?>, '<?= $p['Name'] ?>', <?= $p['Price'] ?>, '<?= $p['Image'] ?>')">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -168,7 +168,7 @@
                                                 </div>
 
                                                 <button class="btn-add"
-                                                        onclick="addToCart('<?= $product['Name'] ?>', <?= $product['Price'] ?>, '<?= $product['Image'] ?>')">
+                                                        onclick="addToCart(<?= $product['ID'] ?>, '<?= $product['Name'] ?>', <?= $product['Price'] ?>, '<?= $product['Image'] ?>')">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </div>
@@ -328,7 +328,7 @@ function displayFavoriteSuggestions(products) {
                         <div class="product-title">${p.Name}</div>
                         <div class="product-price">${Number(p.Price).toLocaleString('vi-VN')}₫</div>
 
-                        <button class="btn-add" onclick="addToCart('${p.Name}', ${p.Price}, '${p.Image}')">
+                        <button class="btn-add" onclick="addToCart(${p.ID} ,'${p.Name}', ${p.Price}, '${p.Image}')">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>

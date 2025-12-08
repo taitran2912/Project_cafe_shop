@@ -261,7 +261,7 @@ function confirmOrder() {
     localStorage.getItem("customerPhone") ??
     new URLSearchParams(window.location.search).get("phone") ??
     null;
-    
+
     fetch("https://caffeshop.hieuthuocyentam.id.vn/checkout/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -271,6 +271,7 @@ function confirmOrder() {
     .then(res => {
         console.log("SERVER RESPONSE:", res); // <=== THÊM DÒNG NÀY
         console.log("ORDER SENT TO SERVER:", order);
+        console.log("ITEMS SENT:", order.items);
 
         if (res.success) {
             localStorage.removeItem("pendingOrder");

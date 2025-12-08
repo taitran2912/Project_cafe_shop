@@ -7,21 +7,24 @@ const formatter = new Intl.NumberFormat('vi-VN', {
     currency: 'VND',
 });
 
-function addToCart(name, price, image) {
-    const existingItem = cart.find(item => item.name === name);
-    
-    if (existingItem) {
-        existingItem.quantity += 1;
+function addToCart(id, name, price, image) {
+    // Nếu đã tồn tại → tăng số lượng
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+        existing.quantity++;
     } else {
         cart.push({
+            id: id,
             name: name,
             price: price,
-            image: image,
-            quantity: 1
+            quantity: 1,
+            image: image
         });
     }
+
     updateCartUI();
 }
+
 
 function removeFromCart(name) {
     const index = cart.findIndex(item => item.name === name);
