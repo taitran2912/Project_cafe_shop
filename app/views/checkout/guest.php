@@ -303,7 +303,7 @@ async function applyCoupon() {
             return;
         }
 
-        const percent = Number(data.coupon.percent) || 0;
+        const percent = Number(data.coupon.Discount_value) || 0;
 
         // Tính giảm giá dựa trên % (sau khi trừ điểm đã dùng)
         const priceAfterPoints = subtotal - usePoints;
