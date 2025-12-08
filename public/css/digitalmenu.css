@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #e67e22;
+    --primary-color: #e67e22; /* Màu cam giống trong ảnh */
     --bg-light: #f8f9fa;
     --text-dark: #333;
     --border-color: #e9ecef;
@@ -7,11 +7,11 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: #fff;
+    background-color: #fff;
     color: var(--text-dark);
 }
 
-/* Header */
+/* Header Styles */
 .shop-header {
     background: white;
     border-bottom: 1px solid var(--border-color);
@@ -20,7 +20,8 @@ body {
 }
 
 .shop-info-card img {
-    width: 100px; height: 100px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -31,7 +32,7 @@ body {
     border-radius: 4px;
 }
 
-/* Category Sidebar */
+/* Navigation Sidebar (Left) */
 .category-sidebar {
     position: sticky;
     top: 20px;
@@ -44,27 +45,28 @@ body {
     display: block;
     padding: 8px 15px;
     color: #666;
+    text-decoration: none;
     font-size: 0.9rem;
     text-transform: uppercase;
     font-weight: 500;
     border-radius: 4px;
     margin-bottom: 2px;
-    transition: .2s;
+    transition: all 0.2s;
 }
 
-.category-link:hover,
-.category-link.active {
-    background: #ffead1;
+.category-link:hover, .category-link.active {
+    background-color: #ffead1;
     color: var(--primary-color);
     font-weight: 700;
 }
 
-/* Menu Cards */
+/* Menu Content (Center) */
 .menu-section-title {
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
-    margin: 20px 0 15px;
+    margin-top: 20px;
+    margin-bottom: 15px;
     padding-bottom: 5px;
     border-bottom: 2px solid var(--border-color);
 }
@@ -72,44 +74,49 @@ body {
 .product-card {
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: white;
     overflow: hidden;
-    transition: .2s;
+    background: white;
+    transition: transform 0.2s;
     height: 100%;
 }
 
 .product-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .product-img-wrapper {
     position: relative;
-    padding-top: 75%;
+    padding-top: 75%; /* 4:3 Aspect Ratio */
     overflow: hidden;
 }
 
 .product-img {
     position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
-.product-body { padding: 12px; }
+.product-body {
+    padding: 12px;
+}
 
 .product-title {
-    font-size: .95rem;
+    font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 5px;
     line-height: 1.3;
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
+    height: 2.6rem; /* Limit to 2 lines */
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
 .product-desc {
-    font-size: .8rem;
+    font-size: 0.8rem;
     color: #888;
     margin-bottom: 8px;
     white-space: nowrap;
@@ -124,17 +131,24 @@ body {
 }
 
 .btn-add {
-    width: 30px; height: 30px;
-    background: var(--primary-color);
-    color: white;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
-    transition: .2s;
+    cursor: pointer;
+    transition: background 0.2s;
 }
-.btn-add:hover { background: #d35400; }
 
-/* Cart Sidebar (Desktop) */
+.btn-add:hover {
+    background-color: #d35400;
+}
+
+/* Cart Sidebar (Right) */
 .cart-sidebar {
     position: sticky;
     top: 20px;
@@ -147,47 +161,92 @@ body {
     flex-direction: column;
 }
 
-.search-box { position: relative; margin-bottom: 15px; }
+.search-box {
+    position: relative;
+    margin-bottom: 15px;
+}
+
 .search-box input {
     padding-left: 35px;
     border-radius: 20px;
-    background: #f1f1f1;
+    background-color: #f1f1f1;
     border: none;
     font-size: 0.9rem;
 }
+
 .search-box i {
     position: absolute;
-    left: 12px; top: 50%;
+    left: 12px;
+    top: 50%;
     transform: translateY(-50%);
     color: #999;
 }
 
+.cart-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: #999;
+}
+
+.cart-empty i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: #ddd;
+}
+
 .cart-items {
-    flex-grow: 1; overflow-y: auto;
+    flex-grow: 1;
+    overflow-y: auto;
     margin-bottom: 15px;
 }
 
 .cart-item {
-    display: flex; justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
 }
 
-.cart-item-title { font-size: 0.9rem; font-weight: 500; }
-.cart-item-price { color: var(--primary-color); font-size: .85rem; }
-
-.cart-item-qty { display: flex; align-items: center; gap: 8px; }
-.btn-qty {
-    width: 20px; height: 20px;
-    display: flex; justify-content: center; align-items: center;
-    background: #eee; border-radius: 4px;
-    border: none;
+.cart-item-info {
+    flex: 1;
 }
 
-.cart-total { border-top: 1px solid var(--border-color); padding-top: 15px; }
+.cart-item-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.cart-item-price {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+}
+
+.cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-qty {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eee;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.cart-total {
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
 
 .btn-checkout {
-    background: var(--primary-color);
+    background-color: var(--primary-color);
     color: white;
     border: none;
     width: 100%;
@@ -195,99 +254,22 @@ body {
     border-radius: 6px;
     font-weight: 600;
 }
-.btn-checkout:hover { background: #d35400; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-
-/* ============================
-   MOBILE CART BUTTON + SHEET
-=============================== */
-
-/* Floating Button */
-.mobile-cart-button {
-    position: fixed;
-    bottom: 20px; right: 20px;
-    width: 58px; height: 58px;
-    background: #007bff;
-    border-radius: 50%;
-    border: none;
-    color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    z-index: 9999;
+.btn-checkout:hover {
+    background-color: #d35400;
 }
 
-.mobile-cart-button span {
-    position: absolute;
-    top: -4px; right: -4px;
-    background: #ff3b30;
-    padding: 3px 7px;
-    border-radius: 50px;
-    color: white;
-    font-size: 12px; font-weight: bold;
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
 }
-
-/* Bottom Sheet */
-.mobile-cart-sheet {
-    position: fixed;
-    bottom: -100%; left: 0;
-    width: 100%;
-    height: 65%;
-    background: #fff;
-    border-radius: 18px 18px 0 0;
-    box-shadow: 0 -6px 25px rgba(0,0,0,0.25);
-    transition: .35s ease;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
 }
-
-.mobile-cart-sheet.active { bottom: 0; }
-
-.sheet-header {
-    padding: 15px 20px;
-    font-size: 18px;
-    font-weight: 600;
-    border-bottom: 1px solid #eee;
-    display: flex; justify-content: space-between; align-items: center;
+::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 3px;
 }
-
-.close-sheet {
-    background: transparent;
-    border: none;
-    font-size: 22px;
-}
-
-#mobile-cart-items {
-    flex: 1;
-    overflow-y: auto;
-    padding: 15px 20px;
-}
-
-.mobile-cart-item { 
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 18px;
-}
-
-.qty-box { display: flex; align-items: center; gap: 10px; }
-
-.qty-box button {
-    width: 28px; height: 28px;
-    background: #f0f0f0;
-    border: none; border-radius: 6px;
-    font-weight: bold;
-}
-
-.sheet-footer {
-    border-top: 1px solid #eee;
-    padding: 15px 20px;
-    background: #fff;
-}
-
-.sheet-footer strong {
-    color: #007bff;
-    font-size: 18px;
+::-webkit-scrollbar-thumb:hover {
+    background: #aaa; 
 }
