@@ -73,7 +73,7 @@ function updateCartUI() {
                     <div class="cart-item-qty">
                         <button class="btn-qty" onclick="removeFromCart('${item.name}')">-</button>
                         <span>${item.quantity}</span>
-                        <button class="btn-qty" onclick="addToCart('${item.name}', ${item.price}, ${item.image} )">+</button>
+                        <button class="btn-qty" onclick="addToCart(${item.ID},'${item.name}', ${item.price}, ${item.image} )">+</button>
                     </div>
                 </div>
             `;
