@@ -241,34 +241,10 @@ class Checkout extends Model {
 
 //digital menu
     public function saveOrder($data) {
-        // 1️⃣ Lấy user ID theo số điện thoại
-        $sqlUser = "SELECT ID FROM Account WHERE Phone = ?";
-        $stmtUser = $this->db->prepare($sqlUser);
-        if (!$stmtUser) {
-            die("Prepare failed (User): " . $this->db->error);
-        }
-
-        $stmtUser->bind_param("s", $data["customerPhone"]);
-
-        if (!$stmtUser->execute()) {
-            die("Execute failed (User): " . $stmtUser->error);
-        }
-
-        $resultUser = $stmtUser->get_result();
-        $user = $resultUser->fetch_assoc();
-        $stmtUser->close();
-
-        $userID = $user["ID"] ?? null;
-
-
         // 2️⃣ Insert đơn hàng
         $sql = "
-            INSERT INTO Orders
-            (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost,
-             Payment_status, Method, Note, Date, Points, Total)
-            VALUES (?, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash',
-                    'Đơn hàng tại quán hoặc mua mang về', NOW(), ?, ?)
-        ";
+    INSERT INTO Orders (ID_Customer, ID_Branch, ID_Table, Status, Address, Shipping_Cost, Payment_status, Method, Note, Date, Points, Total)
+    SELECT ID, ?, ?, 'Ordered', NULL, 0, 'Unpaid', 'Cash', 'Đơn hàng tại quán hoặc mua mang về', NOW(), 2, 1000 FROM Account  WHERE Phone = ?; ";
 
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
@@ -277,12 +253,13 @@ class Checkout extends Model {
 
         // gán biến
         $stmt->bind_param(
-            "iiidd",
-            $userID,
+            "iiddi",
+            
             $data["storeID"],
             $data["tableNumber"],
             $data["usePoints"],
-            $data["total"]
+            $data["total"], 
+            $data["customerPhone"]
         );
 
         if (!$stmt->execute()) {
