@@ -284,7 +284,36 @@ function displayFavoriteSuggestions(list) {
     });
 }
 
-</script>
+document.getElementById("mobile-cart-btn").onclick = () => {
+    document.getElementById("mobile-cart-sheet").classList.add("active");
+};
 
+function closeCartSheet() {
+    document.getElementById("mobile-cart-sheet").classList.remove("active");
+}
+
+
+</script>
+    <button id="mobile-cart-btn" class="mobile-cart-button">
+        <i class="fa fa-shopping-cart"></i>
+        <span id="mobile-cart-count">0</span>
+    </button>
+
+    <div id="mobile-cart-sheet" class="mobile-cart-sheet">
+    <div class="sheet-header">
+        <span>Giỏ hàng của bạn</span>
+        <button class="close-sheet" onclick="closeCartSheet()">✕</button>
+    </div>
+
+    <div id="mobile-cart-items"></div>
+
+    <div class="sheet-footer">
+        <div class="d-flex justify-content-between">
+            <span>Tổng cộng:</span>
+            <strong id="mobile-cart-total"></strong>
+        </div>
+        <button class="btn btn-primary w-100 mt-2">Thanh toán</button>
+    </div>
+</div>
 </body>
 </html>
