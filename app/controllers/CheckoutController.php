@@ -119,7 +119,7 @@ class CheckoutController extends Controller {
         }
 
         // Gọi model lấy điểm
-        $checkoutModel = $this->model('Checkout'); // đổi theo tên model bạn dùng
+        $checkoutModel = $this->model('Checkout');
         $points = $checkoutModel->getPointsByPhone($phone);  
 
         // Nếu không có dữ liệu → trả về 0
