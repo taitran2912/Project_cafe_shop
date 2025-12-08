@@ -202,15 +202,15 @@ class CheckoutController extends Controller {
         $finalTotal      = $input['finalTotal'];
 
         // --- LƯU ĐƠN HÀNG ---
-        // $orderId = $checkoutModel->saveOrder([
-        //     "customerPhone" => $customerPhone,
-        //     "storeID"       => $storeId,
-        //     "tableNumber"   => $tableNumber,
-        //     "usePoints"     => $usePoints,
-        //     // "couponCode"    => $couponCode,
-        //     // "discount"      => $discountAmount,
-        //     "total"         => $finalTotal
-        // ]);
+        $orderId = $checkoutModel->saveOrder([
+            "customerPhone" => $customerPhone,
+            "storeID"       => $storeId,
+            "tableNumber"   => $tableNumber,
+            "usePoints"     => $usePoints,
+            // "couponCode"    => $couponCode,
+            // "discount"      => $discountAmount,
+            "total"         => $finalTotal
+        ]);
 
         // if (!$orderId) {
         //     echo json_encode(["success" => false, "message" => "Cannot save order"]);
@@ -233,26 +233,26 @@ class CheckoutController extends Controller {
         // }
 
         // // --- TRẢ KẾT QUẢ ---
-        // echo json_encode([
-        //     "success" => true,
-        //     "orderID" => $orderId,
-        //     "message" => "Đặt hàng thành công"
-        // ]);
-
         echo json_encode([
             "success" => true,
-            "received_raw" => $input,
-            "parsed" => [
-                "customerPhone" => $customerPhone,
-                "storeID"       => $storeId,
-                "tableNumber"   => $tableNumber,
-                "items"         => $items,
-                "usePoints"     => $usePoints,
-                "couponCode"    => $couponCode,
-                "discountAmount"=> $discountAmount,
-                "finalTotal"    => $finalTotal
-            ]
+            "orderID" => $orderId,
+            "message" => "Đặt hàng thành công"
         ]);
+
+        // echo json_encode([
+        //     "success" => true,
+        //     "received_raw" => $input,
+        //     "parsed" => [
+        //         "customerPhone" => $customerPhone,
+        //         "storeID"       => $storeId,
+        //         "tableNumber"   => $tableNumber,
+        //         "items"         => $items,
+        //         "usePoints"     => $usePoints,
+        //         "couponCode"    => $couponCode,
+        //         "discountAmount"=> $discountAmount,
+        //         "finalTotal"    => $finalTotal
+        //     ]
+        // ]);
 
     }
 
