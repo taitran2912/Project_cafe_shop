@@ -183,6 +183,36 @@ function confirmOrder() {
         alert("Lỗi kết nối server!");
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+    if (!order || !order.items || order.items.length === 0) {
+        document.getElementById("order-items").innerHTML =
+            "<p class='text-danger'>Giỏ hàng trống, vui lòng quay lại menu.</p>";
+
+        document.querySelector(".btn-checkout").style.display = "none";
+        return;
+    }
+
+    // --- Thêm đoạn này ---
+    setOrderLocation(order);
+
+    renderOrderItems(order.items);
+    updateSummary(order.items);
+});
+
+
+function setOrderLocation(order) {
+    const store = order.storeName ?? "Cửa hàng";
+    const table = order.tableNumber ? `tại bàn ${order.tableNumber}` : "mang về";
+    const type = order.type ?? ""; // nếu có thêm type: dine-in | take-away
+
+    document.getElementById("order-location").innerText =
+        `Đơn hàng của bạn tại ${store} - ${table}`;
+}
+
+
 </script>
 
 </body>

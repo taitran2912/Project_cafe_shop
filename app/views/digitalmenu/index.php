@@ -347,7 +347,10 @@ function goToPayment() {
     const orderData = {
         phone: window.customerPhone ?? null,
         items: cart,
-        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        storeId: "<?= $data['storeID'] ?? '' ?>",
+        storeName: "<?= $data['storeName'] ?? '' ?>",
+        tableNumber: "<?= $data['tableNumber'] ?? '' ?>"
     };
 
     // Lưu vào localStorage
