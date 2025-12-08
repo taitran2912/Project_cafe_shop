@@ -268,12 +268,13 @@ class Checkout extends Model {
         // return $this->conn->lastInsertId();
 
         echo json_encode([
-            $data["customerPhone"],
-            $data["storeID"],
-            $data["tableNumber"],       // NOTE = mã đơn hàng
-            $data["usePoints"],  // điểm dùng
-            $data["total"]  
+            "customerPhone" => $data["customerPhone"],
+            "storeID"       => $data["storeID"],
+            "tableNumber"   => $data["tableNumber"],
+            "usePoints"     => $data["usePoints"],
+            "total"         => $data["total"]
         ]);
+
     }
 
 
