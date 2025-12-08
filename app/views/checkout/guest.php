@@ -37,9 +37,9 @@
             <!-- Left Column -->
             <div class="order-items">
                 <div class="section-title">
-                    <span class="icon">📦</span>
-                    <span>Đơn hàng của bạn</span>
+                    <span id="order-location">Đơn hàng của bạn</span>
                 </div>
+
 
                 <div class="items-list" id="order-items">
             
