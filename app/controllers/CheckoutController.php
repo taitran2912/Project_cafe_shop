@@ -102,4 +102,35 @@ class CheckoutController extends Controller {
 
         $this->view('checkout/guest', $data);
     }
+
+    public function points() {
+        header('Content-Type: application/json');
+
+        // Lấy số điện thoại từ query
+        $phone = $_GET['phone'] ?? '';
+
+        if (empty($phone)) {
+            echo json_encode([
+                'success' => false,
+                'points' => 0,
+                'message' => 'Thiếu số điện thoại'
+            ]);
+            return;
+        }
+
+        // Gọi model lấy điểm
+        $checkoutModel = $this->model('Checkout'); // đổi theo tên model bạn dùng
+        $points = $checkoutModel->getPointsByPhone($phone);  
+
+        // Nếu không có dữ liệu → trả về 0
+        if (!$points) {
+            $points = 0;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'points' => (int) $points
+        ]);
+    }
+
 }

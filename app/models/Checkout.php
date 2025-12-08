@@ -153,4 +153,11 @@ class Checkout extends Model {
         $row = $result->fetch_assoc();
         return $row['Payment_status'];  // dạng Pending / Unpaid / Paid / Completed
     }
+
+    public function getPointsByPhone($phone){
+        $sql = "SELECT c.Points FROM Customer_Profile c join Account a on c.ID_account = a.ID WHERE a.Phone = ? LIMIT 1;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$phone]);
+        return $stmt->fetchColumn();
+    }
 }

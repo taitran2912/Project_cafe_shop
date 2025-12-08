@@ -231,6 +231,34 @@ function updateSummary(items) {
     document.getElementById("total").innerText = total.toLocaleString("vi-VN") + "đ";
 }
 
+function loadUserPoints(phone) {
+    if (!phone) return;
+
+    fetch(`https://caffeshop.hieuthuocyentam.id.vn/checkout/points/${phone}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const points = Number(data.points) || 0;
+                document.getElementById("user-ppoints").innerText = 
+                    points.toLocaleString("vi-VN") + "đ";
+            } else {
+                document.getElementById("user-points").innerText = "0đ";
+            }
+        })
+        .catch(err => {
+            console.error("Lỗi load điểm:", err);
+            document.getElementById("user-points").innerText = "0đ";
+        });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const order = JSON.parse(localStorage.getItem("pendingOrder"));
+
+    if (order?.customerPhone) {
+        loadUserPoints(order.customerPhone);
+    }
+});
+
 
 
 
