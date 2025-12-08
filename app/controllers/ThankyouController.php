@@ -7,6 +7,6 @@ class ThankyouController extends Controller {
         $data = [
             'title' => 'Cảm ơn'
         ];
-        $this->view('thankyou/thankyou.php', $data);
+        $this->view('thankyou/thankyou', $data);
     }
 }
