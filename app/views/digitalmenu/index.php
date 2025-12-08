@@ -366,9 +366,6 @@ function goToPayment() {
         window.location.href = `https://caffeshop.hieuthuocyentam.id.vn/checkout/guest/guest`;
     }
 }
-
-</scrip>
-<script>
     const STORE_ID = <?= $data['storeID'] ?>;
 </script>
 
