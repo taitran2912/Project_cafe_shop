@@ -66,7 +66,7 @@
     [
       "title" => "Đơn hàng",
       "icon"  => "fas fa-shopping-cart",
-      "link"  => "admin/m_orders",
+      "link"  => "admin/orders",
       "roles" => [0, 2]
     ],
     [
