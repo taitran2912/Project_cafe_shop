@@ -212,18 +212,13 @@ document.getElementById("addAddressForm").addEventListener("submit", function(e)
                 return alert("Không tìm thấy địa chỉ. Vui lòng thử lại.");
             }
 
-            const latitude = data[0].lat;
-            const longitude = data[0].lon;
-
             // Gửi lên backend cùng địa chỉ và mặc định
             fetch("https://caffeshop.hieuthuocyentam.id.vn/profile/addAddress", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({ 
                     address, 
-                    isDefault, 
-                    latitude, 
-                    longitude 
+                    isDefault
                 })
             })
             .then(res => res.json())
