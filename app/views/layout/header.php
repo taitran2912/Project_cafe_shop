@@ -55,6 +55,9 @@
                             </button>
                             <div id="user-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
                                 <a href="https://caffeshop.hieuthuocyentam.id.vn/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg">Hồ sơ của tôi</a>
+                            <?php if ($userRole ==0 || $userRole ==1 || $userRole == 2 || $userRole ==3): ?>
+                                <a href="https://caffeshop.hieuthuocyentam.id.vn/admin" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg">Quản trị</a>
+                            <?php endif; ?>
                                 <a href="https://caffeshop.hieuthuocyentam.id.vn/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg">Đăng xuất</a>
                             </div>
                         </div>
