@@ -17,7 +17,7 @@ class Order extends Model {
                   LEFT JOIN Customer_Profile cp ON o.ID_Customer = cp.ID
                   LEFT JOIN Account a ON cp.ID_account = a.ID
                   LEFT JOIN Branches b ON o.ID_Branch = b.ID
-                  WHERE o.Status IN ('Pending', 'Confirmed')
+                  WHERE o.Status IN ('Ordered', 'Confirmed')
                   ORDER BY o.Time DESC, o.ID DESC";
         
         $result = $this->db->query($query);
