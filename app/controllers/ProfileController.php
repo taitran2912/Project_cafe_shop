@@ -60,8 +60,8 @@ class ProfileController extends Controller {
 
         $address = trim($input['address'] ?? '');
         $isDefault = isset($input['isDefault']) ? intval($input['isDefault']) : 0;
-        $latitude = isset($input['latitude']) ? floatval($input['latitude']) : null;
-        $longitude = isset($input['longitude']) ? floatval($input['longitude']) : null;
+        $latitude = isset($input['latitude']) ? floatval($input['latitude']) : 10.8455;
+        $longitude = isset($input['longitude']) ? floatval($input['longitude']) : 106.6663;
 
         if (!$address) {
             echo json_encode(['success' => false, 'message' => 'Vui lòng nhập địa chỉ']);
