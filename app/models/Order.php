@@ -7,7 +7,6 @@ class Order extends Model {
                     o.ID_Customer,
                     o.ID_Branch,
                     o.Status,
-                    o.Time,
                     o.Address,
                     a.Name as CustomerName,
                     a.Phone as CustomerPhone,
