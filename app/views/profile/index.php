@@ -205,15 +205,15 @@ document.getElementById("addAddressForm").addEventListener("submit", function(e)
     if (!address) return alert("Vui lòng nhập địa chỉ!");
 
     // Lấy latitude và longitude từ Nominatim
-    // fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`)
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         if (data.length === 0) {
-    //             return alert("Không tìm thấy địa chỉ. Vui lòng thử lại.");
-    //         }
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.length === 0) {
+                return alert("Không tìm thấy địa chỉ. Vui lòng thử lại.");
+            }
 
-    //         const latitude = data[0].lat;
-    //         const longitude = data[0].lon;
+            const latitude = data[0].lat;
+            const longitude = data[0].lon;
 
             // Gửi lên backend cùng địa chỉ và mặc định
             fetch("https://caffeshop.hieuthuocyentam.id.vn/profile/addAddress", {
