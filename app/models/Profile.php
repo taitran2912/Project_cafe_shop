@@ -63,15 +63,16 @@ class Profile extends Model {
 
         // Thêm địa chỉ mới
         $stmt = $mysqli->prepare("
-            INSERT INTO Address(ID_Customer, Address, Latitude, Longitude, AddressDefault) 
+            INSERT INTO Address(ID_Customer, Address, AddressDefault, Latitude, Longitude) 
             VALUES (?, ?, ?, ?, ?)
         ");
-        $stmt->bind_param("issdi", $userId, $address, $latitude, $longitude, $isDefault);
+        $stmt->bind_param("ssisdd", $userId, $address, $isDefault, $latitude, $longitude);
 
         $result = $stmt->execute();
         $stmt->close();
 
         return $result;
     }
+
 
 }
