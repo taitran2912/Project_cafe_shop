@@ -205,12 +205,7 @@ document.getElementById("addAddressForm").addEventListener("submit", function(e)
     if (!address) return alert("Vui lòng nhập địa chỉ!");
 
     // Lấy latitude và longitude từ Nominatim
-    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.length === 0) {
-                return alert("Không tìm thấy địa chỉ. Vui lòng thử lại.");
-            }
+    
 
             // Gửi lên backend cùng địa chỉ và mặc định
             fetch("https://caffeshop.hieuthuocyentam.id.vn/profile/addAddress", {
@@ -221,20 +216,7 @@ document.getElementById("addAddressForm").addEventListener("submit", function(e)
                     isDefault
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Thêm địa chỉ thành công!");
-                    location.reload();
-                } else {
-                    alert("Không thể thêm địa chỉ.");
-                }
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Đã có lỗi khi lấy tọa độ.");
-        });
+            
 });
 
 
