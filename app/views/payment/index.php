@@ -114,7 +114,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const stores = [
     <?php foreach ($data['storeLocations'] as $store): ?>
-      { id: <?= $store['ID'] ?>, lat: <?= $store['lat'] ?>, lng: <?= $store['lng'] ?> },
+      { id: <?= $store['ID'] ?>, lat: <?= $store['lat'] ?>, lng: <?= $store['lng'] ?>, name: "<?= htmlspecialchars($store['Name']) ?>" },
     <?php endforeach; ?>
   ];
 
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const km = d.toFixed(2);
 
       html += `<li>
-          Cửa hàng #${store.id}: ${km} km
+          Cửa hàng ${store.name}: ${km} km
         </li>`;
 
       if (d < minDist) {
