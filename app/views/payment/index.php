@@ -114,7 +114,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const stores = [
     <?php foreach ($data['storeLocations'] as $store): ?>
-      { id: <?= $store['ID'] ?>, lat: <?= $store['lat'] ?>, lng: <?= $store['lng'] ?>, name: "<?= htmlspecialchars($store['BranchName']) ?>" },
+      { id: <?= $store['ID'] ?>, lat: <?= $store['lat'] ?>, lng: <?= $store['lng'] ?>, name: "<?= htmlspecialchars($store['Name']) ?>" },
     <?php endforeach; ?>
   ];
 
