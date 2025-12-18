@@ -56,27 +56,17 @@ class Payment extends Model {
 
     public function getStoreLocations($idCustomer) {
 
-        $sql = "
-            SELECT b.ID AS BranchID, b.Name, b.Address, b.Latitude, b.Longitude
-            FROM Branches b
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM Cart_detail cd
-                JOIN Cart c ON c.ID = cd.ID_Cart
-                WHERE c.ID_Customer = ?
-                AND EXISTS (
-                    SELECT 1
-                    FROM Product_detail pd
-                    LEFT JOIN Inventory i 
-                        ON i.ID_Material = pd.ID_material
-                        AND i.ID_Branch = b.ID
-                    WHERE pd.ID_product = cd.ID_Product
-                    AND (
-                        i.Quantity IS NULL
-                        OR i.Quantity < pd.Quantity * cd.Quantity
-                    )
-                )
-            )
+        $sql = "SELECT b.ID AS BranchID, b.Name, b.Address, b.Latitude, b.Longitude 
+                FROM Branches b WHERE NOT EXISTS ( 
+                    SELECT 1 FROM Cart_detail cd 
+                    JOIN Cart c ON cd.ID_Cart = c.ID 
+                    WHERE c.ID_Customer = ? AND NOT EXISTS ( 
+                        SELECT 1 FROM Inventory i JOIN Product_detail pd ON pd.ID_material = i.ID_Material 
+                        WHERE i.ID_Branch = b.ID 
+                        AND pd.ID_product = cd.ID_Product 
+                        AND i.Quantity >= pd.Quantity * cd.Quantity 
+                    ) 
+                );
         ";
 
         $stmt = $this->db->prepare($sql);
