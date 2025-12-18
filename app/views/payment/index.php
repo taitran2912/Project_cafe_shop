@@ -50,6 +50,8 @@
 
         <div class="summary-row"><span>Tạm tính:</span><span id="subtotal">0đ</span></div>
         <div class="summary-row"><span>Phí giao hàng:</span><span id="shipping">0đ</span></div>
+        <div id="storeDistanceList" class="mt-2 small text-muted"></div>
+
         <div class="summary-row total">
           <span>Tổng cộng:</span><span id="total">0đ</span>
         </div>
@@ -198,46 +200,81 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // function calculateShipping(selectedAddress, stores) {
-  //   const userLat = parseFloat(selectedAddress.dataset.lat);
-  //   const userLng = parseFloat(selectedAddress.dataset.lng);
-  //   let minDist = Infinity;
-  //   stores.forEach(store => {
-  //     const d = getDistance(userLat, userLng, store.lat, store.lng);
-  //     if (d < minDist) minDist = d;
-  //   });
+  //     const userLat = parseFloat(selectedAddress.dataset.lat);
+  //     const userLng = parseFloat(selectedAddress.dataset.lng);
 
-  //   const shippingFee = Math.round(minDist * 7000); // 7k/km ví dụ
-  //   document.getElementById("shipping").textContent = shippingFee.toLocaleString() + "đ";
+  //     let minDist = Infinity;
+  //     let nearestStoreId = null;
 
-  //   const subtotalVal = parseInt(document.getElementById("subtotal").textContent.replace(/\D/g, ""));
-  //   document.getElementById("total").textContent = (subtotalVal + shippingFee).toLocaleString() + "đ";
+  //     stores.forEach(store => {
+  //         const d = getDistance(userLat, userLng, store.lat, store.lng);
+  //         if (d < minDist) {
+  //             minDist = d;
+  //             nearestStoreId = store.id;
+  //         }
+  //     });
+
+  //     const shippingFee = Math.round(minDist * 5000); // ví dụ 5k/km
+
+  //     // Cập nhật input ẩn trong form
+  //     document.getElementById("shipping_fee").value = shippingFee;
+  //     document.getElementById("store_id").value = nearestStoreId;
+
+  //     // Cập nhật hiển thị
+  //     document.getElementById("shipping").textContent = shippingFee.toLocaleString() + "đ";
+  //     const subtotalVal = parseInt(document.getElementById("subtotal").textContent.replace(/\D/g, ""));
+  //     document.getElementById("total").textContent = (subtotalVal + shippingFee).toLocaleString() + "đ";
   // }
 
-  function calculateShipping(selectedAddress, stores) {
-      const userLat = parseFloat(selectedAddress.dataset.lat);
-      const userLng = parseFloat(selectedAddress.dataset.lng);
+  function calculateShipping(selectedAddress) {
+    const userLat = parseFloat(selectedAddress.dataset.lat);
+    const userLng = parseFloat(selectedAddress.dataset.lng);
 
-      let minDist = Infinity;
-      let nearestStoreId = null;
+    let minDist = Infinity;
+    let nearestStoreId = null;
 
-      stores.forEach(store => {
-          const d = getDistance(userLat, userLng, store.lat, store.lng);
-          if (d < minDist) {
-              minDist = d;
-              nearestStoreId = store.id;
-          }
-      });
+    let html = '<strong>Khoảng cách đến các cửa hàng:</strong><ul class="mb-1">';
 
-      const shippingFee = Math.round(minDist * 5000); // ví dụ 5k/km
+    stores.forEach(store => {
+      const d = getDistance(userLat, userLng, store.lat, store.lng);
+      const km = d.toFixed(2);
 
-      // Cập nhật input ẩn trong form
-      document.getElementById("shipping_fee").value = shippingFee;
-      document.getElementById("store_id").value = nearestStoreId;
+      html += `<li>
+          Cửa hàng #${store.id}: ${km} km
+        </li>`;
 
-      // Cập nhật hiển thị
-      document.getElementById("shipping").textContent = shippingFee.toLocaleString() + "đ";
-      const subtotalVal = parseInt(document.getElementById("subtotal").textContent.replace(/\D/g, ""));
-      document.getElementById("total").textContent = (subtotalVal + shippingFee).toLocaleString() + "đ";
+      if (d < minDist) {
+        minDist = d;
+        nearestStoreId = store.id;
+      }
+    });
+
+    html += '</ul>';
+
+    // Phí ship
+    const shippingFee = Math.round(minDist * 5000);
+
+    // Gắn input ẩn
+    document.getElementById("shipping_fee").value = shippingFee;
+    document.getElementById("store_id").value = nearestStoreId;
+
+    // Hiển thị
+    document.getElementById("shipping").textContent =
+      shippingFee.toLocaleString() + "đ";
+
+    const subtotalVal = parseInt(
+      document.getElementById("subtotal").textContent.replace(/\D/g, "")
+    );
+
+    document.getElementById("total").textContent =
+      (subtotalVal + shippingFee).toLocaleString() + "đ";
+
+    // Hiển thị danh sách khoảng cách
+    html += `<div class="text-success">
+        → Giao từ cửa hàng #${nearestStoreId} (gần nhất)
+      </div>`;
+
+    document.getElementById("storeDistanceList").innerHTML = html;
   }
 
 //
