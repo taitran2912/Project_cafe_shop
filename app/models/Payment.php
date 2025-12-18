@@ -54,38 +54,50 @@ class Payment extends Model {
         }
     }
 
-    public function getStoreLocations() {
-        // Giả sử có bảng Store với các cột ID, Name, Latitude, Longitude
-        $query = "SELECT b.ID AS BranchID, b.Name, b.Address, b.Latitude, b.Longitude 
-                    FROM Branches b WHERE NOT EXISTS ( 
-                        SELECT 1 FROM Cart_detail cd 
-                        JOIN Cart c ON cd.ID_Cart = c.ID 
-                        WHERE c.ID_Customer = 1 AND NOT EXISTS ( 
-                            SELECT 1 FROM Inventory i JOIN Product_detail pd ON pd.ID_material = i.ID_Material 
-                            WHERE i.ID_Branch = b.ID 
-                            AND pd.ID_product = cd.ID_Product 
-                            AND i.Quantity >= pd.Quantity * cd.Quantity 
-                        ) 
-                    );
-                ";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    public function getStoreLocations($idCustomer) {
 
+        $sql = "
+            SELECT b.ID AS BranchID, b.Name, b.Address, b.Latitude, b.Longitude
+            FROM Branches b
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM Cart_detail cd
+                JOIN Cart c ON c.ID = cd.ID_Cart
+                WHERE c.ID_Customer = ?
+                AND EXISTS (
+                    SELECT 1
+                    FROM Product_detail pd
+                    LEFT JOIN Inventory i 
+                        ON i.ID_Material = pd.ID_material
+                        AND i.ID_Branch = b.ID
+                    WHERE pd.ID_product = cd.ID_Product
+                    AND (
+                        i.Quantity IS NULL
+                        OR i.Quantity < pd.Quantity * cd.Quantity
+                    )
+                )
+            )
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $idCustomer);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
         $stores = [];
+
         while ($row = $result->fetch_assoc()) {
             $stores[] = [
-                'ID' => $row['BranchID'],
-                'Name' => $row['Name'],
+                'ID'      => $row['BranchID'],
+                'Name'    => $row['Name'],
                 'Address' => $row['Address'],
-                'lat' => $row['Latitude'],
-                'lng' => $row['Longitude']
+                'lat'     => (float)$row['Latitude'],
+                'lng'     => (float)$row['Longitude']
             ];
         }
 
         $stmt->close();
-        return $stores; // Trả về mảng các cửa hàng
+        return $stores;
     }
 
     public function getAllAddress($customerId) {
