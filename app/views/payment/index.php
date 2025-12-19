@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (d < minDist) {
         minDist = d;
-        nearestStoreId = store.include_once;
+        nearestStoreId = store.id;
       }
     });
 
