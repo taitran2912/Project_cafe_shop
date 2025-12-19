@@ -246,7 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (d < minDist) {
         minDist = d;
         nearestStoreId = store.name;
-        idStore = store.id;
       }
     });
 
@@ -257,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Gắn input ẩn
     document.getElementById("shipping_fee").value = shippingFee;
-    document.getElementById("store_id").value = idStore;
+    document.getElementById("store_id").value = nearestStoreId;
 
     // Hiển thị
     document.getElementById("shipping").textContent =
