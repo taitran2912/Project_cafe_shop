@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Gắn input ẩn
     document.getElementById("shipping_fee").value = shippingFee;
-    document.getElementById("store_id").value = nearestStoreId;
+    document.getElementById("store_id").value = stores.find(s => s.name === nearestStoreId).id;
 
     // Hiển thị
     document.getElementById("shipping").textContent =
