@@ -24,7 +24,7 @@ class CheckoutController extends Controller {
             $address = $checkoutModel->getAddressById($addressId);
 
             $cart = $checkoutModel->getCartItems($userID);
-            // $createOrder = $checkoutModel->createOrder($userID, $address['Address'], $storeId, $shippingFee, 0, $orderCode);
+            $createOrder = $checkoutModel->createOrder($userID, $address['Address'], $storeId, $shippingFee, 0, $orderCode);
             
             $subtotal = 0;
             if (!empty($cart)){
